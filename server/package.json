@@ -1,0 +1,25 @@
+{
+  "name": "mamixta-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node index.ts",
+    "dev": "nodemon"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.8",
+    "@types/ws": "^7.2.9",
+    "nodemon": "^2.0.6",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.5"
+  },
+  "dependencies": {
+    "@types/node": "^14.14.6",
+    "express": "^4.17.1",
+    "uuid": "^8.3.1",
+    "ws": "^7.3.1"
+  }
+}
