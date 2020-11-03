@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as http from 'http';
 import { v4 as uuidv4 } from 'uuid';
 import * as WebSocket from 'ws';
+import { Card } from './card';
 
 import { HAND_CARDS_NUMBER, getHand, getSuffledDeck, sortHand } from './game';
 
@@ -15,7 +16,7 @@ const rooms = {};
 wss.on('connection', (ws: WebSocket, request, client) => {
   const userUuid = uuidv4();
   ws.on('message', (data: string) => {
-    const { action, card, type, room } = JSON.parse(data);
+    const { action, card, cards, type, room } = JSON.parse(data);
 
     if (action === 'JOIN') {
       if (!rooms[room]) {
@@ -41,25 +42,56 @@ wss.on('connection', (ws: WebSocket, request, client) => {
       }
     } else if (action === 'PLAY') {
       if (type === 'DROP') {
-        // send active card to all users in the room
-        Object.entries(rooms[room].users).forEach(([, user]: [string, any]) => {
-          user.ws.send(JSON.stringify({ activeCard: card }));
-        });
+        if (cards) {
+          console.log(cards);
 
-        // return the hand without the card
-        rooms[room].users[userUuid].hand = rooms[room].users[
-          userUuid
-        ].hand.filter(
-          (handCard) =>
-            handCard.value !== card.value || handCard.suit !== card.suit
-        );
+          // send active card using last of cards to all users in the room
+          Object.entries(rooms[room].users).forEach(
+            ([, user]: [string, any]) => {
+              user.ws.send(
+                JSON.stringify({ activeCard: cards[cards.length - 1] })
+              );
+            }
+          );
 
-        // push back the card so the deck is never empty
-        rooms[room].deck.push(card);
-        console.log(rooms[room].deck[rooms[room].deck.length - 1]);
+          // return the hand without the cards
+          cards.forEach((c: Card) => {
+            rooms[room].users[userUuid].hand.splice(
+              rooms[room].users[userUuid].hand.findIndex(
+                (handCard: Card) =>
+                  handCard.value == c.value && handCard.suit === c.suit
+              ),
+              1
+            );
+          });
 
-        // send the hand to the user who dropped the card
-        ws.send(JSON.stringify({ hand: rooms[room].users[userUuid].hand }));
+          // push back the card so the deck is never empty
+          rooms[room].deck.push(...cards);
+
+          // send the hand to the user who dropped the card
+          ws.send(JSON.stringify({ hand: rooms[room].users[userUuid].hand }));
+        } else {
+          // send active card to all users in the room
+          Object.entries(rooms[room].users).forEach(
+            ([, user]: [string, any]) => {
+              user.ws.send(JSON.stringify({ activeCard: card }));
+            }
+          );
+
+          // return the hand without the card
+          rooms[room].users[userUuid].hand = rooms[room].users[
+            userUuid
+          ].hand.filter(
+            (handCard) =>
+              handCard.value !== card.value || handCard.suit !== card.suit
+          );
+
+          // push back the card so the deck is never empty
+          rooms[room].deck.push(card);
+
+          // send the hand to the user who dropped the card
+          ws.send(JSON.stringify({ hand: rooms[room].users[userUuid].hand }));
+        }
       }
       if (type === 'PICK') {
         if (card) {

@@ -7,6 +7,7 @@ const reducer = (state, action) => {
   if (action.type === 'setActiveCard') {
     return { ...state, activeCard: action.payload };
   }
+
   if (action.type === 'setPreviousCards') {
     if (state.activeCard) {
       return {
@@ -18,6 +19,34 @@ const reducer = (state, action) => {
     }
   }
 
+  if (action.type === 'selectCard') {
+    const selectedCards = [...state.selectedCards];
+    const selectedCardIndex = state.selectedCards.findIndex(
+      (c) => action.payload.value === c.value && action.payload.suit === c.suit
+    );
+
+    if (selectedCardIndex >= 0) {
+      selectedCards.splice(selectedCardIndex, 1);
+
+      return {
+        ...state,
+        selectedCards: selectedCards,
+      };
+    } else {
+      return {
+        ...state,
+        selectedCards: [...state.selectedCards, action.payload],
+      };
+    }
+  }
+
+  if (action.type === 'resetSelectedCards') {
+    return {
+      ...state,
+      selectedCards: [],
+    };
+  }
+
   return state;
 };
 
@@ -27,6 +56,7 @@ const App = () => {
   const [state, dispatch] = useReducer(reducer, {
     activeCard: null,
     previousCards: [],
+    selectedCards: [],
   });
   const [hand, setHand] = useState([]);
   const [hasDrop, setHasDrop] = useState(false);
@@ -57,9 +87,22 @@ const App = () => {
 
   const dropCard = (card) => {
     setHasDrop(true);
-    client.send(
-      JSON.stringify({ action: 'PLAY', type: 'DROP', card, room: 'coucou' })
-    );
+    if (state.selectedCards.length > 0) {
+      client.send(
+        JSON.stringify({
+          action: 'PLAY',
+          type: 'DROP',
+          cards: state.selectedCards,
+          room: 'coucou',
+        })
+      );
+    } else {
+      client.send(
+        JSON.stringify({ action: 'PLAY', type: 'DROP', card, room: 'coucou' })
+      );
+    }
+
+    dispatch({ type: 'resetSelectedCards' });
   };
 
   const pickCard = (card) => {
@@ -69,18 +112,27 @@ const App = () => {
     );
   };
 
+  const selectCard = (card) => {
+    dispatch({ type: 'selectCard', payload: card });
+  };
+
   return (
     <div>
-      {hasDrop.toString()}
       {state.previousCards &&
         state.previousCards.map((card) => (
-          <Card canPick={hasDrop} isPrevious card={card} pickCard={pickCard} />
+          <Card hasDrop={hasDrop} isPrevious card={card} pickCard={pickCard} />
         ))}
       {state.activeCard && <Card isActive card={state.activeCard} />}
-      <Card canPick={hasDrop} pickCard={pickCard} isStack />
+      <Card hasDrop={hasDrop} pickCard={pickCard} isStack />
       <br />
       {hand.map((card) => (
-        <Card card={card} dropCard={dropCard} />
+        <Card
+          hasDrop={hasDrop}
+          card={card}
+          dropCard={dropCard}
+          selectCard={selectCard}
+          selectedCards={state.selectedCards}
+        />
       ))}
     </div>
   );
