@@ -1,9 +1,25 @@
+import React from 'react';
+
+import { Card } from '../../types'
+
+interface CardProps {
+  card?: Card,
+  dropCard?: (card: Card) => void,
+  hasDrop?: boolean,
+  isActive?: boolean,
+  isPrevious?: boolean,
+  isStack?: boolean,
+  pickCard?: (card?: Card) => void,
+  selectCard?: (card: Card) => void,
+  selectedCards?: Card[]
+}
+
 const BACK = process.env.PUBLIC_URL + 'back.svg';
 
-const getCardImagePath = (card) =>
+const getCardImagePath = (card: Card) =>
   `${process.env.PUBLIC_URL}cards/${card.suit.toUpperCase()}-${card.value}.svg`;
 
-const Card = ({
+const CardComponent = ({
   card,
   dropCard,
   hasDrop,
@@ -13,27 +29,27 @@ const Card = ({
   pickCard,
   selectCard,
   selectedCards,
-}) => {
-  const onCardClick = (e) => {
+}: CardProps) => {
+  const onCardClick = (e: any) => {
     if (e.type === 'click') {
       if (hasDrop && !isActive) {
         if (isStack) {
-          pickCard();
+          pickCard!();
         } else if (isPrevious) {
-          pickCard(card);
+          pickCard!(card);
         }
       } else if (!hasDrop && dropCard) {
-        dropCard(card);
+        dropCard(card!);
       }
     } else if (e.type === 'contextmenu') {
       e.preventDefault();
-      selectCard(card);
+      selectCard!(card!);
     }
   };
 
   const isSelected = selectedCards?.some(
-    (selectedCard) =>
-      selectedCard.value === card.value && selectedCard.suit === card.suit
+    (selectedCard: Card) =>
+      selectedCard.value === card!.value && selectedCard.suit === card!.suit
   );
 
   const canClick =
@@ -54,9 +70,9 @@ const Card = ({
       alt=''
       onClick={onCardClick}
       onContextMenu={onCardClick}
-      src={isStack ? BACK : getCardImagePath(card)}
+      src={isStack ? BACK : getCardImagePath(card!)}
     />
   );
 };
 
-export default Card;
+export default CardComponent;

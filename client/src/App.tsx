@@ -1,54 +1,10 @@
-import { useEffect, useState, useReducer } from 'react';
+import React, { useEffect, useState, useReducer } from 'react';
 
-import Card from './Card';
+import CardComponent from './components/Card';
 import './App.css';
-
-const reducer = (state, action) => {
-  if (action.type === 'setActiveCard') {
-    return { ...state, activeCard: action.payload };
-  }
-
-  if (action.type === 'setPreviousCards') {
-    if (state.activeCard) {
-      return {
-        ...state,
-        previousCards: (action.payload && [action.payload]) || [
-          state.activeCard,
-        ],
-      };
-    }
-  }
-
-  if (action.type === 'selectCard') {
-    const selectedCards = [...state.selectedCards];
-    const selectedCardIndex = state.selectedCards.findIndex(
-      (c) => action.payload.value === c.value && action.payload.suit === c.suit
-    );
-
-    if (selectedCardIndex >= 0) {
-      selectedCards.splice(selectedCardIndex, 1);
-
-      return {
-        ...state,
-        selectedCards: selectedCards,
-      };
-    } else {
-      return {
-        ...state,
-        selectedCards: [...state.selectedCards, action.payload],
-      };
-    }
-  }
-
-  if (action.type === 'resetSelectedCards') {
-    return {
-      ...state,
-      selectedCards: [],
-    };
-  }
-
-  return state;
-};
+import { canDropCard } from './core/game';
+import reducer from './reducers';
+import { Card } from './types';
 
 const client = new WebSocket('ws://localhost:8999/');
 
@@ -79,15 +35,23 @@ const App = () => {
         dispatch({ type: 'setPreviousCards' });
         dispatch({ type: 'setActiveCard', payload: activeCard });
       } else if (previousCards) {
-        console.log(previousCards);
         dispatch({ type: 'setPreviousCards', payload: previousCards });
       }
     };
   }, []);
 
-  const dropCard = (card) => {
-    setHasDrop(true);
-    if (state.selectedCards.length > 0) {
+  const dropCard = (card: Card) => {
+    const selectedCardIndex = state.selectedCards.findIndex(
+      (c: Card) => card.value === c.value && card.suit === c.suit
+    );
+
+    if (
+      selectedCardIndex !== -1 &&
+      state.selectedCards.length >= 1 &&
+      canDropCard(state.selectedCards)
+    ) {
+      setHasDrop(true);
+      dispatch({ type: 'resetSelectedCards' });
       client.send(
         JSON.stringify({
           action: 'PLAY',
@@ -96,37 +60,43 @@ const App = () => {
           room: 'coucou',
         })
       );
-    } else {
+    } else if (state.selectedCards.length === 0) {
+      setHasDrop(true);
+      dispatch({ type: 'resetSelectedCards' });
       client.send(
         JSON.stringify({ action: 'PLAY', type: 'DROP', card, room: 'coucou' })
       );
     }
-
-    dispatch({ type: 'resetSelectedCards' });
   };
 
-  const pickCard = (card) => {
+  const pickCard = (card?: Card) => {
     setHasDrop(false);
     client.send(
       JSON.stringify({ action: 'PLAY', type: 'PICK', card, room: 'coucou' })
     );
   };
 
-  const selectCard = (card) => {
+  const selectCard = (card: Card) => {
     dispatch({ type: 'selectCard', payload: card });
   };
 
   return (
     <div>
+      <div>{hasDrop && 'Please pick a card'}</div>
       {state.previousCards &&
-        state.previousCards.map((card) => (
-          <Card hasDrop={hasDrop} isPrevious card={card} pickCard={pickCard} />
+        state.previousCards.map((card: Card) => (
+          <CardComponent
+            hasDrop={hasDrop}
+            isPrevious
+            card={card}
+            pickCard={pickCard}
+          />
         ))}
-      {state.activeCard && <Card isActive card={state.activeCard} />}
-      <Card hasDrop={hasDrop} pickCard={pickCard} isStack />
+      {state.activeCard && <CardComponent isActive card={state.activeCard} />}
+      <CardComponent hasDrop={hasDrop} pickCard={pickCard} isStack />
       <br />
       {hand.map((card) => (
-        <Card
+        <CardComponent
           hasDrop={hasDrop}
           card={card}
           dropCard={dropCard}
