@@ -1,4 +1,4 @@
-import WebSocket from 'ws';
+import * as WebSocket from 'ws';
 
 export interface Card {
   suit: string;
@@ -7,7 +7,7 @@ export interface Card {
 
 export interface Room {
   deck: Card[];
-  activeCard: Card;
+  activeCards: Card[];
   users: Users;
 }
 

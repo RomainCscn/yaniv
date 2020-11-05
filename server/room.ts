@@ -1,4 +1,4 @@
-import WebSocket from 'ws';
+import * as WebSocket from 'ws';
 import { HAND_CARDS_NUMBER, getHand, getSuffledDeck } from './game';
 import { Room } from './types';
 
@@ -14,7 +14,7 @@ export const addUser = (userUuid: string, room: Room, userWs: WebSocket): void =
 export default function initRoom(): Room {
   return {
     deck: getSuffledDeck(),
-    activeCard: null,
+    activeCards: [],
     users: {},
   };
 }

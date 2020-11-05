@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as http from 'http';
 import { v4 as uuidv4 } from 'uuid';
-import WebSocket from 'ws';
+import * as WebSocket from 'ws';
 import { Card, Room, User, Users } from './types';
 
 import { sortHand } from './game';
@@ -19,13 +19,18 @@ const getCurrentUser = (roomName: string, userUuid: string) => rooms[roomName].u
 const isExistingUser = (roomName: string, userUuid: string) =>
   typeof rooms[roomName].users[userUuid] === 'object';
 
-const sendActiveCard = (users: Users, card: Card) =>
+const sendActiveCards = (users: Users, cards: Card[]) =>
   Object.entries(users).forEach(([, user]: [string, User]) => {
-    user.ws.send(JSON.stringify({ activeCard: card }));
+    user.ws.send(JSON.stringify({ activeCards: cards }));
   });
 
+const removePreviousCards = (room) =>
+  Object.entries(room.users).forEach(([, user]: [string, User]) =>
+    user.ws.send(JSON.stringify({ previousCards: [] })),
+  );
+
 const handleMultipleCardsDrop = ({ deck, users }: Room, user: User, cards: Card[]) => {
-  sendActiveCard(users, cards[cards.length - 1]);
+  sendActiveCards(users, cards);
 
   // return the hand without the cards
   cards.forEach((c: Card) => {
@@ -45,7 +50,7 @@ const handleMultipleCardsDrop = ({ deck, users }: Room, user: User, cards: Card[
 };
 
 const handleSingleCardDrop = (room: Room, user: User, card: Card) => {
-  sendActiveCard(room.users, card);
+  sendActiveCards(room.users, [card]);
 
   // return the hand without the card
   user.hand = user.hand.filter(
@@ -62,14 +67,12 @@ const handleSingleCardDrop = (room: Room, user: User, card: Card) => {
 const handlePickDroppedCard = (room: Room, user: User, card: Card) => {
   user.hand = sortHand([...user.hand, card]);
 
+  // remove the card from the deck
   room.deck = room.deck.filter(
     (deckCard) => deckCard.value !== card.value || deckCard.suit !== card.suit,
   );
 
-  // send the second to last card (last one is the active card)
-  Object.entries(room.users).forEach(([, user]: [string, User]) =>
-    user.ws.send(JSON.stringify({ previousCards: room.deck[room.deck.length - 2] })),
-  );
+  removePreviousCards(room);
 };
 
 const handlePickStackedCard = (room: Room, user: User) => {
@@ -78,6 +81,8 @@ const handlePickStackedCard = (room: Room, user: User) => {
 
   // remove the card from the deck
   room.deck = room.deck.slice(1);
+
+  removePreviousCards(room);
 };
 
 const handlePlay = (
