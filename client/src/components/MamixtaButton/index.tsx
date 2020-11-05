@@ -8,6 +8,7 @@ import styles from './styles.module.css';
 interface MamixtaButtonProps {
   client: WebSocket;
   hand: Card[];
+  roomName: string;
 }
 
 const MIN_VALUE_TO_SUBMIT = 7;
@@ -22,12 +23,12 @@ const canSubmitMamixta = (hand: Card[]): boolean => {
   return handSum <= MIN_VALUE_TO_SUBMIT;
 };
 
-const MamixtaButton = ({ client, hand }: MamixtaButtonProps) => {
+const MamixtaButton = ({ client, hand, roomName }: MamixtaButtonProps) => {
   const submit = () => {
     const canSubmit = canSubmitMamixta(hand);
 
     if (canSubmit) {
-      send(client, 'PLAY', 'MAMIXTA');
+      send(client, roomName, { action: 'PLAY', actionType: 'MAMIXTA' });
     } else {
       console.log('Plus de 7, MAMIXTA impossible !');
     }

@@ -11,6 +11,7 @@ interface DeckProps {
   hand: Card[];
   hasDrop: boolean;
   resetSelectedCards: () => void;
+  roomName: string;
   selectCard: any;
   selectedCards: Card[];
   setHasDrop: any;
@@ -21,6 +22,7 @@ const Deck = ({
   hand,
   hasDrop,
   resetSelectedCards,
+  roomName,
   selectCard,
   selectedCards,
   setHasDrop,
@@ -34,11 +36,11 @@ const Deck = ({
     if (dropMultipleCards) {
       setHasDrop(true);
       resetSelectedCards();
-      send(client, 'PLAY', 'DROP', { cards: selectedCards });
+      send(client, roomName, { action: 'PLAY', actionType: 'DROP' }, { cards: selectedCards });
     } else if (selectedCards.length === 0) {
       setHasDrop(true);
       resetSelectedCards();
-      send(client, 'PLAY', 'DROP', { card });
+      send(client, roomName, { action: 'PLAY', actionType: 'DROP' }, { card });
     }
   };
 
