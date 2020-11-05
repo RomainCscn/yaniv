@@ -12,15 +12,4 @@ const sendActiveCards = (users: Users, cards: Card[]): void => {
   );
 };
 
-const sendCardsNumberToOtherPlayers = (users: Users, userUuid: string, user: User): void => {
-  Object.entries(users).forEach(([, user]: [string, User]) => {
-    user.ws.send(
-      JSON.stringify({
-        type: 'SET_OTHER_PLAYERS_CARDS',
-        player: { uuid: userUuid, numberOfCards: user.hand.length, username: user.username },
-      }),
-    );
-  });
-};
-
-export { removePreviousCards, sendActiveCards, sendCardsNumberToOtherPlayers };
+export { removePreviousCards, sendActiveCards };

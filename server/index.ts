@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import * as WebSocket from 'ws';
 import { Card, Room, User } from './types';
 
-import { removePreviousCards, sendActiveCards, sendCardsNumberToOtherPlayers } from './dispatcher';
+import { removePreviousCards, sendActiveCards } from './dispatcher';
 import { sortHand } from './game';
 import initRoom, { addUser, assignHandToUser } from './room';
 
@@ -19,6 +19,13 @@ const getCurrentUser = (roomName: string, userUuid: string) => rooms[roomName].u
 
 const isExistingUser = (roomName: string, userUuid: string) =>
   typeof rooms[roomName].users[userUuid] === 'object';
+
+const getPlayers = (room) =>
+  Object.entries(room.users).map(([uuid, user]: [string, User]) => ({
+    uuid,
+    username: user.username,
+    numberOfCards: user.hand.length,
+  }));
 
 const handleMultipleCardsDrop = ({ deck, users }: Room, user: User, cards: Card[]) => {
   sendActiveCards(users, cards);
@@ -101,7 +108,9 @@ const handlePlay = (
     // send the hand to the user who picked the card
     user.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: user.hand }));
 
-    sendCardsNumberToOtherPlayers(room.users, userUuid, user);
+    Object.entries(room.users).forEach(([, user]: [string, User]) => {
+      user.ws.send(JSON.stringify({ type: 'SET_OTHER_PLAYERS_CARDS', players: getPlayers(room) }));
+    });
   }
 };
 
@@ -132,14 +141,13 @@ const handleStart = (roomName: string) => {
     assignHandToUser(room, user);
   });
 
-  const players = Object.entries(room.users).map(([uuid, user]: [string, User]) => ({
-    uuid,
-    username: user.username,
-    numberOfCards: user.hand.length,
-  }));
-
   Object.entries(room.users).forEach(([, user]: [string, User]) => {
-    user.ws.send(JSON.stringify({ type: 'START_GAME', players }));
+    user.ws.send(JSON.stringify({ type: 'START_GAME', players: getPlayers(room) }));
+  });
+};
+
+const handleReadyToPlay = (roomName: string) => {
+  Object.entries(rooms[roomName].users).forEach(([, user]: [string, User]) => {
     user.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: user.hand }));
   });
 };
@@ -154,6 +162,8 @@ wss.on('connection', (ws: WebSocket) => {
       handleJoin(roomName, username, userUuid, ws);
     } else if (action === 'START') {
       handleStart(roomName);
+    } else if (action === 'READY_TO_PLAY') {
+      handleReadyToPlay(roomName);
     } else if (action === 'PLAY') {
       handlePlay(actionType, card, cards, roomName, userUuid);
     }

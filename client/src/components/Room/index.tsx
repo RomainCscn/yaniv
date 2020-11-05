@@ -3,22 +3,24 @@ import React, { useEffect, useState, useReducer } from 'react';
 import ActiveCards from '../ActiveCards';
 import Deck from '../Deck';
 import MamixtaButton from '../MamixtaButton';
+import OtherPlayerDeck from '../OtherPlayerDeck';
 import PreviousCards from '../PreviousCards';
 import Stack from '../Stack';
 import reducer from '../../reducers';
-import { Card, ReceivedMessage } from '../../types';
+import { Card, OtherPlayer, ReceivedMessage } from '../../types';
 import { send } from '../../utils';
 
 interface RoomProps {
   client: WebSocket;
+  players: OtherPlayer[];
   roomName: string;
   username: string;
 }
 
-const Room = ({ client, roomName, username }: RoomProps) => {
+const Room = ({ client, players, roomName, username }: RoomProps) => {
   const [state, dispatch] = useReducer(reducer, {
     activeCards: [],
-    otherPlayers: {},
+    otherPlayers: players,
     previousCards: [],
     selectedCards: [],
   });
@@ -26,11 +28,15 @@ const Room = ({ client, roomName, username }: RoomProps) => {
   const [hasDrop, setHasDrop] = useState(false);
 
   useEffect(() => {
+    send(client, roomName, { action: 'READY_TO_PLAY' });
+  }, [client, roomName]);
+
+  useEffect(() => {
     client.onmessage = (message) => {
       const {
         activeCards,
         hand: userHand,
-        player,
+        players,
         previousCards,
         type,
       }: ReceivedMessage = JSON.parse(message.data);
@@ -43,7 +49,8 @@ const Room = ({ client, roomName, username }: RoomProps) => {
       } else if (type === 'SET_PREVIOUS_CARDS') {
         dispatch({ type: 'setPreviousCards', payload: previousCards });
       } else if (type === 'SET_OTHER_PLAYERS_CARDS') {
-        console.log(player);
+        const otherPlayers = players.filter((player) => player.username !== username);
+        dispatch({ type: 'setOtherPlayers', payload: otherPlayers });
       }
     };
   }, [client, roomName, username]);
@@ -63,6 +70,9 @@ const Room = ({ client, roomName, username }: RoomProps) => {
 
   return (
     <>
+      {state.otherPlayers.map(({ numberOfCards, username }: OtherPlayer) => (
+        <OtherPlayerDeck numberOfCards={numberOfCards} username={username} />
+      ))}
       <PreviousCards hasDrop={hasDrop} pickCard={pickCard} previousCards={state.previousCards} />
       <ActiveCards activeCards={state.activeCards} />
       <Stack hasDrop={hasDrop} pickCard={pickCard} />

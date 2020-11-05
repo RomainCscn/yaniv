@@ -13,15 +13,20 @@ interface PreviousCardsProps {
 const PreviousCards = ({ hasDrop, pickCard, previousCards }: PreviousCardsProps) => {
   return (
     <>
-      {previousCards.map((card: Card) => (
-        <CardComponent
-          key={getCardUniqueIndex(card)}
-          hasDrop={hasDrop}
-          isPrevious
-          card={card}
-          pickCard={pickCard}
-        />
-      ))}
+      {previousCards.map((card: Card, index) => {
+        const lastCardIndex = previousCards.length - 1;
+        console.log({ lastCardIndex, index });
+
+        return (
+          <CardComponent
+            key={getCardUniqueIndex(card)}
+            hasDrop={hasDrop}
+            isPrevious
+            card={card}
+            pickCard={(index === 0 || index === lastCardIndex) && pickCard}
+          />
+        );
+      })}
     </>
   );
 };

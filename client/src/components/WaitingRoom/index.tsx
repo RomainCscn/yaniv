@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import Room from '../Room';
-import { ReceivedMessage } from '../../types';
+import { OtherPlayer, ReceivedMessage } from '../../types';
 import { send } from '../../utils';
 
 interface RoomProps {
@@ -13,6 +13,7 @@ interface RoomProps {
 const WaitingRoom = ({ client, roomName, username }: RoomProps) => {
   const [play, setPlay] = useState(false);
   const [usernames, setUsernames] = useState<string[]>([]);
+  const [players, setPlayers] = useState<OtherPlayer[]>([]);
 
   useEffect(() => {
     send(client, roomName, { action: 'JOIN' }, { username });
@@ -23,7 +24,8 @@ const WaitingRoom = ({ client, roomName, username }: RoomProps) => {
       if (type === 'PLAYERS_UPDATE') {
         setUsernames(usernameList);
       } else if (type === 'START_GAME') {
-        console.log(players);
+        const otherPlayers = players.filter((player) => player.username !== username);
+        setPlayers(otherPlayers);
         setPlay(true);
       }
     };
@@ -36,7 +38,7 @@ const WaitingRoom = ({ client, roomName, username }: RoomProps) => {
   return (
     <div>
       {play ? (
-        <Room client={client} roomName={roomName} username={username} />
+        <Room client={client} players={players} roomName={roomName} username={username} />
       ) : (
         <>
           <p>Joueur dans le salon :</p>

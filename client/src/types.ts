@@ -27,6 +27,6 @@ export type ReceivedMessageType =
   | 'SET_PREVIOUS_CARDS'
   | 'START_GAME';
 
-export type MessageAction = 'JOIN' | 'PLAY' | 'START';
+export type MessageAction = 'JOIN' | 'PLAY' | 'READY_TO_PLAY' | 'START';
 
 export type MessageActionType = 'DROP' | 'MAMIXTA' | 'PICK';

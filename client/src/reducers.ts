@@ -1,19 +1,20 @@
 import { canSelectCard } from './core/game';
 import { findCardIndex } from './core/utils';
-import { Card } from './types';
+import { Card, OtherPlayer } from './types';
 
 enum ActionType {
-  setActiveCards = 'setActiveCards',
-  setPreviousCards = 'setPreviousCards',
-  selectCard = 'selectCard',
   resetSelectedCards = 'resetSelectedCards',
+  selectCard = 'selectCard',
+  setActiveCards = 'setActiveCards',
+  setOtherPlayers = 'setOtherPlayers',
+  setPreviousCards = 'setPreviousCards',
 }
 
 type ActionTypeKeys = keyof typeof ActionType;
 
 interface Action {
   type: ActionTypeKeys;
-  payload?: Card | Card[];
+  payload?: Card | Card[] | OtherPlayer[];
 }
 
 const reducer = (state: any, action: Action) => {
@@ -59,6 +60,13 @@ const reducer = (state: any, action: Action) => {
     return {
       ...state,
       selectedCards: [],
+    };
+  }
+
+  if (action.type === 'setOtherPlayers') {
+    return {
+      ...state,
+      otherPlayers: action.payload,
     };
   }
 
