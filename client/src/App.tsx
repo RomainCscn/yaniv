@@ -7,7 +7,7 @@ import OtherPlayerDeck from './components/OtherPlayerDeck';
 import PreviousCards from './components/PreviousCards';
 import Stack from './components/Stack';
 import reducer from './reducers';
-import { Card } from './types';
+import { Card, ReceivedMessage } from './types';
 import { send } from './utils';
 
 import './App.css';
@@ -17,10 +17,11 @@ const client = new WebSocket('ws://localhost:8999/');
 const App = () => {
   const [state, dispatch] = useReducer(reducer, {
     activeCards: [],
+    otherPlayers: {},
     previousCards: [],
     selectedCards: [],
   });
-  const [hand, setHand] = useState([]);
+  const [hand, setHand] = useState<Card[]>([]);
   const [hasDrop, setHasDrop] = useState(false);
 
   useEffect(() => {
@@ -29,15 +30,23 @@ const App = () => {
     };
 
     client.onmessage = (message) => {
-      const { activeCards, hand: userHand, previousCards } = JSON.parse(message.data);
+      const {
+        activeCards,
+        hand: userHand,
+        player,
+        previousCards,
+        type,
+      }: ReceivedMessage = JSON.parse(message.data);
 
-      if (userHand) {
+      if (type === 'SET_PLAYER_HAND') {
         setHand(userHand);
-      } else if (activeCards) {
+      } else if (type === 'SET_ACTIVE_CARDS') {
         dispatch({ type: 'setPreviousCards' });
         dispatch({ type: 'setActiveCards', payload: activeCards });
-      } else if (previousCards) {
+      } else if (type === 'SET_PREVIOUS_CARDS') {
         dispatch({ type: 'setPreviousCards', payload: previousCards });
+      } else if (type === 'SET_OTHER_PLAYERS_CARDS') {
+        console.log(player);
       }
     };
   }, []);
