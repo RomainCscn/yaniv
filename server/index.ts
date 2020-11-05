@@ -2,8 +2,9 @@ import * as express from 'express';
 import * as http from 'http';
 import { v4 as uuidv4 } from 'uuid';
 import * as WebSocket from 'ws';
-import { Card, Room, User, Users } from './types';
+import { Card, Room, User } from './types';
 
+import { removePreviousCards, sendActiveCards, sendCardsNumberToOtherPlayers } from './dispatcher';
 import { sortHand } from './game';
 import initRoom, { addUser } from './room';
 
@@ -12,22 +13,12 @@ const app = express();
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-const rooms = {};
+const rooms: Record<string, Room> = {};
 
 const getCurrentUser = (roomName: string, userUuid: string) => rooms[roomName].users[userUuid];
 
 const isExistingUser = (roomName: string, userUuid: string) =>
   typeof rooms[roomName].users[userUuid] === 'object';
-
-const sendActiveCards = (users: Users, cards: Card[]) =>
-  Object.entries(users).forEach(([, user]: [string, User]) => {
-    user.ws.send(JSON.stringify({ activeCards: cards }));
-  });
-
-const removePreviousCards = (room) =>
-  Object.entries(room.users).forEach(([, user]: [string, User]) =>
-    user.ws.send(JSON.stringify({ previousCards: [] })),
-  );
 
 const handleMultipleCardsDrop = ({ deck, users }: Room, user: User, cards: Card[]) => {
   sendActiveCards(users, cards);
@@ -46,11 +37,11 @@ const handleMultipleCardsDrop = ({ deck, users }: Room, user: User, cards: Card[
   deck.push(...cards);
 
   // send the hand to the user who dropped the cards
-  user.ws.send(JSON.stringify({ hand: user.hand }));
+  user.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: user.hand }));
 };
 
-const handleSingleCardDrop = (room: Room, user: User, card: Card) => {
-  sendActiveCards(room.users, [card]);
+const handleSingleCardDrop = ({ deck, users }: Room, user: User, card: Card) => {
+  sendActiveCards(users, [card]);
 
   // return the hand without the card
   user.hand = user.hand.filter(
@@ -58,10 +49,10 @@ const handleSingleCardDrop = (room: Room, user: User, card: Card) => {
   );
 
   // push back the card so the deck is never empty
-  room.deck.push(card);
+  deck.push(card);
 
   // send the hand to the user who dropped the card
-  user.ws.send(JSON.stringify({ hand: user.hand }));
+  user.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: user.hand }));
 };
 
 const handlePickDroppedCard = (room: Room, user: User, card: Card) => {
@@ -108,7 +99,9 @@ const handlePlay = (
       handlePickStackedCard(room, user);
     }
     // send the hand to the user who picked the card
-    user.ws.send(JSON.stringify({ hand: user.hand }));
+    user.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: user.hand }));
+
+    sendCardsNumberToOtherPlayers(room.users, userUuid, user.hand.length);
   }
 };
 
@@ -123,6 +116,12 @@ const handleJoin = (roomName: string, userUuid: string, ws: WebSocket) => {
 
   if (!isExistingUser(roomName, userUuid)) {
     addUser(userUuid, rooms[roomName], ws);
+
+    sendCardsNumberToOtherPlayers(
+      rooms[roomName].users,
+      userUuid,
+      getCurrentUser(roomName, userUuid).hand.length,
+    );
   }
 };
 
