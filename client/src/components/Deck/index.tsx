@@ -2,7 +2,7 @@ import React from 'react';
 
 import CardComponent from '../Card';
 import { canDropCard } from '../../core/game';
-import { findCardIndex } from '../../core/utils';
+import { findCardIndex, getCardUniqueIndex } from '../../core/utils';
 import { Card } from '../../types';
 import { send } from '../../utils';
 
@@ -46,6 +46,7 @@ const Deck = ({
     <>
       {hand.map((card) => (
         <CardComponent
+          key={getCardUniqueIndex(card)}
           dropCard={dropCard}
           hasDrop={hasDrop}
           card={card}

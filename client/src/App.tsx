@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useReducer } from 'react';
 
-import CardComponent from './components/Card';
+import ActiveCards from './components/ActiveCards';
 import Deck from './components/Deck';
 import MamixtaButton from './components/MamixtaButton';
 import OtherPlayerDeck from './components/OtherPlayerDeck';
+import PreviousCards from './components/PreviousCards';
+import Stack from './components/Stack';
 import reducer from './reducers';
 import { Card } from './types';
 import { send } from './utils';
@@ -53,31 +55,26 @@ const App = () => {
     dispatch({ type: 'selectCard', payload: card });
   };
 
-  console.log(state?.previousCards);
-
   return (
     <div>
       <OtherPlayerDeck numberOfCards={3} />
-      <div>{hasDrop && 'Please pick a card'}</div>
-      {state?.previousCards.length > 0 &&
-        state.previousCards.map((card: Card) => (
-          <CardComponent hasDrop={hasDrop} isPrevious card={card} pickCard={pickCard} />
-        ))}
-      {state.activeCards.map((card: Card) => (
-        <CardComponent isActive card={card} />
-      ))}
-      <CardComponent hasDrop={hasDrop} pickCard={pickCard} isStack />
-      <br />
-      <Deck
-        client={client}
-        hand={hand}
-        hasDrop={hasDrop}
-        resetSelectedCards={resetSelectedCards}
-        setHasDrop={setHasDrop}
-        selectCard={selectCard}
-        selectedCards={state.selectedCards}
-      />
-      <MamixtaButton client={client} hand={hand} />
+      <PreviousCards hasDrop={hasDrop} pickCard={pickCard} previousCards={state.previousCards} />
+      <ActiveCards activeCards={state.activeCards} />
+      <Stack hasDrop={hasDrop} pickCard={pickCard} />
+      <div>
+        <Deck
+          client={client}
+          hand={hand}
+          hasDrop={hasDrop}
+          resetSelectedCards={resetSelectedCards}
+          setHasDrop={setHasDrop}
+          selectCard={selectCard}
+          selectedCards={state.selectedCards}
+        />
+      </div>
+      <div>
+        <MamixtaButton client={client} hand={hand} />
+      </div>
     </div>
   );
 };
