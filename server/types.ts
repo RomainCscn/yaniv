@@ -13,6 +13,7 @@ export interface Room {
 
 export interface User {
   hand: Card[];
+  username: string;
   ws: WebSocket;
 }
 

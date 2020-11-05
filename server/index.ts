@@ -6,7 +6,7 @@ import { Card, Room, User } from './types';
 
 import { removePreviousCards, sendActiveCards, sendCardsNumberToOtherPlayers } from './dispatcher';
 import { sortHand } from './game';
-import initRoom, { addUser } from './room';
+import initRoom, { addUser, assignHandToUser } from './room';
 
 const app = express();
 
@@ -101,11 +101,11 @@ const handlePlay = (
     // send the hand to the user who picked the card
     user.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: user.hand }));
 
-    sendCardsNumberToOtherPlayers(room.users, userUuid, user.hand.length);
+    sendCardsNumberToOtherPlayers(room.users, userUuid, user);
   }
 };
 
-const handleJoin = (roomName: string, userUuid: string, ws: WebSocket) => {
+const handleJoin = (roomName: string, username: string, userUuid: string, ws: WebSocket) => {
   if (!rooms[roomName]) {
     rooms[roomName] = initRoom();
   }
@@ -115,24 +115,45 @@ const handleJoin = (roomName: string, userUuid: string, ws: WebSocket) => {
   }
 
   if (!isExistingUser(roomName, userUuid)) {
-    addUser(userUuid, rooms[roomName], ws);
+    addUser(userUuid, rooms[roomName], username, ws);
 
-    sendCardsNumberToOtherPlayers(
-      rooms[roomName].users,
-      userUuid,
-      getCurrentUser(roomName, userUuid).hand.length,
-    );
+    const usernames = Object.entries(rooms[roomName].users).map(([, user]) => user.username);
+
+    Object.entries(rooms[roomName].users).forEach(([, user]: [string, User]) => {
+      user.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', usernameList: usernames }));
+    });
   }
+};
+
+const handleStart = (roomName: string) => {
+  const room = rooms[roomName];
+
+  Object.entries(room.users).forEach(([, user]: [string, User]) => {
+    assignHandToUser(room, user);
+  });
+
+  const players = Object.entries(room.users).map(([uuid, user]: [string, User]) => ({
+    uuid,
+    username: user.username,
+    numberOfCards: user.hand.length,
+  }));
+
+  Object.entries(room.users).forEach(([, user]: [string, User]) => {
+    user.ws.send(JSON.stringify({ type: 'START_GAME', players }));
+    user.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: user.hand }));
+  });
 };
 
 wss.on('connection', (ws: WebSocket) => {
   const userUuid = uuidv4();
 
   ws.on('message', (data: string) => {
-    const { action, actionType, card, cards, room: roomName } = JSON.parse(data);
+    const { action, actionType, card, cards, room: roomName, username } = JSON.parse(data);
 
     if (action === 'JOIN') {
-      handleJoin(roomName, userUuid, ws);
+      handleJoin(roomName, username, userUuid, ws);
+    } else if (action === 'START') {
+      handleStart(roomName);
     } else if (action === 'PLAY') {
       handlePlay(actionType, card, cards, roomName, userUuid);
     }
