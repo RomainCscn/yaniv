@@ -1,4 +1,5 @@
 import { canSelectCard } from './core/game';
+import { findCardIndex } from './core/utils';
 import { Card } from './types';
 
 enum ActionType {
@@ -12,7 +13,7 @@ type ActionTypeKeys = keyof typeof ActionType;
 
 interface Action {
   type: ActionTypeKeys;
-  payload?: any;
+  payload?: Card | Card[];
 }
 
 const reducer = (state: any, action: Action) => {
@@ -24,25 +25,20 @@ const reducer = (state: any, action: Action) => {
     if (state.activeCard) {
       return {
         ...state,
-        previousCards: (action.payload && [action.payload]) || [
-          state.activeCard,
-        ],
+        previousCards: (action.payload && [action.payload]) || [state.activeCard],
       };
     }
   }
 
   if (action.type === 'selectCard') {
-    const canSelect = canSelectCard(action.payload, state.selectedCards);
+    const canSelect = canSelectCard(action.payload as Card, state.selectedCards);
 
     if (!canSelect) {
       return state;
     }
 
     const selectedCards = [...state.selectedCards];
-    const selectedCardIndex = state.selectedCards.findIndex(
-      (c: Card) =>
-        action.payload.value === c.value && action.payload.suit === c.suit
-    );
+    const selectedCardIndex = findCardIndex(action.payload as Card, state.selectedCards);
 
     if (selectedCardIndex >= 0) {
       selectedCards.splice(selectedCardIndex, 1);

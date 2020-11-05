@@ -1,12 +1,19 @@
 import React, { useEffect, useState, useReducer } from 'react';
 
 import CardComponent from './components/Card';
-import './App.css';
+import MaxmixtaButton from './components/MamixtaButton';
 import { canDropCard } from './core/game';
+import { findCardIndex } from './core/utils';
 import reducer from './reducers';
-import { Card } from './types';
+import { Card, MessageAction, MessageActionType } from './types';
+import './App.css';
 
+const ROOM = 'TEST';
 const client = new WebSocket('ws://localhost:8999/');
+
+const send = (action: MessageAction, actionType?: MessageActionType, data?: object) => {
+  client.send(JSON.stringify({ action, actionType, room: ROOM, ...data }));
+};
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, {
@@ -19,15 +26,11 @@ const App = () => {
 
   useEffect(() => {
     client.onopen = () => {
-      client.send(
-        JSON.stringify({ action: 'JOIN', room: 'coucou', message: 'test' })
-      );
+      send('JOIN');
     };
 
     client.onmessage = (message) => {
-      const { activeCard, hand: userHand, previousCards } = JSON.parse(
-        message.data
-      );
+      const { activeCard, hand: userHand, previousCards } = JSON.parse(message.data);
 
       if (userHand) {
         setHand(userHand);
@@ -41,39 +44,27 @@ const App = () => {
   }, []);
 
   const dropCard = (card: Card) => {
-    const selectedCardIndex = state.selectedCards.findIndex(
-      (c: Card) => card.value === c.value && card.suit === c.suit
-    );
+    const selectedCardIndex = findCardIndex(card, state.selectedCards);
 
-    if (
+    const dropMultipleCards =
       selectedCardIndex !== -1 &&
       state.selectedCards.length >= 1 &&
-      canDropCard(state.selectedCards)
-    ) {
+      canDropCard(state.selectedCards);
+
+    if (dropMultipleCards) {
       setHasDrop(true);
       dispatch({ type: 'resetSelectedCards' });
-      client.send(
-        JSON.stringify({
-          action: 'PLAY',
-          type: 'DROP',
-          cards: state.selectedCards,
-          room: 'coucou',
-        })
-      );
+      send('PLAY', 'DROP', { cards: state.selectedCards });
     } else if (state.selectedCards.length === 0) {
       setHasDrop(true);
       dispatch({ type: 'resetSelectedCards' });
-      client.send(
-        JSON.stringify({ action: 'PLAY', type: 'DROP', card, room: 'coucou' })
-      );
+      send('PLAY', 'DROP', { card });
     }
   };
 
   const pickCard = (card?: Card) => {
     setHasDrop(false);
-    client.send(
-      JSON.stringify({ action: 'PLAY', type: 'PICK', card, room: 'coucou' })
-    );
+    send('PLAY', 'PICK', { card });
   };
 
   const selectCard = (card: Card) => {
@@ -83,15 +74,9 @@ const App = () => {
   return (
     <div>
       <div>{hasDrop && 'Please pick a card'}</div>
-      {state.previousCards &&
-        state.previousCards.map((card: Card) => (
-          <CardComponent
-            hasDrop={hasDrop}
-            isPrevious
-            card={card}
-            pickCard={pickCard}
-          />
-        ))}
+      {state?.previousCards.map((card: Card) => (
+        <CardComponent hasDrop={hasDrop} isPrevious card={card} pickCard={pickCard} />
+      ))}
       {state.activeCard && <CardComponent isActive card={state.activeCard} />}
       <CardComponent hasDrop={hasDrop} pickCard={pickCard} isStack />
       <br />
@@ -104,6 +89,7 @@ const App = () => {
           selectedCards={state.selectedCards}
         />
       ))}
+      <MaxmixtaButton hand={hand} send={send} />
     </div>
   );
 };
