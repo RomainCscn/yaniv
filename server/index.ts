@@ -1,10 +1,10 @@
 import * as express from 'express';
 import * as http from 'http';
 import { v4 as uuidv4 } from 'uuid';
-import * as WebSocket from 'ws';
-import { Card } from './card';
+import WebSocket from 'ws';
+import { Card, Room, User, Users } from './types';
 
-import { HAND_CARDS_NUMBER, getHand, getSuffledDeck, sortHand } from './game';
+import { sortHand } from './game';
 import initRoom, { addUser } from './room';
 
 const app = express();
@@ -19,12 +19,12 @@ const getCurrentUser = (roomName: string, userUuid: string) => rooms[roomName].u
 const isExistingUser = (roomName: string, userUuid: string) =>
   typeof rooms[roomName].users[userUuid] === 'object';
 
-const sendActiveCard = (users: any, card: Card) =>
-  Object.entries(users).forEach(([, user]: [string, any]) => {
+const sendActiveCard = (users: Users, card: Card) =>
+  Object.entries(users).forEach(([, user]: [string, User]) => {
     user.ws.send(JSON.stringify({ activeCard: card }));
   });
 
-const handleMultipleCardsDrop = ({ deck, users }: any, user: any, cards: any) => {
+const handleMultipleCardsDrop = ({ deck, users }: Room, user: User, cards: Card[]) => {
   sendActiveCard(users, cards[cards.length - 1]);
 
   // return the hand without the cards
@@ -44,7 +44,7 @@ const handleMultipleCardsDrop = ({ deck, users }: any, user: any, cards: any) =>
   user.ws.send(JSON.stringify({ hand: user.hand }));
 };
 
-const handleSingleCardDrop = (room: any, user: any, card: Card) => {
+const handleSingleCardDrop = (room: Room, user: User, card: Card) => {
   sendActiveCard(room.users, card);
 
   // return the hand without the card
@@ -59,7 +59,7 @@ const handleSingleCardDrop = (room: any, user: any, card: Card) => {
   user.ws.send(JSON.stringify({ hand: user.hand }));
 };
 
-const handlePickDroppedCard = (room: any, user: any, card: Card) => {
+const handlePickDroppedCard = (room: Room, user: User, card: Card) => {
   user.hand = sortHand([...user.hand, card]);
 
   room.deck = room.deck.filter(
@@ -67,12 +67,12 @@ const handlePickDroppedCard = (room: any, user: any, card: Card) => {
   );
 
   // send the second to last card (last one is the active card)
-  Object.entries(room.users).forEach(([, user]: [string, any]) =>
+  Object.entries(room.users).forEach(([, user]: [string, User]) =>
     user.ws.send(JSON.stringify({ previousCards: room.deck[room.deck.length - 2] })),
   );
 };
 
-const handlePickStackedCard = (room: any, user: any) => {
+const handlePickStackedCard = (room: Room, user: User) => {
   // add the first card of the deck to the user hand
   user.hand = sortHand([...user.hand, room.deck[0]]);
 
@@ -83,7 +83,7 @@ const handlePickStackedCard = (room: any, user: any) => {
 const handlePlay = (
   actionType: string,
   card: Card,
-  cards: any,
+  cards: Card[],
   roomName: string,
   userUuid: string,
 ) => {

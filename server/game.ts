@@ -1,4 +1,4 @@
-import { Card } from './card';
+import { Card } from './types';
 
 const suits = ['spade', 'diamond', 'club', 'heart'];
 const values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
@@ -17,13 +17,13 @@ const getDeck = () => {
   return deck;
 };
 
-const shuffle = (deck) => {
+const shuffle = (deck: Card[]) => {
   const shuffledDeck = [...deck];
 
-  for (var i = 0; i < 1000; i++) {
-    var location1 = Math.floor(Math.random() * shuffledDeck.length);
-    var location2 = Math.floor(Math.random() * shuffledDeck.length);
-    var tmp = shuffledDeck[location1];
+  for (let i = 0; i < 1000; i++) {
+    const location1 = Math.floor(Math.random() * shuffledDeck.length);
+    const location2 = Math.floor(Math.random() * shuffledDeck.length);
+    const tmp = shuffledDeck[location1];
 
     shuffledDeck[location1] = shuffledDeck[location2];
     shuffledDeck[location2] = tmp;
@@ -32,9 +32,9 @@ const shuffle = (deck) => {
   return shuffledDeck;
 };
 
-const getSuffledDeck = () => shuffle(getDeck());
+const getSuffledDeck = (): Card[] => shuffle(getDeck());
 
-const sortHand = (hand: Array<Card>) => {
+const sortHand = (hand: Card[]): Card[] => {
   return hand
     .sort((a, b) => b.value - a.value)
     .sort((a, b) => {
@@ -50,7 +50,7 @@ const sortHand = (hand: Array<Card>) => {
     });
 };
 
-const getHand = (deck) => {
+const getHand = (deck: Card[]): Card[] => {
   return sortHand(deck.slice(0, HAND_CARDS_NUMBER));
 };
 

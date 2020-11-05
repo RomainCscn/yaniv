@@ -1,6 +1,8 @@
-import { HAND_CARDS_NUMBER, getHand, getSuffledDeck, sortHand } from './game';
+import WebSocket from 'ws';
+import { HAND_CARDS_NUMBER, getHand, getSuffledDeck } from './game';
+import { Room } from './types';
 
-export const addUser = (userUuid, room, userWs) => {
+export const addUser = (userUuid: string, room: Room, userWs: WebSocket): void => {
   const userHand = getHand(room.deck);
 
   room.users[userUuid] = { hand: userHand, ws: userWs };
@@ -9,7 +11,7 @@ export const addUser = (userUuid, room, userWs) => {
   userWs.send(JSON.stringify({ hand: userHand }));
 };
 
-export default function initRoom() {
+export default function initRoom(): Room {
   return {
     deck: getSuffledDeck(),
     activeCard: null,
