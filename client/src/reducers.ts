@@ -3,7 +3,7 @@ import { findCardIndex } from './core/utils';
 import { Card } from './types';
 
 enum ActionType {
-  setActiveCard = 'setActiveCard',
+  setActiveCards = 'setActiveCards',
   setPreviousCards = 'setPreviousCards',
   selectCard = 'selectCard',
   resetSelectedCards = 'resetSelectedCards',
@@ -17,15 +17,15 @@ interface Action {
 }
 
 const reducer = (state: any, action: Action) => {
-  if (action.type === 'setActiveCard') {
-    return { ...state, activeCard: action.payload };
+  if (action.type === 'setActiveCards') {
+    return { ...state, activeCards: action.payload };
   }
 
   if (action.type === 'setPreviousCards') {
-    if (state.activeCard) {
+    if (state.activeCards) {
       return {
         ...state,
-        previousCards: (action.payload && [action.payload]) || [state.activeCard],
+        previousCards: action.payload || state.activeCards,
       };
     }
   }

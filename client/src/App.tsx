@@ -1,23 +1,20 @@
 import React, { useEffect, useState, useReducer } from 'react';
 
 import CardComponent from './components/Card';
-import MaxmixtaButton from './components/MamixtaButton';
-import { canDropCard } from './core/game';
-import { findCardIndex } from './core/utils';
+import Deck from './components/Deck';
+import MamixtaButton from './components/MamixtaButton';
+import OtherPlayerDeck from './components/OtherPlayerDeck';
 import reducer from './reducers';
-import { Card, MessageAction, MessageActionType } from './types';
+import { Card } from './types';
+import { send } from './utils';
+
 import './App.css';
 
-const ROOM = 'TEST';
 const client = new WebSocket('ws://localhost:8999/');
-
-const send = (action: MessageAction, actionType?: MessageActionType, data?: object) => {
-  client.send(JSON.stringify({ action, actionType, room: ROOM, ...data }));
-};
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, {
-    activeCard: null,
+    activeCards: [],
     previousCards: [],
     selectedCards: [],
   });
@@ -26,70 +23,61 @@ const App = () => {
 
   useEffect(() => {
     client.onopen = () => {
-      send('JOIN');
+      send(client, 'JOIN');
     };
 
     client.onmessage = (message) => {
-      const { activeCard, hand: userHand, previousCards } = JSON.parse(message.data);
+      const { activeCards, hand: userHand, previousCards } = JSON.parse(message.data);
 
       if (userHand) {
         setHand(userHand);
-      } else if (activeCard) {
+      } else if (activeCards) {
         dispatch({ type: 'setPreviousCards' });
-        dispatch({ type: 'setActiveCard', payload: activeCard });
+        dispatch({ type: 'setActiveCards', payload: activeCards });
       } else if (previousCards) {
         dispatch({ type: 'setPreviousCards', payload: previousCards });
       }
     };
   }, []);
 
-  const dropCard = (card: Card) => {
-    const selectedCardIndex = findCardIndex(card, state.selectedCards);
-
-    const dropMultipleCards =
-      selectedCardIndex !== -1 &&
-      state.selectedCards.length >= 1 &&
-      canDropCard(state.selectedCards);
-
-    if (dropMultipleCards) {
-      setHasDrop(true);
-      dispatch({ type: 'resetSelectedCards' });
-      send('PLAY', 'DROP', { cards: state.selectedCards });
-    } else if (state.selectedCards.length === 0) {
-      setHasDrop(true);
-      dispatch({ type: 'resetSelectedCards' });
-      send('PLAY', 'DROP', { card });
-    }
-  };
-
   const pickCard = (card?: Card) => {
     setHasDrop(false);
-    send('PLAY', 'PICK', { card });
+    send(client, 'PLAY', 'PICK', { card });
+  };
+
+  const resetSelectedCards = () => {
+    dispatch({ type: 'resetSelectedCards' });
   };
 
   const selectCard = (card: Card) => {
     dispatch({ type: 'selectCard', payload: card });
   };
 
+  console.log(state?.previousCards);
+
   return (
     <div>
+      <OtherPlayerDeck numberOfCards={3} />
       <div>{hasDrop && 'Please pick a card'}</div>
-      {state?.previousCards.map((card: Card) => (
-        <CardComponent hasDrop={hasDrop} isPrevious card={card} pickCard={pickCard} />
+      {state?.previousCards.length > 0 &&
+        state.previousCards.map((card: Card) => (
+          <CardComponent hasDrop={hasDrop} isPrevious card={card} pickCard={pickCard} />
+        ))}
+      {state.activeCards.map((card: Card) => (
+        <CardComponent isActive card={card} />
       ))}
-      {state.activeCard && <CardComponent isActive card={state.activeCard} />}
       <CardComponent hasDrop={hasDrop} pickCard={pickCard} isStack />
       <br />
-      {hand.map((card) => (
-        <CardComponent
-          hasDrop={hasDrop}
-          card={card}
-          dropCard={dropCard}
-          selectCard={selectCard}
-          selectedCards={state.selectedCards}
-        />
-      ))}
-      <MaxmixtaButton hand={hand} send={send} />
+      <Deck
+        client={client}
+        hand={hand}
+        hasDrop={hasDrop}
+        resetSelectedCards={resetSelectedCards}
+        setHasDrop={setHasDrop}
+        selectCard={selectCard}
+        selectedCards={state.selectedCards}
+      />
+      <MamixtaButton client={client} hand={hand} />
     </div>
   );
 };

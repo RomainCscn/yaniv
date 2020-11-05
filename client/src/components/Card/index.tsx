@@ -1,17 +1,17 @@
 import React from 'react';
 
-import { Card } from '../../types'
+import { Card } from '../../types';
 
 interface CardProps {
-  card?: Card,
-  dropCard?: (card: Card) => void,
-  hasDrop?: boolean,
-  isActive?: boolean,
-  isPrevious?: boolean,
-  isStack?: boolean,
-  pickCard?: (card?: Card) => void,
-  selectCard?: (card: Card) => void,
-  selectedCards?: Card[]
+  card?: Card;
+  dropCard?: (card: Card) => void;
+  hasDrop?: boolean;
+  isActive?: boolean;
+  isPrevious?: boolean;
+  isStack?: boolean;
+  pickCard?: (card?: Card) => void;
+  selectCard?: (card: Card) => void;
+  selectedCards?: Card[];
 }
 
 const BACK = process.env.PUBLIC_URL + 'back.svg';
@@ -48,12 +48,10 @@ const CardComponent = ({
   };
 
   const isSelected = selectedCards?.some(
-    (selectedCard: Card) =>
-      selectedCard.value === card!.value && selectedCard.suit === card!.suit
+    (selectedCard: Card) => selectedCard.value === card!.value && selectedCard.suit === card!.suit,
   );
 
-  const canClick =
-    (!isActive && !hasDrop && dropCard) || (hasDrop && (isStack || isPrevious));
+  const canClick = (!isActive && !hasDrop && dropCard) || (hasDrop && (isStack || isPrevious));
 
   return (
     <img

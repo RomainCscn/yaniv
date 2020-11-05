@@ -1,12 +1,13 @@
 import React from 'react';
 
-import { Card, MessageAction, MessageActionType } from '../../types';
+import { Card } from '../../types';
+import { send } from '../../utils';
 
 import styles from './styles.module.css';
 
 interface MamixtaButtonProps {
+  client: WebSocket;
   hand: Card[];
-  send: (action: MessageAction, type?: MessageActionType, data?: object) => void;
 }
 
 const MIN_VALUE_TO_SUBMIT = 7;
@@ -21,12 +22,12 @@ const canSubmitMamixta = (hand: Card[]): boolean => {
   return handSum <= MIN_VALUE_TO_SUBMIT;
 };
 
-const MamixtaButton = ({ hand, send }: MamixtaButtonProps) => {
+const MamixtaButton = ({ client, hand }: MamixtaButtonProps) => {
   const submit = () => {
     const canSubmit = canSubmitMamixta(hand);
 
     if (canSubmit) {
-      send('PLAY', 'MAMIXTA');
+      send(client, 'PLAY', 'MAMIXTA');
     } else {
       console.log('Plus de 7, MAMIXTA impossible !');
     }
