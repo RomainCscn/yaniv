@@ -4,16 +4,12 @@ import { Card } from '../../types';
 
 interface CardProps {
   canPlay: boolean;
-  card?: Card;
-  dropCard?: (card: Card) => void;
-  hasDrop?: boolean;
-  isStack?: boolean;
-  pickCard?: false | ((card?: Card) => void);
-  selectCard?: (card: Card) => void;
-  selectedCards?: Card[];
+  card: Card;
+  dropCard: (card: Card) => void;
+  hasDrop: boolean;
+  selectCard: (card: Card) => void;
+  selectedCards: Card[];
 }
-
-const BACK = process.env.PUBLIC_URL + 'back.svg';
 
 const getCardImagePath = (card: Card) =>
   `${process.env.PUBLIC_URL}cards/${card.suit.toUpperCase()}-${card.value}.svg`;
@@ -23,21 +19,14 @@ const CardComponent = ({
   card,
   dropCard,
   hasDrop,
-  isStack,
-  pickCard,
   selectCard,
   selectedCards,
 }: CardProps) => {
-  const onCardClick = (e: any) => {
-    if (canPlay && e.type === 'click') {
-      if (hasDrop && isStack && pickCard) {
-        pickCard();
-      } else if (!hasDrop && dropCard) {
-        dropCard(card!);
-      }
-    } else if (canPlay && e.type === 'contextmenu') {
-      e.preventDefault();
-      selectCard!(card!);
+  const onCardClick = (e: React.MouseEvent) => {
+    if (e.type === 'click' && canPlay && !hasDrop) {
+      dropCard(card!);
+    } else if (e.type === 'contextmenu' && canPlay && !hasDrop) {
+      selectCard(card);
     }
   };
 
@@ -45,14 +34,12 @@ const CardComponent = ({
     (selectedCard: Card) => selectedCard.value === card!.value && selectedCard.suit === card!.suit,
   );
 
-  const canClick = canPlay && ((!hasDrop && dropCard) || (hasDrop && pickCard && isStack));
+  const canClick = canPlay && !hasDrop && !!dropCard;
 
   return (
     <img
       style={{
-        border: `${isSelected ? '2px' : '1px'} solid ${
-          isStack ? 'transparent' : isSelected ? 'green' : 'black'
-        }`,
+        border: `${isSelected ? '2px' : '1px'} solid ${isSelected ? 'green' : 'black'}`,
         margin: '6px',
         borderRadius: '8px',
         cursor: canClick ? 'pointer' : '',
@@ -62,7 +49,7 @@ const CardComponent = ({
       alt=''
       onClick={onCardClick}
       onContextMenu={onCardClick}
-      src={isStack ? BACK : getCardImagePath(card!)}
+      src={getCardImagePath(card)}
     />
   );
 };

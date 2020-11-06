@@ -32,6 +32,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
   const [hand, setHand] = useState<Card[]>([]);
   const [hasDrop, setHasDrop] = useState(false);
   const [scores, setScores] = useState<PlayerScore[]>([]);
+  const [isEndOfRound, setIsEndOfRound] = useState(false);
 
   useEffect(() => {
     send(client, roomName, { action: 'READY_TO_PLAY' });
@@ -61,6 +62,8 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
         const otherPlayers = players.filter((player) => player.uuid !== userUuid);
         dispatch({ type: 'setOtherPlayers', payload: otherPlayers });
       } else if (type === 'REVEAL_OTHER_PLAYERS_CARDS') {
+        setCanPlay(false);
+        setIsEndOfRound(true);
         dispatch({ type: 'setOtherPlayersCards', payload: playersCard });
       } else if (type === 'SET_ACTIVE_PLAYER') {
         setCanPlay(uuid === userUuid);
@@ -94,16 +97,18 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
           username={username}
         />
       ))}
-      <div className={styles.cardsArea}>
-        <PreviousCards
-          canPlay={canPlay}
-          hasDrop={hasDrop}
-          pickCard={pickCard}
-          previousCards={state.previousCards}
-        />
-        <ActiveCards activeCards={state.activeCards} />
-        <Stack canPlay={canPlay} hasDrop={hasDrop} pickCard={pickCard} />
-      </div>
+      {!isEndOfRound && (
+        <div className={styles.cardsArea}>
+          <PreviousCards
+            canPlay={canPlay}
+            hasDrop={hasDrop}
+            pickCard={pickCard}
+            previousCards={state.previousCards}
+          />
+          <ActiveCards activeCards={state.activeCards} />
+          <Stack canPlay={canPlay} hasDrop={hasDrop} pickCard={pickCard} />
+        </div>
+      )}
       <div>
         <Deck
           canPlay={canPlay}
@@ -117,7 +122,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
         />
       </div>
       <div>
-        <MamixtaButton hand={hand} hasDrop={hasDrop} roomName={roomName} />
+        {!isEndOfRound && <MamixtaButton hand={hand} hasDrop={hasDrop} roomName={roomName} />}
       </div>
     </>
   );

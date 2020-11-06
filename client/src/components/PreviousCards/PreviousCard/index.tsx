@@ -19,8 +19,6 @@ const CardComponent = ({ card, canPlay, hasDrop, pickCard }: CardProps) => {
     }
   };
 
-  console.log(canPlay && hasDrop && !!pickCard);
-
   return (
     <img
       style={{
