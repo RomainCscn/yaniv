@@ -11,6 +11,7 @@ interface RoomProps {
 }
 
 const WaitingRoom = ({ client, roomName, username }: RoomProps) => {
+  const [error, setError] = useState('');
   const [play, setPlay] = useState(false);
   const [usernames, setUsernames] = useState<string[]>([]);
   const [players, setPlayers] = useState<OtherPlayer[]>([]);
@@ -32,7 +33,11 @@ const WaitingRoom = ({ client, roomName, username }: RoomProps) => {
   }, [client, roomName, username]);
 
   const startGame = () => {
-    send(client, roomName, { action: 'START' });
+    if (usernames.length >= 2) {
+      send(client, roomName, { action: 'START' });
+    } else {
+      setError('Un seul joueur dans le salon ! Au moins deux joueurs requis pour jouer.');
+    }
   };
 
   return (
@@ -46,6 +51,7 @@ const WaitingRoom = ({ client, roomName, username }: RoomProps) => {
             <div key={username}>{username}</div>
           ))}
           <button onClick={() => startGame()}>PLAY</button>
+          {usernames.length < 2 && error}
         </>
       )}
     </div>
