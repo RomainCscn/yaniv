@@ -1,8 +1,13 @@
 import React from 'react';
 
+import { Card } from '../../types';
+
 const BACK = process.env.PUBLIC_URL + 'back.svg';
 
-const OtherPlayerCard = () => {
+const getCardImagePath = (card: Card) =>
+  `${process.env.PUBLIC_URL}cards/${card.suit.toUpperCase()}-${card.value}.svg`;
+
+const OtherPlayerCard = ({ card }: { card?: Card }) => {
   return (
     <img
       style={{
@@ -13,7 +18,7 @@ const OtherPlayerCard = () => {
       width='75'
       height='105'
       alt=''
-      src={BACK}
+      src={card ? getCardImagePath(card) : BACK}
     />
   );
 };

@@ -7,6 +7,7 @@ enum ActionType {
   selectCard = 'selectCard',
   setActiveCards = 'setActiveCards',
   setOtherPlayers = 'setOtherPlayers',
+  setOtherPlayersCards = 'setOtherPlayersCards',
   setPreviousCards = 'setPreviousCards',
 }
 
@@ -14,7 +15,7 @@ type ActionTypeKeys = keyof typeof ActionType;
 
 interface Action {
   type: ActionTypeKeys;
-  payload?: Card | Card[] | OtherPlayer[];
+  payload?: Card | Card[] | OtherPlayer[] | Record<string, Card[]>;
 }
 
 const reducer = (state: any, action: Action) => {
@@ -68,6 +69,20 @@ const reducer = (state: any, action: Action) => {
       ...state,
       otherPlayers: action.payload,
     };
+  }
+
+  if (action.type === 'setOtherPlayersCards') {
+    const otherPlayersWithHand = state.otherPlayers.map((player: OtherPlayer) => {
+      const otherPlayers = action.payload as Record<string, Card[]>;
+      const playerHand = otherPlayers[player.uuid];
+
+      return {
+        ...player,
+        hand: playerHand,
+      };
+    });
+
+    return { ...state, otherPlayers: otherPlayersWithHand };
   }
 
   return state;

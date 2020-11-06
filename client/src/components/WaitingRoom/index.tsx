@@ -15,17 +15,19 @@ const WaitingRoom = ({ client, roomName, username }: RoomProps) => {
   const [play, setPlay] = useState(false);
   const [usernames, setUsernames] = useState<string[]>([]);
   const [players, setPlayers] = useState<OtherPlayer[]>([]);
+  const [userUuid, setUserUuid] = useState('');
 
   useEffect(() => {
     send(client, roomName, { action: 'JOIN' }, { username });
 
     client.onmessage = (message) => {
-      const { players, usernameList, type }: ReceivedMessage = JSON.parse(message.data);
+      const { players, usernameList, type, uuid }: ReceivedMessage = JSON.parse(message.data);
 
       if (type === 'PLAYERS_UPDATE') {
         setUsernames(usernameList);
       } else if (type === 'START_GAME') {
         const otherPlayers = players.filter((player) => player.username !== username);
+        setUserUuid(uuid);
         setPlayers(otherPlayers);
         setPlay(true);
       }
@@ -43,7 +45,13 @@ const WaitingRoom = ({ client, roomName, username }: RoomProps) => {
   return (
     <div>
       {play ? (
-        <Room client={client} players={players} roomName={roomName} username={username} />
+        <Room
+          client={client}
+          players={players}
+          roomName={roomName}
+          username={username}
+          userUuid={userUuid}
+        />
       ) : (
         <>
           <p>Joueur dans le salon :</p>

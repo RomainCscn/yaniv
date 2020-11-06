@@ -7,6 +7,7 @@ export interface OtherPlayer {
   username: string;
   uuid: string;
   numberOfCards: number;
+  hand?: Card[];
 }
 
 export interface ReceivedMessage {
@@ -14,13 +15,16 @@ export interface ReceivedMessage {
   hand: Card[];
   player: OtherPlayer;
   players: OtherPlayer[];
+  playersCard: Record<string, Card[]>;
   usernameList: string[];
   previousCards: Card[];
   type: ReceivedMessageType;
+  uuid: string;
 }
 
 export type ReceivedMessageType =
   | 'PLAYERS_UPDATE'
+  | 'REVEAL_OTHER_PLAYERS_CARDS'
   | 'SET_ACTIVE_CARDS'
   | 'SET_OTHER_PLAYERS_CARDS'
   | 'SET_PLAYER_HAND'

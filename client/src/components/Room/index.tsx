@@ -15,9 +15,10 @@ interface RoomProps {
   players: OtherPlayer[];
   roomName: string;
   username: string;
+  userUuid: string;
 }
 
-const Room = ({ client, players, roomName, username }: RoomProps) => {
+const Room = ({ client, players, roomName, userUuid }: RoomProps) => {
   const [state, dispatch] = useReducer(reducer, {
     activeCards: [],
     otherPlayers: players,
@@ -37,6 +38,7 @@ const Room = ({ client, players, roomName, username }: RoomProps) => {
         activeCards,
         hand: userHand,
         players,
+        playersCard,
         previousCards,
         type,
       }: ReceivedMessage = JSON.parse(message.data);
@@ -49,11 +51,13 @@ const Room = ({ client, players, roomName, username }: RoomProps) => {
       } else if (type === 'SET_PREVIOUS_CARDS') {
         dispatch({ type: 'setPreviousCards', payload: previousCards });
       } else if (type === 'SET_OTHER_PLAYERS_CARDS') {
-        const otherPlayers = players.filter((player) => player.username !== username);
+        const otherPlayers = players.filter((player) => player.uuid !== userUuid);
         dispatch({ type: 'setOtherPlayers', payload: otherPlayers });
+      } else if (type === 'REVEAL_OTHER_PLAYERS_CARDS') {
+        dispatch({ type: 'setOtherPlayersCards', payload: playersCard });
       }
     };
-  }, [client, roomName, username]);
+  }, [client, roomName, userUuid]);
 
   const pickCard = (card?: Card) => {
     setHasDrop(false);
@@ -68,10 +72,12 @@ const Room = ({ client, players, roomName, username }: RoomProps) => {
     dispatch({ type: 'selectCard', payload: card });
   };
 
+  console.log(hasDrop);
+
   return (
     <>
-      {state.otherPlayers.map(({ numberOfCards, username }: OtherPlayer) => (
-        <OtherPlayerDeck numberOfCards={numberOfCards} username={username} />
+      {state.otherPlayers.map(({ hand, numberOfCards, username }: OtherPlayer) => (
+        <OtherPlayerDeck hand={hand} numberOfCards={numberOfCards} username={username} />
       ))}
       <PreviousCards hasDrop={hasDrop} pickCard={pickCard} previousCards={state.previousCards} />
       <ActiveCards activeCards={state.activeCards} />
@@ -89,7 +95,7 @@ const Room = ({ client, players, roomName, username }: RoomProps) => {
         />
       </div>
       <div>
-        <MamixtaButton client={client} hand={hand} roomName={roomName} />
+        <MamixtaButton client={client} hand={hand} hasDrop={hasDrop} roomName={roomName} />
       </div>
     </>
   );
