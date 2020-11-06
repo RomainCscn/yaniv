@@ -25,6 +25,7 @@ const Room = ({ client, players, roomName, userUuid }: RoomProps) => {
     previousCards: [],
     selectedCards: [],
   });
+  const [canPlay, setCanPlay] = useState(false);
   const [hand, setHand] = useState<Card[]>([]);
   const [hasDrop, setHasDrop] = useState(false);
 
@@ -41,6 +42,7 @@ const Room = ({ client, players, roomName, userUuid }: RoomProps) => {
         playersCard,
         previousCards,
         type,
+        uuid,
       }: ReceivedMessage = JSON.parse(message.data);
 
       if (type === 'SET_PLAYER_HAND') {
@@ -55,6 +57,8 @@ const Room = ({ client, players, roomName, userUuid }: RoomProps) => {
         dispatch({ type: 'setOtherPlayers', payload: otherPlayers });
       } else if (type === 'REVEAL_OTHER_PLAYERS_CARDS') {
         dispatch({ type: 'setOtherPlayersCards', payload: playersCard });
+      } else if (type === 'SET_ACTIVE_PLAYER') {
+        setCanPlay(uuid === userUuid);
       }
     };
   }, [client, roomName, userUuid]);
@@ -72,18 +76,24 @@ const Room = ({ client, players, roomName, userUuid }: RoomProps) => {
     dispatch({ type: 'selectCard', payload: card });
   };
 
-  console.log(hasDrop);
+  console.log(canPlay);
 
   return (
     <>
       {state.otherPlayers.map(({ hand, numberOfCards, username }: OtherPlayer) => (
         <OtherPlayerDeck hand={hand} numberOfCards={numberOfCards} username={username} />
       ))}
-      <PreviousCards hasDrop={hasDrop} pickCard={pickCard} previousCards={state.previousCards} />
+      <PreviousCards
+        canPlay={canPlay}
+        hasDrop={hasDrop}
+        pickCard={pickCard}
+        previousCards={state.previousCards}
+      />
       <ActiveCards activeCards={state.activeCards} />
-      <Stack hasDrop={hasDrop} pickCard={pickCard} />
+      <Stack canPlay={canPlay} hasDrop={hasDrop} pickCard={pickCard} />
       <div>
         <Deck
+          canPlay={canPlay}
           client={client}
           hand={hand}
           hasDrop={hasDrop}

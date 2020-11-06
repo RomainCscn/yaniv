@@ -5,12 +5,13 @@ import { getCardUniqueIndex } from '../../core/utils';
 import { Card } from '../../types';
 
 interface PreviousCardsProps {
+  canPlay: boolean;
   hasDrop: boolean;
   previousCards: Card[];
   pickCard: (card?: Card) => void;
 }
 
-const PreviousCards = ({ hasDrop, pickCard, previousCards }: PreviousCardsProps) => {
+const PreviousCards = ({ canPlay, hasDrop, pickCard, previousCards }: PreviousCardsProps) => {
   return (
     <>
       {previousCards.map((card: Card, index) => {
@@ -19,6 +20,7 @@ const PreviousCards = ({ hasDrop, pickCard, previousCards }: PreviousCardsProps)
 
         return (
           <CardComponent
+            canPlay={canPlay}
             key={getCardUniqueIndex(card)}
             hasDrop={hasDrop}
             isPrevious

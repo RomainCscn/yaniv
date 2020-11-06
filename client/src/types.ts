@@ -25,6 +25,7 @@ export interface ReceivedMessage {
 export type ReceivedMessageType =
   | 'PLAYERS_UPDATE'
   | 'REVEAL_OTHER_PLAYERS_CARDS'
+  | 'SET_ACTIVE_PLAYER'
   | 'SET_ACTIVE_CARDS'
   | 'SET_OTHER_PLAYERS_CARDS'
   | 'SET_PLAYER_HAND'

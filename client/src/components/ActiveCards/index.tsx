@@ -12,7 +12,7 @@ const ActiveCards = ({ activeCards }: ActiveCardsProps) => {
   return (
     <>
       {activeCards.map((card: Card) => (
-        <CardComponent key={getCardUniqueIndex(card)} isActive card={card} />
+        <CardComponent canPlay={false} key={getCardUniqueIndex(card)} isActive card={card} />
       ))}
     </>
   );

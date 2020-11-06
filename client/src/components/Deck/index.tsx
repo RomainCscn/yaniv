@@ -7,6 +7,7 @@ import { Card } from '../../types';
 import { send } from '../../utils';
 
 interface DeckProps {
+  canPlay: boolean;
   client: WebSocket;
   hand: Card[];
   hasDrop: boolean;
@@ -18,6 +19,7 @@ interface DeckProps {
 }
 
 const Deck = ({
+  canPlay,
   client,
   hand,
   hasDrop,
@@ -48,6 +50,7 @@ const Deck = ({
     <>
       {hand.map((card) => (
         <CardComponent
+          canPlay={canPlay}
           key={getCardUniqueIndex(card)}
           dropCard={dropCard}
           hasDrop={hasDrop}

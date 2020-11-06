@@ -3,6 +3,7 @@ import React from 'react';
 import { Card } from '../../types';
 
 interface CardProps {
+  canPlay: boolean;
   card?: Card;
   dropCard?: (card: Card) => void;
   hasDrop?: boolean;
@@ -20,6 +21,7 @@ const getCardImagePath = (card: Card) =>
   `${process.env.PUBLIC_URL}cards/${card.suit.toUpperCase()}-${card.value}.svg`;
 
 const CardComponent = ({
+  canPlay,
   card,
   dropCard,
   hasDrop,
@@ -31,7 +33,7 @@ const CardComponent = ({
   selectedCards,
 }: CardProps) => {
   const onCardClick = (e: any) => {
-    if (e.type === 'click') {
+    if (canPlay && e.type === 'click') {
       if (hasDrop && !isActive) {
         if (isStack && pickCard) {
           pickCard();
@@ -41,7 +43,7 @@ const CardComponent = ({
       } else if (!hasDrop && dropCard) {
         dropCard(card!);
       }
-    } else if (e.type === 'contextmenu') {
+    } else if (canPlay && e.type === 'contextmenu') {
       e.preventDefault();
       selectCard!(card!);
     }
@@ -52,7 +54,8 @@ const CardComponent = ({
   );
 
   const canClick =
-    (!isActive && !hasDrop && dropCard) || (hasDrop && pickCard && (isStack || isPrevious));
+    canPlay &&
+    ((!isActive && !hasDrop && dropCard) || (hasDrop && pickCard && (isStack || isPrevious)));
 
   return (
     <img
