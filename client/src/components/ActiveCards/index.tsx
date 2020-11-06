@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CardComponent from '../Card';
+import CardComponent from './ActiveCard';
 import { getCardUniqueIndex } from '../../core/utils';
 import { Card } from '../../types';
 
@@ -10,11 +10,11 @@ interface ActiveCardsProps {
 
 const ActiveCards = ({ activeCards }: ActiveCardsProps) => {
   return (
-    <>
+    <div style={{ marginRight: '128px' }}>
       {activeCards.map((card: Card) => (
-        <CardComponent canPlay={false} key={getCardUniqueIndex(card)} isActive card={card} />
+        <CardComponent key={getCardUniqueIndex(card)} card={card} />
       ))}
-    </>
+    </div>
   );
 };
 

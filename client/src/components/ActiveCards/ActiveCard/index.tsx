@@ -1,26 +1,28 @@
 import React from 'react';
 
-import { Card } from '../../types';
+import { Card } from '../../../types';
 
-const BACK = process.env.PUBLIC_URL + 'back.svg';
+interface CardProps {
+  card: Card;
+}
 
 const getCardImagePath = (card: Card) =>
   `${process.env.PUBLIC_URL}cards/${card.suit.toUpperCase()}-${card.value}.svg`;
 
-const OtherPlayerCard = ({ card }: { card?: Card }) => {
+const CardComponent = ({ card }: CardProps) => {
   return (
     <img
       style={{
         border: '1px solid black',
-        marginRight: '-6px',
+        margin: '6px -82px 6px 0',
         borderRadius: '8px',
       }}
-      width='75'
-      height='105'
+      width='150'
+      height='208'
       alt=''
-      src={card ? getCardImagePath(card) : BACK}
+      src={getCardImagePath(card)}
     />
   );
 };
 
-export default OtherPlayerCard;
+export default CardComponent;

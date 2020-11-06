@@ -7,8 +7,6 @@ interface CardProps {
   card?: Card;
   dropCard?: (card: Card) => void;
   hasDrop?: boolean;
-  isActive?: boolean;
-  isPrevious?: boolean;
   isStack?: boolean;
   pickCard?: false | ((card?: Card) => void);
   selectCard?: (card: Card) => void;
@@ -25,8 +23,6 @@ const CardComponent = ({
   card,
   dropCard,
   hasDrop,
-  isActive,
-  isPrevious,
   isStack,
   pickCard,
   selectCard,
@@ -34,12 +30,8 @@ const CardComponent = ({
 }: CardProps) => {
   const onCardClick = (e: any) => {
     if (canPlay && e.type === 'click') {
-      if (hasDrop && !isActive) {
-        if (isStack && pickCard) {
-          pickCard();
-        } else if (isPrevious && pickCard) {
-          pickCard(card);
-        }
+      if (hasDrop && isStack && pickCard) {
+        pickCard();
       } else if (!hasDrop && dropCard) {
         dropCard(card!);
       }
@@ -53,9 +45,7 @@ const CardComponent = ({
     (selectedCard: Card) => selectedCard.value === card!.value && selectedCard.suit === card!.suit,
   );
 
-  const canClick =
-    canPlay &&
-    ((!isActive && !hasDrop && dropCard) || (hasDrop && pickCard && (isStack || isPrevious)));
+  const canClick = canPlay && ((!hasDrop && dropCard) || (hasDrop && pickCard && isStack));
 
   return (
     <img

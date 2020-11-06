@@ -1,6 +1,6 @@
 import React from 'react';
 
-import OtherPlayerCard from '../OtherPlayerCard';
+import OtherPlayerCard from './OtherPlayerCard';
 import { Card } from '../../types';
 
 const OtherPlayerDeck = ({

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import CardComponent from '../Card';
+import PreviousCard from './PreviousCard';
 import { getCardUniqueIndex } from '../../core/utils';
 import { Card } from '../../types';
 
@@ -13,23 +13,17 @@ interface PreviousCardsProps {
 
 const PreviousCards = ({ canPlay, hasDrop, pickCard, previousCards }: PreviousCardsProps) => {
   return (
-    <>
-      {previousCards.map((card: Card, index) => {
-        const lastCardIndex = previousCards.length - 1;
-        console.log({ lastCardIndex, index });
-
-        return (
-          <CardComponent
-            canPlay={canPlay}
-            key={getCardUniqueIndex(card)}
-            hasDrop={hasDrop}
-            isPrevious
-            card={card}
-            pickCard={(index === 0 || index === lastCardIndex) && pickCard}
-          />
-        );
-      })}
-    </>
+    <div style={{ marginRight: '128px' }}>
+      {previousCards.map((card: Card, index) => (
+        <PreviousCard
+          canPlay={canPlay}
+          key={getCardUniqueIndex(card)}
+          hasDrop={hasDrop}
+          card={card}
+          pickCard={(index === 0 || index === previousCards.length - 1) && pickCard}
+        />
+      ))}
+    </div>
   );
 };
 

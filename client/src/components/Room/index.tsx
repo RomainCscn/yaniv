@@ -12,6 +12,8 @@ import { Card, OtherPlayer, PlayerScore, ReceivedMessage } from '../../types';
 import { send } from '../../utils';
 import ScoreDashboard from '../ScoreDashboard';
 
+import styles from './styles.module.css';
+
 interface RoomProps {
   players: OtherPlayer[];
   roomName: string;
@@ -92,14 +94,16 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
           username={username}
         />
       ))}
-      <PreviousCards
-        canPlay={canPlay}
-        hasDrop={hasDrop}
-        pickCard={pickCard}
-        previousCards={state.previousCards}
-      />
-      <ActiveCards activeCards={state.activeCards} />
-      <Stack canPlay={canPlay} hasDrop={hasDrop} pickCard={pickCard} />
+      <div className={styles.cardsArea}>
+        <PreviousCards
+          canPlay={canPlay}
+          hasDrop={hasDrop}
+          pickCard={pickCard}
+          previousCards={state.previousCards}
+        />
+        <ActiveCards activeCards={state.activeCards} />
+        <Stack canPlay={canPlay} hasDrop={hasDrop} pickCard={pickCard} />
+      </div>
       <div>
         <Deck
           canPlay={canPlay}
