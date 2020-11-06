@@ -153,8 +153,18 @@ const handlePlay = (
     // send the hand to the user who picked the card
     user.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: user.hand }));
 
+    const playersUuid = Object.entries(room.users).map(([uuid]) => uuid);
+    const activePlayerIndex = playersUuid.indexOf(room.activePlayer as string);
+    const nextPlayerUuid =
+      activePlayerIndex === playersUuid.length - 1
+        ? playersUuid[0]
+        : playersUuid[activePlayerIndex + 1];
+
+    rooms[roomName].activePlayer = nextPlayerUuid;
+
     // sync players to display other players cards
     Object.entries(room.users).forEach(([, user]: [string, User]) => {
+      user.ws.send(JSON.stringify({ type: 'SET_ACTIVE_PLAYER', uuid: nextPlayerUuid }));
       user.ws.send(JSON.stringify({ type: 'SET_OTHER_PLAYERS_CARDS', players: getPlayers(room) }));
     });
   } else if (actionType === 'MAMIXTA') {
@@ -194,9 +204,20 @@ const handleStart = (roomName: string) => {
   });
 };
 
-const handleReadyToPlay = (roomName: string, userUuid: string) => {
+const handleReadyToPlay = (roomName: string) => {
+  if (!rooms[roomName].activePlayer) {
+    const playersNumber = Object.entries(rooms[roomName].users).length;
+    const firstPlayerUuid = Object.entries(rooms[roomName].users)[
+      Math.floor(Math.random() * playersNumber)
+    ][0];
+
+    console.log(firstPlayerUuid);
+
+    rooms[roomName].activePlayer = firstPlayerUuid;
+  }
+
   Object.entries(rooms[roomName].users).forEach(([, user]: [string, User]) => {
-    user.ws.send(JSON.stringify({ type: 'SET_ACTIVE_PLAYER', uuid: userUuid }));
+    user.ws.send(JSON.stringify({ type: 'SET_ACTIVE_PLAYER', uuid: rooms[roomName].activePlayer }));
     user.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: user.hand }));
   });
 };
@@ -212,7 +233,7 @@ wss.on('connection', (ws: WebSocket) => {
     } else if (action === 'START') {
       handleStart(roomName);
     } else if (action === 'READY_TO_PLAY') {
-      handleReadyToPlay(roomName, userUuid);
+      handleReadyToPlay(roomName);
     } else if (action === 'PLAY') {
       handlePlay(actionType, card, cards, roomName, userUuid);
     }

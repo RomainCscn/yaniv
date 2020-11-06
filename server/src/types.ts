@@ -8,8 +8,9 @@ export interface Card {
 }
 
 export interface Room {
-  deck: Card[];
   activeCards: Card[];
+  activePlayer: null | string;
+  deck: Card[];
   users: Users;
 }
 

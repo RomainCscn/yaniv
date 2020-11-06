@@ -28,6 +28,7 @@ export default function initRoom(): Room {
   return {
     deck: getSuffledDeck(),
     activeCards: [],
+    activePlayer: null,
     users: {},
   };
 }
