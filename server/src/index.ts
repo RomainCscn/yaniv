@@ -2,11 +2,11 @@ import * as express from 'express';
 import * as http from 'http';
 import { v4 as uuidv4 } from 'uuid';
 import * as WebSocket from 'ws';
-import { Card, Room, User } from './types';
 
 import { removePreviousCards, sendActiveCards } from './dispatcher';
-import { sortHand } from './game';
-import initRoom, { addUser, assignHandToUser } from './room';
+import { getCardValue, sortHand } from './game';
+import initRoom, { addUser, assignHandToUser, resetDeck } from './room';
+import { Card, Room, User } from './types';
 
 const app = express();
 
@@ -20,7 +20,7 @@ const getCurrentUser = (roomName: string, userUuid: string) => rooms[roomName].u
 const isExistingUser = (roomName: string, userUuid: string) =>
   typeof rooms[roomName].users[userUuid] === 'object';
 
-const getPlayers = (room) =>
+const getPlayers = (room: Room) =>
   Object.entries(room.users).map(([uuid, user]: [string, User]) => ({
     uuid,
     username: user.username,
@@ -83,6 +83,51 @@ const handlePickStackedCard = (room: Room, user: User) => {
   removePreviousCards(room);
 };
 
+const handleMamixta = (room: Room, userUuid: string) => {
+  const usersScore: Record<string, number> = {};
+
+  Object.entries(room.users).forEach(([uuid, user]: [string, User]) => {
+    const handSum = user.hand.reduce((sum: number, card) => {
+      return sum + getCardValue(card);
+    }, 0);
+
+    usersScore[uuid] = handSum;
+  });
+
+  const currentUserScore = usersScore[userUuid];
+
+  const lowerScoreThanCurrent = Object.entries(usersScore).filter(
+    ([uuid, score]: [string, number]) => uuid !== userUuid && currentUserScore >= score,
+  );
+
+  if (lowerScoreThanCurrent.length > 0) {
+    Object.entries(usersScore).forEach(
+      ([uuid, score]: [string, number]) =>
+        (room.users[uuid].score += userUuid === uuid ? score + 30 : score),
+    );
+  } else {
+    Object.entries(usersScore).forEach(
+      ([uuid, score]: [string, number]) => (room.users[uuid].score += score),
+    );
+  }
+
+  const playersCard = Object.fromEntries(
+    Object.entries(room.users).map(([uuid, user]: [string, User]) => [uuid, user.hand]),
+  );
+
+  Object.entries(room.users).forEach(([, user]: [string, User]) => {
+    user.ws.send(JSON.stringify({ type: 'REVEAL_OTHER_PLAYERS_CARDS', playersCard }));
+  });
+
+  // // generate new deck and send cards to players
+  // Object.entries(room.users).forEach(([, user]: [string, User]) => {
+  //   resetDeck(room);
+  //   assignHandToUser(room, user);
+  //   user.ws.send(JSON.stringify({ type: 'NEW_ROUND' }));
+  //   user.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: user.hand }));
+  // });
+};
+
 const handlePlay = (
   actionType: string,
   card: Card,
@@ -108,9 +153,12 @@ const handlePlay = (
     // send the hand to the user who picked the card
     user.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: user.hand }));
 
+    // sync players to display other players cards
     Object.entries(room.users).forEach(([, user]: [string, User]) => {
       user.ws.send(JSON.stringify({ type: 'SET_OTHER_PLAYERS_CARDS', players: getPlayers(room) }));
     });
+  } else if (actionType === 'MAMIXTA') {
+    handleMamixta(room, userUuid);
   }
 };
 
@@ -141,13 +189,14 @@ const handleStart = (roomName: string) => {
     assignHandToUser(room, user);
   });
 
-  Object.entries(room.users).forEach(([, user]: [string, User]) => {
-    user.ws.send(JSON.stringify({ type: 'START_GAME', players: getPlayers(room) }));
+  Object.entries(room.users).forEach(([uuid, user]: [string, User]) => {
+    user.ws.send(JSON.stringify({ type: 'START_GAME', players: getPlayers(room), uuid }));
   });
 };
 
-const handleReadyToPlay = (roomName: string) => {
+const handleReadyToPlay = (roomName: string, userUuid: string) => {
   Object.entries(rooms[roomName].users).forEach(([, user]: [string, User]) => {
+    user.ws.send(JSON.stringify({ type: 'SET_ACTIVE_PLAYER', uuid: userUuid }));
     user.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: user.hand }));
   });
 };
@@ -163,7 +212,7 @@ wss.on('connection', (ws: WebSocket) => {
     } else if (action === 'START') {
       handleStart(roomName);
     } else if (action === 'READY_TO_PLAY') {
-      handleReadyToPlay(roomName);
+      handleReadyToPlay(roomName, userUuid);
     } else if (action === 'PLAY') {
       handlePlay(actionType, card, cards, roomName, userUuid);
     }

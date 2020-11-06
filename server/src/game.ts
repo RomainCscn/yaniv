@@ -4,6 +4,8 @@ const suits = ['spade', 'diamond', 'club', 'heart'];
 const values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 export const HAND_CARDS_NUMBER = 7;
 
+const getCardValue = (card: Card): number => (card.value <= 10 ? card.value : 10);
+
 const getDeck = () => {
   const deck = [];
 
@@ -54,4 +56,4 @@ const getHand = (deck: Card[]): Card[] => {
   return sortHand(deck.slice(0, HAND_CARDS_NUMBER));
 };
 
-export { getHand, getSuffledDeck, sortHand };
+export { getCardValue, getHand, getSuffledDeck, sortHand };

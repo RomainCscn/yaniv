@@ -16,7 +16,12 @@ export const addUser = (
   username: string,
   userWs: WebSocket,
 ): void => {
-  room.users[userUuid] = { hand: [], username, ws: userWs };
+  room.users[userUuid] = { hand: [], score: 0, username, ws: userWs };
+};
+
+export const resetDeck = (room: Room): void => {
+  room.deck = getSuffledDeck();
+  room.activeCards = [];
 };
 
 export default function initRoom(): Room {
