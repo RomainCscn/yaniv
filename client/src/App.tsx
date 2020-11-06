@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 
 import WaitingRoom from './components/WaitingRoom';
 
-const client = new WebSocket('ws://localhost:8999/');
-
 const App = () => {
   const [roomName, setRoomName] = useState('a');
   const [username, setUsername] = useState(Math.random().toString(36).substring(7));
@@ -16,7 +14,7 @@ const App = () => {
   return (
     <div>
       {hasJoinRoom ? (
-        <WaitingRoom client={client} roomName={roomName} username={username} />
+        <WaitingRoom roomName={roomName} username={username} />
       ) : (
         <>
           <h2>Join a room</h2>

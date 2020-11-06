@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
 import Room from '../Room';
+import client from '../../core/client';
 import { OtherPlayer, ReceivedMessage } from '../../types';
 import { send } from '../../utils';
 
 interface RoomProps {
-  client: WebSocket;
   roomName: string;
   username: string;
 }
 
-const WaitingRoom = ({ client, roomName, username }: RoomProps) => {
+const WaitingRoom = ({ roomName, username }: RoomProps) => {
   const [error, setError] = useState('');
   const [play, setPlay] = useState(false);
   const [usernames, setUsernames] = useState<string[]>([]);
@@ -32,7 +32,7 @@ const WaitingRoom = ({ client, roomName, username }: RoomProps) => {
         setPlay(true);
       }
     };
-  }, [client, roomName, username]);
+  }, [roomName, username]);
 
   const startGame = () => {
     if (usernames.length >= 2) {
@@ -45,13 +45,7 @@ const WaitingRoom = ({ client, roomName, username }: RoomProps) => {
   return (
     <div>
       {play ? (
-        <Room
-          client={client}
-          players={players}
-          roomName={roomName}
-          username={username}
-          userUuid={userUuid}
-        />
+        <Room players={players} roomName={roomName} username={username} userUuid={userUuid} />
       ) : (
         <>
           <p>Joueur dans le salon :</p>

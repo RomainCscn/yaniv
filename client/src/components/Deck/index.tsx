@@ -1,6 +1,7 @@
 import React from 'react';
 
 import CardComponent from '../Card';
+import client from '../../core/client';
 import { canDropCard } from '../../core/game';
 import { findCardIndex, getCardUniqueIndex } from '../../core/utils';
 import { Card } from '../../types';
@@ -8,7 +9,6 @@ import { send } from '../../utils';
 
 interface DeckProps {
   canPlay: boolean;
-  client: WebSocket;
   hand: Card[];
   hasDrop: boolean;
   resetSelectedCards: () => void;
@@ -20,7 +20,6 @@ interface DeckProps {
 
 const Deck = ({
   canPlay,
-  client,
   hand,
   hasDrop,
   resetSelectedCards,

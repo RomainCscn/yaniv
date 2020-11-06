@@ -1,12 +1,12 @@
 import React from 'react';
 
+import client from '../../core/client';
 import { Card } from '../../types';
 import { send } from '../../utils';
 
 import styles from './styles.module.css';
 
 interface MamixtaButtonProps {
-  client: WebSocket;
   hand: Card[];
   hasDrop: boolean;
   roomName: string;
@@ -24,7 +24,7 @@ const canSubmitMamixta = (hand: Card[], hasDrop: boolean): boolean => {
   return !hasDrop && handSum <= MIN_VALUE_TO_SUBMIT;
 };
 
-const MamixtaButton = ({ client, hand, hasDrop, roomName }: MamixtaButtonProps) => {
+const MamixtaButton = ({ hand, hasDrop, roomName }: MamixtaButtonProps) => {
   const submit = () => {
     const canSubmit = canSubmitMamixta(hand, hasDrop);
 

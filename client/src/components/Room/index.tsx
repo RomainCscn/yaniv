@@ -6,19 +6,20 @@ import MamixtaButton from '../MamixtaButton';
 import OtherPlayerDeck from '../OtherPlayerDeck';
 import PreviousCards from '../PreviousCards';
 import Stack from '../Stack';
+import client from '../../core/client';
 import reducer from '../../reducers';
-import { Card, OtherPlayer, ReceivedMessage } from '../../types';
+import { Card, OtherPlayer, PlayerScore, ReceivedMessage } from '../../types';
 import { send } from '../../utils';
+import ScoreDashboard from '../ScoreDashboard';
 
 interface RoomProps {
-  client: WebSocket;
   players: OtherPlayer[];
   roomName: string;
   username: string;
   userUuid: string;
 }
 
-const Room = ({ client, players, roomName, userUuid }: RoomProps) => {
+const Room = ({ players, roomName, userUuid }: RoomProps) => {
   const [state, dispatch] = useReducer(reducer, {
     activeCards: [],
     otherPlayers: players,
@@ -28,10 +29,11 @@ const Room = ({ client, players, roomName, userUuid }: RoomProps) => {
   const [canPlay, setCanPlay] = useState(false);
   const [hand, setHand] = useState<Card[]>([]);
   const [hasDrop, setHasDrop] = useState(false);
+  const [scores, setScores] = useState<PlayerScore[]>([]);
 
   useEffect(() => {
     send(client, roomName, { action: 'READY_TO_PLAY' });
-  }, [client, roomName]);
+  }, [roomName]);
 
   useEffect(() => {
     client.onmessage = (message) => {
@@ -40,6 +42,7 @@ const Room = ({ client, players, roomName, userUuid }: RoomProps) => {
         hand: userHand,
         players,
         playersCard,
+        playersScore,
         previousCards,
         type,
         uuid,
@@ -59,9 +62,11 @@ const Room = ({ client, players, roomName, userUuid }: RoomProps) => {
         dispatch({ type: 'setOtherPlayersCards', payload: playersCard });
       } else if (type === 'SET_ACTIVE_PLAYER') {
         setCanPlay(uuid === userUuid);
+      } else if (type === 'UPDATE_SCORE') {
+        setScores(playersScore);
       }
     };
-  }, [client, roomName, userUuid]);
+  }, [roomName, userUuid]);
 
   const pickCard = (card?: Card) => {
     setHasDrop(false);
@@ -76,12 +81,16 @@ const Room = ({ client, players, roomName, userUuid }: RoomProps) => {
     dispatch({ type: 'selectCard', payload: card });
   };
 
-  console.log(canPlay);
-
   return (
     <>
+      <ScoreDashboard scores={scores} />
       {state.otherPlayers.map(({ hand, numberOfCards, username }: OtherPlayer) => (
-        <OtherPlayerDeck hand={hand} numberOfCards={numberOfCards} username={username} />
+        <OtherPlayerDeck
+          key={username}
+          hand={hand}
+          numberOfCards={numberOfCards}
+          username={username}
+        />
       ))}
       <PreviousCards
         canPlay={canPlay}
@@ -94,7 +103,6 @@ const Room = ({ client, players, roomName, userUuid }: RoomProps) => {
       <div>
         <Deck
           canPlay={canPlay}
-          client={client}
           hand={hand}
           hasDrop={hasDrop}
           resetSelectedCards={resetSelectedCards}
@@ -105,7 +113,7 @@ const Room = ({ client, players, roomName, userUuid }: RoomProps) => {
         />
       </div>
       <div>
-        <MamixtaButton client={client} hand={hand} hasDrop={hasDrop} roomName={roomName} />
+        <MamixtaButton hand={hand} hasDrop={hasDrop} roomName={roomName} />
       </div>
     </>
   );
