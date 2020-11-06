@@ -115,8 +115,14 @@ const handleMamixta = (room: Room, userUuid: string) => {
     Object.entries(room.users).map(([uuid, user]: [string, User]) => [uuid, user.hand]),
   );
 
+  const playersScore = Object.entries(room.users).map(([, user]: [string, User]) => [
+    user.username,
+    user.score,
+  ]);
+
   Object.entries(room.users).forEach(([, user]: [string, User]) => {
     user.ws.send(JSON.stringify({ type: 'REVEAL_OTHER_PLAYERS_CARDS', playersCard }));
+    user.ws.send(JSON.stringify({ type: 'UPDATE_SCORE', playersScore }));
   });
 
   // // generate new deck and send cards to players
@@ -210,8 +216,6 @@ const handleReadyToPlay = (roomName: string) => {
     const firstPlayerUuid = Object.entries(rooms[roomName].users)[
       Math.floor(Math.random() * playersNumber)
     ][0];
-
-    console.log(firstPlayerUuid);
 
     rooms[roomName].activePlayer = firstPlayerUuid;
   }
