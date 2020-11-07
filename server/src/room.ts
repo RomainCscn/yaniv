@@ -28,11 +28,13 @@ export const getPlayers = (
     numberOfCards: user.hand.length,
   }));
 
-export const resetDeck = (room: Room): void => {
+export const resetDeck = (room: Room, { resetScore = false } = {}): void => {
   room.deck = getSuffledDeck();
   room.activeCards = [];
   room.activePlayer = room.roundWinner;
   room.roundWinner = null;
+
+  if (resetScore) Object.entries(room.users).forEach(([, user]) => (user.score = 0));
 };
 
 export default function initRoom(): Room {

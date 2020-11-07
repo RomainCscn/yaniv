@@ -1,7 +1,9 @@
 import { getCardValue } from '../../game';
 import { Room, User } from '../../types';
 
-export const handleEndRound = (room: Room, userUuid: string): void => {
+const SCORE_LIMIT = 50;
+
+const getScores = (room: Room): Record<string, number> => {
   const usersScore: Record<string, number> = {};
 
   Object.entries(room.users).forEach(([uuid, user]: [string, User]) => {
@@ -12,6 +14,11 @@ export const handleEndRound = (room: Room, userUuid: string): void => {
     usersScore[uuid] = handSum;
   });
 
+  return usersScore;
+};
+
+export const handleEndRound = (room: Room, userUuid: string): void => {
+  const usersScore = getScores(room);
   const currentUserScore = usersScore[userUuid];
 
   const lowerScoreThanCurrent = Object.entries(usersScore).filter(
@@ -31,14 +38,26 @@ export const handleEndRound = (room: Room, userUuid: string): void => {
     );
   }
 
-  const playersCard = Object.fromEntries(
-    Object.entries(room.users).map(([uuid, user]: [string, User]) => [uuid, user.hand]),
-  );
-
   const playersScore = Object.entries(room.users).map(([, user]: [string, User]) => [
     user.username,
     user.score,
   ]);
+
+  const playerAboveScoreLimit = playersScore.find(([, score]) => score >= SCORE_LIMIT);
+
+  if (playerAboveScoreLimit) {
+    const winner = playersScore.reduce((previous, current) =>
+      previous[1] < current[1] ? previous : current,
+    );
+    console.log(room.roundWinner);
+    Object.entries(room.users).forEach(([, user]: [string, User]) => {
+      user.ws.send(JSON.stringify({ type: 'GAME_OVER', playersScore, winner: winner[0] }));
+    });
+  }
+
+  const playersCard = Object.fromEntries(
+    Object.entries(room.users).map(([uuid, user]: [string, User]) => [uuid, user.hand]),
+  );
 
   Object.entries(room.users).forEach(([, user]: [string, User]) => {
     user.ws.send(

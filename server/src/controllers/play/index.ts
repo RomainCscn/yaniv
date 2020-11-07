@@ -2,6 +2,7 @@ import { handleMultipleCardsDrop, handleSingleCardDrop } from './drop';
 import { handleEndRound } from './endRound';
 import { handleNextRound } from './nextRound';
 import { handlePickDroppedCard, handlePickStackedCard } from './pick';
+import { handlePlayAgain } from './playAgain';
 
 import { getPlayers } from '../../room';
 import rooms from '../../rooms';
@@ -52,6 +53,8 @@ const handlePlay = (
     handleEndRound(room, userUuid);
   } else if (actionType === 'NEXT_ROUND') {
     handleNextRound(room);
+  } else if (actionType === 'PLAY_AGAIN') {
+    handlePlayAgain(room);
   }
 };
 

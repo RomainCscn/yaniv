@@ -31,6 +31,7 @@ export interface ReceivedMessage {
   roundWinner: string;
   type: ReceivedMessageType;
   uuid: string;
+  winner: string;
 }
 
 export type ReceivedMessageType =
@@ -52,5 +53,6 @@ export type MessageActionType =
   | 'MAMIXTA'
   | 'NEXT_ROUND'
   | 'PICK'
+  | 'PLAY_AGAIN'
   | 'REQUEST_PLAYING_ROOM'
   | 'REQUEST_WAITING_ROOM';

@@ -5,6 +5,7 @@ import Deck from '../Deck';
 import MamixtaButton from '../MamixtaButton';
 import NextRoundButton from '../NextRoundButton';
 import OtherPlayerDeck from '../OtherPlayerDeck';
+import PlayAgainButton from '../PlayAgainButton';
 import PreviousCards from '../PreviousCards';
 import Stack from '../Stack';
 import client, { send } from '../../core/client';
@@ -34,6 +35,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
   const [scores, setScores] = useState<PlayerScore[]>([]);
   const [isEndOfRound, setIsEndOfRound] = useState(false);
   const [roundWinner, setRoundWinner] = useState<string>();
+  const [gameWinner, setGameWinner] = useState<string>();
 
   useEffect(() => {
     send(roomName, { action: 'READY_TO_PLAY' });
@@ -51,6 +53,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
         roundWinner,
         type,
         uuid,
+        winner,
       }: ReceivedMessage = JSON.parse(message.data);
 
       if (type === 'SET_PLAYER_HAND') {
@@ -73,7 +76,10 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
         setCanPlay(uuid === userUuid);
       } else if (type === 'NEW_ROUND') {
         dispatch({ type: 'newRound' });
+        setGameWinner('');
         setIsEndOfRound(false);
+      } else if ('GAME_OVER') {
+        setGameWinner(winner);
       }
     };
   }, [roomName, userUuid]);
@@ -126,7 +132,12 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
         selectedCards={state.selectedCards}
       />
       <div>
-        {isEndOfRound ? (
+        {gameWinner ? (
+          <div>
+            <div>Gagnant de la partie : {gameWinner} !</div>
+            <PlayAgainButton roomName={roomName} />
+          </div>
+        ) : isEndOfRound ? (
           <div>
             <NextRoundButton roomName={roomName} />
             {roundWinner === userUuid ? 'GAGNÉ' : 'PERDU'}
