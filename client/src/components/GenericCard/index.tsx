@@ -24,6 +24,7 @@ const GenericCard = ({
 }: GenericCardProps) => (
   <img
     className={classnames({
+      // @ts-ignore
       [styles[`${cardType}Card`]]: true,
       [styles.pointer]: canClick,
       [styles.selected]: isSelected,
