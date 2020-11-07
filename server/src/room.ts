@@ -19,6 +19,15 @@ export const addUser = (
   room.users[userUuid] = { hand: [], score: 0, username, ws: userWs };
 };
 
+export const getPlayers = (
+  room: Room,
+): { uuid: string; username: string; numberOfCards: number }[] =>
+  Object.entries(room.users).map(([uuid, user]: [string, User]) => ({
+    uuid,
+    username: user.username,
+    numberOfCards: user.hand.length,
+  }));
+
 export const resetDeck = (room: Room): void => {
   room.deck = getSuffledDeck();
   room.activeCards = [];
