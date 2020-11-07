@@ -70,6 +70,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
       } else if (type === 'UPDATE_SCORE') {
         setScores(playersScore);
       } else if (type === 'NEW_ROUND') {
+        dispatch({ type: 'newRound' });
         setIsEndOfRound(false);
       }
     };

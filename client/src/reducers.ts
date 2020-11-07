@@ -3,6 +3,7 @@ import { findCardIndex } from './core/utils';
 import { Card, OtherPlayer } from './types';
 
 enum ActionType {
+  newRound = 'newRound',
   resetSelectedCards = 'resetSelectedCards',
   selectCard = 'selectCard',
   setActiveCards = 'setActiveCards',
@@ -83,6 +84,10 @@ const reducer = (state: any, action: Action) => {
     });
 
     return { ...state, otherPlayers: otherPlayersWithHand };
+  }
+
+  if (action.type === 'newRound') {
+    return { ...state, activeCards: [], previousCards: [], selectedCards: [] };
   }
 
   return state;
