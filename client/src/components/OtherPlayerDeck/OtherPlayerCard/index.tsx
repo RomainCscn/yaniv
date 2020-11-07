@@ -1,11 +1,8 @@
 import React from 'react';
 
+import { BACK } from '../../../constants';
 import { Card } from '../../../types';
-
-const BACK = process.env.PUBLIC_URL + 'back.svg';
-
-const getCardImagePath = (card: Card) =>
-  `${process.env.PUBLIC_URL}cards/${card.suit.toUpperCase()}-${card.value}.svg`;
+import { getCardImagePath } from '../../../core/utils';
 
 const OtherPlayerCard = ({ card }: { card?: Card }) => (
   <img

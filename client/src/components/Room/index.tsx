@@ -6,10 +6,9 @@ import MamixtaButton from '../MamixtaButton';
 import OtherPlayerDeck from '../OtherPlayerDeck';
 import PreviousCards from '../PreviousCards';
 import Stack from '../Stack';
-import client from '../../core/client';
+import client, { send } from '../../core/client';
 import reducer from '../../reducers';
 import { Card, OtherPlayer, PlayerScore, ReceivedMessage } from '../../types';
-import { send } from '../../utils';
 import ScoreDashboard from '../ScoreDashboard';
 
 import styles from './styles.module.css';
@@ -35,7 +34,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
   const [isEndOfRound, setIsEndOfRound] = useState(false);
 
   useEffect(() => {
-    send(client, roomName, { action: 'READY_TO_PLAY' });
+    send(roomName, { action: 'READY_TO_PLAY' });
   }, [roomName]);
 
   useEffect(() => {
@@ -75,7 +74,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
 
   const pickCard = (card?: Card) => {
     setHasDrop(false);
-    send(client, roomName, { action: 'PLAY', actionType: 'PICK' }, { card });
+    send(roomName, { action: 'PLAY', actionType: 'PICK' }, { card });
   };
 
   const resetSelectedCards = () => {

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
 import Room from '../Room';
-import client from '../../core/client';
+import client, { send } from '../../core/client';
 import { OtherPlayer, ReceivedMessage } from '../../types';
-import { send } from '../../utils';
 
 interface RoomProps {
   roomName: string;
@@ -18,7 +17,7 @@ const WaitingRoom = ({ roomName, username }: RoomProps) => {
   const [userUuid, setUserUuid] = useState('');
 
   useEffect(() => {
-    send(client, roomName, { action: 'JOIN' }, { username });
+    send(roomName, { action: 'JOIN' }, { username });
 
     client.onmessage = (message) => {
       const { players, usernameList, type, uuid }: ReceivedMessage = JSON.parse(message.data);
@@ -36,7 +35,7 @@ const WaitingRoom = ({ roomName, username }: RoomProps) => {
 
   const startGame = () => {
     if (usernames.length >= 2) {
-      send(client, roomName, { action: 'START' });
+      send(roomName, { action: 'START' });
     } else {
       setError('Un seul joueur dans le salon ! Au moins deux joueurs requis pour jouer.');
     }

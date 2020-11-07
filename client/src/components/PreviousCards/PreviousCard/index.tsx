@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Card } from '../../../types';
+import { getCardImagePath } from '../../../core/utils';
 
 interface CardProps {
   canPlay: boolean;
@@ -8,9 +9,6 @@ interface CardProps {
   hasDrop: boolean;
   pickCard?: false | ((card?: Card) => void);
 }
-
-const getCardImagePath = (card: Card) =>
-  `${process.env.PUBLIC_URL}cards/${card.suit.toUpperCase()}-${card.value}.svg`;
 
 const CardComponent = ({ card, canPlay, hasDrop, pickCard }: CardProps) => {
   const onCardClick = () => {

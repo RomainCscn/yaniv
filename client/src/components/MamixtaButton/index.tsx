@@ -1,8 +1,7 @@
 import React from 'react';
 
-import client from '../../core/client';
+import { send } from '../../core/client';
 import { Card } from '../../types';
-import { send } from '../../utils';
 
 import styles from './styles.module.css';
 
@@ -29,7 +28,7 @@ const MamixtaButton = ({ hand, hasDrop, roomName }: MamixtaButtonProps) => {
     const canSubmit = canSubmitMamixta(hand, hasDrop);
 
     if (canSubmit) {
-      send(client, roomName, { action: 'PLAY', actionType: 'MAMIXTA' });
+      send(roomName, { action: 'PLAY', actionType: 'MAMIXTA' });
     } else {
       console.log('Nope');
     }

@@ -1,12 +1,12 @@
 import React from 'react';
 
+import { BACK } from '../../../constants';
+
 interface CardProps {
   canPlay: boolean;
   hasDrop: boolean;
   pickCard: () => void;
 }
-
-const BACK = process.env.PUBLIC_URL + 'back.svg';
 
 const CardComponent = ({ canPlay, hasDrop, pickCard }: CardProps) => {
   const onCardClick = () => {

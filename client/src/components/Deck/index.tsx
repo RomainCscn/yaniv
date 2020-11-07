@@ -1,11 +1,10 @@
 import React from 'react';
 
-import CardComponent from '../Card';
-import client from '../../core/client';
+import CardComponent from './DeckCard';
+import { send } from '../../core/client';
 import { canDropCard } from '../../core/game';
 import { findCardIndex, getCardUniqueIndex } from '../../core/utils';
 import { Card } from '../../types';
-import { send } from '../../utils';
 
 interface DeckProps {
   canPlay: boolean;
@@ -37,11 +36,11 @@ const Deck = ({
     if (dropMultipleCards) {
       setHasDrop(true);
       resetSelectedCards();
-      send(client, roomName, { action: 'PLAY', actionType: 'DROP' }, { cards: selectedCards });
+      send(roomName, { action: 'PLAY', actionType: 'DROP' }, { cards: selectedCards });
     } else if (selectedCards.length === 0) {
       setHasDrop(true);
       resetSelectedCards();
-      send(client, roomName, { action: 'PLAY', actionType: 'DROP' }, { card });
+      send(roomName, { action: 'PLAY', actionType: 'DROP' }, { card });
     }
   };
 

@@ -5,4 +5,7 @@ const findCardIndex = (card: Card, cards: Card[]) =>
 
 const getCardUniqueIndex = (card: Card) => `${card.value}-${card.suit}`;
 
-export { findCardIndex, getCardUniqueIndex };
+const getCardImagePath = (card: Card) =>
+  `${process.env.PUBLIC_URL}cards/${card.suit.toUpperCase()}-${card.value}.svg`;
+
+export { findCardIndex, getCardUniqueIndex, getCardImagePath };
