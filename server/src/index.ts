@@ -17,7 +17,7 @@ wss.on('connection', (ws: WebSocket) => {
     const { action, actionType, card, cards, room: roomName, username } = JSON.parse(data);
 
     if (action === 'JOIN') {
-      handleJoin(roomName, username, userUuid, ws);
+      handleJoin(actionType, roomName, username, userUuid, ws);
     } else if (action === 'START') {
       handleStart(roomName);
     } else if (action === 'READY_TO_PLAY') {

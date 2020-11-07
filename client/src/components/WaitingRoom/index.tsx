@@ -17,7 +17,7 @@ const WaitingRoom = ({ roomName, username }: RoomProps) => {
   const [userUuid, setUserUuid] = useState('');
 
   useEffect(() => {
-    send(roomName, { action: 'JOIN' }, { username });
+    send(roomName, { action: 'JOIN', actionType: 'JOINED_WAITING_ROOM' }, { username });
 
     client.onmessage = (message) => {
       const { players, usernameList, type, uuid }: ReceivedMessage = JSON.parse(message.data);

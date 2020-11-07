@@ -3,6 +3,10 @@ export interface Card {
   value: number;
 }
 
+interface CustomError {
+  code: 'GAME_ALREADY_STARTED' | 'TOO_MANY_PLAYERS';
+}
+
 export interface OtherPlayer {
   username: string;
   uuid: string;
@@ -16,6 +20,7 @@ export interface PlayerScore {
 
 export interface ReceivedMessage {
   activeCards: Card[];
+  error: CustomError;
   hand: Card[];
   player: OtherPlayer;
   players: OtherPlayer[];
@@ -41,4 +46,11 @@ export type ReceivedMessageType =
 
 export type MessageAction = 'JOIN' | 'PLAY' | 'READY_TO_PLAY' | 'START';
 
-export type MessageActionType = 'DROP' | 'MAMIXTA' | 'NEXT_ROUND' | 'PICK';
+export type MessageActionType =
+  | 'DROP'
+  | 'JOINED_WAITING_ROOM'
+  | 'MAMIXTA'
+  | 'NEXT_ROUND'
+  | 'PICK'
+  | 'REQUEST_PLAYING_ROOM'
+  | 'REQUEST_WAITING_ROOM';
