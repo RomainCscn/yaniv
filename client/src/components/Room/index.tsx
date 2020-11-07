@@ -104,22 +104,20 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
             pickCard={pickCard}
             previousCards={state.previousCards}
           />
-          <ActiveCards activeCards={state.activeCards} />
+          {state.activeCards.length > 0 && <ActiveCards activeCards={state.activeCards} />}
           <Stack canPlay={canPlay} hasDrop={hasDrop} pickCard={pickCard} />
         </div>
       )}
-      <div>
-        <Deck
-          canPlay={canPlay}
-          hand={hand}
-          hasDrop={hasDrop}
-          resetSelectedCards={resetSelectedCards}
-          roomName={roomName}
-          setHasDrop={setHasDrop}
-          selectCard={selectCard}
-          selectedCards={state.selectedCards}
-        />
-      </div>
+      <Deck
+        canPlay={canPlay}
+        hand={hand}
+        hasDrop={hasDrop}
+        resetSelectedCards={resetSelectedCards}
+        roomName={roomName}
+        setHasDrop={setHasDrop}
+        selectCard={selectCard}
+        selectedCards={state.selectedCards}
+      />
       <div>
         {!isEndOfRound && <MamixtaButton hand={hand} hasDrop={hasDrop} roomName={roomName} />}
       </div>

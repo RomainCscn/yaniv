@@ -1,6 +1,6 @@
 import React from 'react';
 
-import OtherPlayerCard from './OtherPlayerCard';
+import GenericCard from '../GenericCard';
 import { Card } from '../../types';
 
 const OtherPlayerDeck = ({
@@ -15,8 +15,12 @@ const OtherPlayerDeck = ({
   return (
     <div>
       {hand
-        ? hand.map((card, index) => <OtherPlayerCard key={index} card={card} />)
-        : [...Array(numberOfCards).keys()].map((index) => <OtherPlayerCard key={index} />)}
+        ? hand.map((card, index) => (
+            <GenericCard canClick={false} key={index} cardType='otherPlayer' card={card} />
+          ))
+        : [...Array(numberOfCards).keys()].map((index) => (
+            <GenericCard canClick={false} cardType='otherPlayer' key={index} />
+          ))}
       <div>{username}</div>
     </div>
   );

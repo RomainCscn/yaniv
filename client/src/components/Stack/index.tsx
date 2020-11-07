@@ -1,16 +1,19 @@
 import React from 'react';
 
-import CardComponent from './StackCard';
-import { Card } from '../../types';
+import GenericCard from '../GenericCard';
+
+import styles from './styles.module.css';
 
 interface StackProps {
   canPlay: boolean;
   hasDrop: boolean;
-  pickCard: (card?: Card) => void;
+  pickCard: () => void;
 }
 
-const Stack = ({ canPlay, hasDrop, pickCard }: StackProps) => {
-  return <CardComponent canPlay={canPlay} hasDrop={hasDrop} pickCard={pickCard} />;
-};
+const Stack = ({ canPlay, hasDrop, pickCard }: StackProps) => (
+  <div className={styles.stackContainer}>
+    <GenericCard canClick={canPlay && hasDrop} onCardClick={() => pickCard()} />
+  </div>
+);
 
 export default Stack;

@@ -1,8 +1,10 @@
 import React from 'react';
 
-import CardComponent from './ActiveCard';
+import GenericCard from '../GenericCard';
 import { getCardUniqueIndex } from '../../core/utils';
 import { Card } from '../../types';
+
+import styles from './styles.module.css';
 
 interface ActiveCardsProps {
   activeCards: Card[];
@@ -10,10 +12,12 @@ interface ActiveCardsProps {
 
 const ActiveCards = ({ activeCards }: ActiveCardsProps) => {
   return (
-    <div style={{ marginRight: '128px' }}>
-      {activeCards.map((card: Card) => (
-        <CardComponent key={getCardUniqueIndex(card)} card={card} />
-      ))}
+    <div className={styles.activeBoard}>
+      <div className={styles.offsetCardMargin}>
+        {activeCards.map((card: Card) => (
+          <GenericCard key={getCardUniqueIndex(card)} canClick={false} card={card} />
+        ))}
+      </div>
     </div>
   );
 };

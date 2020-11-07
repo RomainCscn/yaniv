@@ -1,0 +1,13 @@
+.activeBoard {
+  background-color: #037830;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 82px;
+  padding: 12px 24px;
+}
+
+.offsetCardMargin {
+  margin-right: 82px;
+}

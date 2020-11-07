@@ -6,6 +6,8 @@ import { canDropCard } from '../../core/game';
 import { findCardIndex, getCardUniqueIndex } from '../../core/utils';
 import { Card } from '../../types';
 
+import styles from './styles.module.css';
+
 interface DeckProps {
   canPlay: boolean;
   hand: Card[];
@@ -45,7 +47,7 @@ const Deck = ({
   };
 
   return (
-    <>
+    <div className={styles.deckContainer}>
       {hand.map((card) => (
         <CardComponent
           canPlay={canPlay}
@@ -57,7 +59,7 @@ const Deck = ({
           selectedCards={selectedCards}
         />
       ))}
-    </>
+    </div>
   );
 };
 
