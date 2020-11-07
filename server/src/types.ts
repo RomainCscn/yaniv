@@ -11,6 +11,7 @@ export interface Room {
   activeCards: Card[];
   activePlayer: null | string;
   deck: Card[];
+  roundWinner: null | string;
   users: Users;
 }
 

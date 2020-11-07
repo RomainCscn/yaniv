@@ -22,13 +22,16 @@ export const addUser = (
 export const resetDeck = (room: Room): void => {
   room.deck = getSuffledDeck();
   room.activeCards = [];
+  room.activePlayer = room.roundWinner;
+  room.roundWinner = null;
 };
 
 export default function initRoom(): Room {
   return {
-    deck: getSuffledDeck(),
     activeCards: [],
     activePlayer: null,
+    deck: getSuffledDeck(),
+    roundWinner: null,
     users: {},
   };
 }

@@ -101,11 +101,13 @@ const handleMamixta = (room: Room, userUuid: string) => {
   );
 
   if (lowerScoreThanCurrent.length > 0) {
+    room.roundWinner = lowerScoreThanCurrent[0][0];
     Object.entries(usersScore).forEach(
       ([uuid, score]: [string, number]) =>
         (room.users[uuid].score += userUuid === uuid ? score + 30 : score),
     );
   } else {
+    room.roundWinner = userUuid;
     Object.entries(usersScore).forEach(
       ([uuid, score]: [string, number]) => (room.users[uuid].score += score),
     );
@@ -124,14 +126,18 @@ const handleMamixta = (room: Room, userUuid: string) => {
     user.ws.send(JSON.stringify({ type: 'REVEAL_OTHER_PLAYERS_CARDS', playersCard }));
     user.ws.send(JSON.stringify({ type: 'UPDATE_SCORE', playersScore }));
   });
+};
 
-  // // generate new deck and send cards to players
-  // Object.entries(room.users).forEach(([, user]: [string, User]) => {
-  //   resetDeck(room);
-  //   assignHandToUser(room, user);
-  //   user.ws.send(JSON.stringify({ type: 'NEW_ROUND' }));
-  //   user.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: user.hand }));
-  // });
+const handleNextRound = (room: Room) => {
+  resetDeck(room);
+
+  Object.entries(room.users).forEach(([, user]: [string, User]) => {
+    assignHandToUser(room, user);
+    user.ws.send(JSON.stringify({ type: 'NEW_ROUND' }));
+    user.ws.send(JSON.stringify({ type: 'SET_OTHER_PLAYERS_CARDS', players: getPlayers(room) }));
+    user.ws.send(JSON.stringify({ type: 'SET_ACTIVE_PLAYER', uuid: room.activePlayer }));
+    user.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: user.hand }));
+  });
 };
 
 const handlePlay = (
@@ -175,6 +181,8 @@ const handlePlay = (
     });
   } else if (actionType === 'MAMIXTA') {
     handleMamixta(room, userUuid);
+  } else if (actionType === 'NEXT_ROUND') {
+    handleNextRound(room);
   }
 };
 
