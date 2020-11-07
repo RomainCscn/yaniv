@@ -33,6 +33,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
   const [hasDrop, setHasDrop] = useState(false);
   const [scores, setScores] = useState<PlayerScore[]>([]);
   const [isEndOfRound, setIsEndOfRound] = useState(false);
+  const [roundWinner, setRoundWinner] = useState<string>();
 
   useEffect(() => {
     send(roomName, { action: 'READY_TO_PLAY' });
@@ -47,6 +48,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
         playersCard,
         playersScore,
         previousCards,
+        roundWinner,
         type,
         uuid,
       }: ReceivedMessage = JSON.parse(message.data);
@@ -61,14 +63,14 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
       } else if (type === 'SET_OTHER_PLAYERS_CARDS') {
         const otherPlayers = players.filter((player) => player.uuid !== userUuid);
         dispatch({ type: 'setOtherPlayers', payload: otherPlayers });
-      } else if (type === 'REVEAL_OTHER_PLAYERS_CARDS') {
+      } else if (type === 'END_OF_ROUND_UPDATE') {
         setCanPlay(false);
         setIsEndOfRound(true);
+        setScores(playersScore);
+        setRoundWinner(roundWinner);
         dispatch({ type: 'setOtherPlayersCards', payload: playersCard });
       } else if (type === 'SET_ACTIVE_PLAYER') {
         setCanPlay(uuid === userUuid);
-      } else if (type === 'UPDATE_SCORE') {
-        setScores(playersScore);
       } else if (type === 'NEW_ROUND') {
         dispatch({ type: 'newRound' });
         setIsEndOfRound(false);
@@ -92,10 +94,11 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
   return (
     <>
       <ScoreDashboard scores={scores} />
-      {state.otherPlayers.map(({ hand, numberOfCards, username }: OtherPlayer) => (
+      {state.otherPlayers.map(({ hand, numberOfCards, username, uuid }: OtherPlayer) => (
         <OtherPlayerDeck
           key={username}
           hand={hand}
+          isWinner={uuid === roundWinner}
           numberOfCards={numberOfCards}
           username={username}
         />
@@ -124,7 +127,10 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
       />
       <div>
         {isEndOfRound ? (
-          <NextRoundButton roomName={roomName} />
+          <div>
+            <NextRoundButton roomName={roomName} />
+            {roundWinner === userUuid ? 'GAGNÉ' : 'PERDU'}
+          </div>
         ) : (
           <MamixtaButton hand={hand} canClick={canPlay && !hasDrop} roomName={roomName} />
         )}

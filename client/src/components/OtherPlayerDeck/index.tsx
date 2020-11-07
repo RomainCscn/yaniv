@@ -1,17 +1,19 @@
 import React from 'react';
+import classnames from 'classnames';
 
 import GenericCard from '../GenericCard';
 import { Card } from '../../types';
 
-const OtherPlayerDeck = ({
-  hand,
-  numberOfCards,
-  username,
-}: {
+import styles from './styles.module.css';
+
+interface OtherPlayerDeckProps {
   hand?: Card[];
+  isWinner: boolean;
   numberOfCards: number;
   username: string;
-}) => {
+}
+
+const OtherPlayerDeck = ({ hand, isWinner, numberOfCards, username }: OtherPlayerDeckProps) => {
   return (
     <div>
       {hand
@@ -21,7 +23,7 @@ const OtherPlayerDeck = ({
         : [...Array(numberOfCards).keys()].map((index) => (
             <GenericCard canClick={false} cardType='otherPlayer' key={index} />
           ))}
-      <div>{username}</div>
+      <div className={classnames({ [styles.winner]: isWinner })}>{username}</div>
     </div>
   );
 };

@@ -41,7 +41,13 @@ export const handleEndRound = (room: Room, userUuid: string): void => {
   ]);
 
   Object.entries(room.users).forEach(([, user]: [string, User]) => {
-    user.ws.send(JSON.stringify({ type: 'REVEAL_OTHER_PLAYERS_CARDS', playersCard }));
-    user.ws.send(JSON.stringify({ type: 'UPDATE_SCORE', playersScore }));
+    user.ws.send(
+      JSON.stringify({
+        type: 'END_OF_ROUND_UPDATE',
+        playersCard,
+        playersScore,
+        roundWinner: room.roundWinner,
+      }),
+    );
   });
 };

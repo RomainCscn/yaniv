@@ -28,21 +28,21 @@ export interface ReceivedMessage {
   playersScore: PlayerScore[];
   usernameList: string[];
   previousCards: Card[];
+  roundWinner: string;
   type: ReceivedMessageType;
   uuid: string;
 }
 
 export type ReceivedMessageType =
+  | 'END_OF_ROUND_UPDATE'
   | 'NEW_ROUND'
   | 'PLAYERS_UPDATE'
-  | 'REVEAL_OTHER_PLAYERS_CARDS'
   | 'SET_ACTIVE_PLAYER'
   | 'SET_ACTIVE_CARDS'
   | 'SET_OTHER_PLAYERS_CARDS'
   | 'SET_PLAYER_HAND'
   | 'SET_PREVIOUS_CARDS'
-  | 'START_GAME'
-  | 'UPDATE_SCORE';
+  | 'START_GAME';
 
 export type MessageAction = 'JOIN' | 'PLAY' | 'READY_TO_PLAY' | 'START';
 
