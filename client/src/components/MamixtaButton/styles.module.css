@@ -1,5 +1,4 @@
 .button {
-  cursor: pointer;
   padding: 12px;
   font-size: 2rem;
   font-weight: bold;
@@ -7,4 +6,8 @@
   color: #064709;
   border: none;
   border-radius: 12px;
+}
+
+.pointer {
+  cursor: pointer;
 }

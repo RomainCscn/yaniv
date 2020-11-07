@@ -3,6 +3,7 @@ import React, { useEffect, useState, useReducer } from 'react';
 import ActiveCards from '../ActiveCards';
 import Deck from '../Deck';
 import MamixtaButton from '../MamixtaButton';
+import NextRoundButton from '../NextRoundButton';
 import OtherPlayerDeck from '../OtherPlayerDeck';
 import PreviousCards from '../PreviousCards';
 import Stack from '../Stack';
@@ -68,6 +69,8 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
         setCanPlay(uuid === userUuid);
       } else if (type === 'UPDATE_SCORE') {
         setScores(playersScore);
+      } else if (type === 'NEW_ROUND') {
+        setIsEndOfRound(false);
       }
     };
   }, [roomName, userUuid]);
@@ -119,7 +122,11 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
         selectedCards={state.selectedCards}
       />
       <div>
-        {!isEndOfRound && <MamixtaButton hand={hand} hasDrop={hasDrop} roomName={roomName} />}
+        {isEndOfRound ? (
+          <NextRoundButton roomName={roomName} />
+        ) : (
+          <MamixtaButton hand={hand} canClick={canPlay && !hasDrop} roomName={roomName} />
+        )}
       </div>
     </>
   );

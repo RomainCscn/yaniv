@@ -28,6 +28,7 @@ export interface ReceivedMessage {
 }
 
 export type ReceivedMessageType =
+  | 'NEW_ROUND'
   | 'PLAYERS_UPDATE'
   | 'REVEAL_OTHER_PLAYERS_CARDS'
   | 'SET_ACTIVE_PLAYER'
@@ -40,4 +41,4 @@ export type ReceivedMessageType =
 
 export type MessageAction = 'JOIN' | 'PLAY' | 'READY_TO_PLAY' | 'START';
 
-export type MessageActionType = 'DROP' | 'MAMIXTA' | 'PICK';
+export type MessageActionType = 'DROP' | 'MAMIXTA' | 'NEXT_ROUND' | 'PICK';
