@@ -109,7 +109,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
   };
 
   return (
-    <>
+    <div className={styles.mainContainer}>
       <ScoreDashboard scores={scores} />
       {state.otherPlayers.map(({ hand, numberOfCards, username, uuid }: OtherPlayer) => (
         <OtherPlayerDeck
@@ -131,14 +131,6 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
           <Stack canPlay={canPlay && state.selectedCards.length > 0} pickCard={pickCard} />
         </div>
       )}
-      <Deck
-        canPlay={canPlay}
-        hand={hand}
-        roomName={roomName}
-        selectCard={selectCard}
-        selectedCards={state.selectedCards}
-      />
-      {scores.find((score) => score.uuid === userUuid)?.score || 0}
       <div>
         {gameWinner ? (
           <div>
@@ -154,7 +146,15 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
           <MamixtaButton hand={hand} canClick={canPlay} roomName={roomName} />
         )}
       </div>
-    </>
+      <Deck
+        canPlay={canPlay}
+        hand={hand}
+        roomName={roomName}
+        score={scores.find((score) => score.uuid === userUuid)?.score || 0}
+        selectCard={selectCard}
+        selectedCards={state.selectedCards}
+      />
+    </div>
   );
 };
 

@@ -1,3 +1,9 @@
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
 .cardsArea {
   display: flex;
   justify-content: center;
