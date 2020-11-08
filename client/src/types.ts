@@ -14,9 +14,12 @@ export interface OtherPlayer {
   hand?: Card[];
 }
 
-export interface PlayerScore {
-  [key: string]: number;
-}
+export type PlayerScore = {
+  score: number;
+  scoreHistory: number[];
+  uuid: string;
+  username: string;
+};
 
 export interface ReceivedMessage {
   error: CustomError;

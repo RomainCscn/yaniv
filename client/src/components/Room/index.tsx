@@ -117,6 +117,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
           hand={hand}
           isWinner={uuid === roundWinner}
           numberOfCards={numberOfCards}
+          score={scores.find((score) => score.uuid === uuid)?.score || 0}
           username={username}
         />
       ))}
@@ -137,6 +138,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
         selectCard={selectCard}
         selectedCards={state.selectedCards}
       />
+      {scores.find((score) => score.uuid === userUuid)?.score || 0}
       <div>
         {gameWinner ? (
           <div>

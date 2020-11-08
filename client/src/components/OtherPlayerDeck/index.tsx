@@ -10,10 +10,17 @@ interface OtherPlayerDeckProps {
   hand?: Card[];
   isWinner: boolean;
   numberOfCards: number;
+  score: number;
   username: string;
 }
 
-const OtherPlayerDeck = ({ hand, isWinner, numberOfCards, username }: OtherPlayerDeckProps) => {
+const OtherPlayerDeck = ({
+  hand,
+  isWinner,
+  numberOfCards,
+  score,
+  username,
+}: OtherPlayerDeckProps) => {
   return (
     <div>
       {hand
@@ -23,7 +30,9 @@ const OtherPlayerDeck = ({ hand, isWinner, numberOfCards, username }: OtherPlaye
         : [...Array(numberOfCards).keys()].map((index) => (
             <GenericCard canClick={false} cardType='otherPlayer' key={index} />
           ))}
-      <div className={classnames({ [styles.winner]: isWinner })}>{username}</div>
+      <div className={classnames({ [styles.winner]: isWinner })}>
+        {username} - {score}
+      </div>
     </div>
   );
 };
