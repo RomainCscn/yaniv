@@ -16,7 +16,7 @@ export const addUser = (
   username: string,
   userWs: WebSocket,
 ): void => {
-  room.users[userUuid] = { hand: [], score: 0, username, ws: userWs };
+  room.users[userUuid] = { hand: [], score: 0, scoreHistory: [], username, ws: userWs };
 };
 
 export const getPlayers = (
@@ -34,7 +34,12 @@ export const resetDeck = (room: Room, { resetScore = false } = {}): void => {
   room.activePlayer = room.roundWinner;
   room.roundWinner = null;
 
-  if (resetScore) Object.entries(room.users).forEach(([, user]) => (user.score = 0));
+  if (resetScore) {
+    Object.entries(room.users).forEach(([, user]) => {
+      user.score = 0;
+      user.scoreHistory = [];
+    });
+  }
 };
 
 export default function initRoom(): Room {

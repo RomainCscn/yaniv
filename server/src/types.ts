@@ -24,6 +24,7 @@ export interface Room {
 export interface User {
   hand: Card[];
   score: number;
+  scoreHistory: number[];
   username: string;
   ws: WebSocket;
 }
