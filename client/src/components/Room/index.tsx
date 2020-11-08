@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useReducer } from 'react';
 
-import ActiveCards from '../ActiveCards';
 import Deck from '../Deck';
 import MamixtaButton from '../MamixtaButton';
 import NextRoundButton from '../NextRoundButton';
 import OtherPlayerDeck from '../OtherPlayerDeck';
 import PlayAgainButton from '../PlayAgainButton';
-import PreviousCards from '../PreviousCards';
+import ThrownCards from '../ThrownCards';
 import Stack from '../Stack';
 import client, { send } from '../../core/client';
+import { canDropCards } from '../../core/game';
 import reducer from '../../reducers';
 import { Card, OtherPlayer, PlayerScore, ReceivedMessage } from '../../types';
 import ScoreDashboard from '../ScoreDashboard';
@@ -24,14 +24,12 @@ interface RoomProps {
 
 const Room = ({ players, roomName, userUuid }: RoomProps) => {
   const [state, dispatch] = useReducer(reducer, {
-    activeCards: [],
     otherPlayers: players,
-    previousCards: [],
+    thrownCards: [],
     selectedCards: [],
   });
   const [canPlay, setCanPlay] = useState(false);
   const [hand, setHand] = useState<Card[]>([]);
-  const [hasDrop, setHasDrop] = useState(false);
   const [scores, setScores] = useState<PlayerScore[]>([]);
   const [isEndOfRound, setIsEndOfRound] = useState(false);
   const [roundWinner, setRoundWinner] = useState<string>();
@@ -44,12 +42,11 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
   useEffect(() => {
     client.onmessage = (message) => {
       const {
-        activeCards,
         hand: userHand,
         players,
         playersCard,
         playersScore,
-        previousCards,
+        thrownCards,
         roundWinner,
         type,
         uuid,
@@ -58,11 +55,8 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
 
       if (type === 'SET_PLAYER_HAND') {
         setHand(userHand);
-      } else if (type === 'SET_ACTIVE_CARDS') {
-        dispatch({ type: 'setPreviousCards' });
-        dispatch({ type: 'setActiveCards', payload: activeCards });
-      } else if (type === 'SET_PREVIOUS_CARDS') {
-        dispatch({ type: 'setPreviousCards', payload: previousCards });
+      } else if (type === 'SET_THROWN_CARDS') {
+        dispatch({ type: 'setThrownCards', payload: thrownCards });
       } else if (type === 'SET_OTHER_PLAYERS_CARDS') {
         const otherPlayers = players.filter((player) => player.uuid !== userUuid);
         dispatch({ type: 'setOtherPlayers', payload: otherPlayers });
@@ -85,12 +79,29 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
   }, [roomName, userUuid]);
 
   const pickCard = (card?: Card) => {
-    setHasDrop(false);
-    send(roomName, { action: 'PLAY', actionType: 'PICK' }, { card });
-  };
+    if (canDropCards(state.selectedCards)) {
+      let cards = {};
+      if (card && state.thrownCards.length > 1) {
+        // remove picked card from the thrown one
+        const remainingThrownCards = state.thrownCards.filter(
+          (thrownCard: Card) => thrownCard.value !== card.value || thrownCard.suit !== card.suit,
+        );
 
-  const resetSelectedCards = () => {
-    dispatch({ type: 'resetSelectedCards' });
+        cards = {
+          pickedCard: card,
+          notPickedCards: remainingThrownCards,
+          thrownCards: state.selectedCards,
+        };
+      } else {
+        cards = {
+          ...(card ? { pickedCard: card } : { notPickedCards: state.thrownCards }),
+          thrownCards: state.selectedCards,
+        };
+      }
+
+      dispatch({ type: 'resetSelectedCards' });
+      send(roomName, { action: 'PLAY', actionType: 'DROP_AND_PICK' }, { ...cards });
+    }
   };
 
   const selectCard = (card: Card) => {
@@ -111,23 +122,18 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
       ))}
       {!isEndOfRound && (
         <div className={styles.cardsArea}>
-          <PreviousCards
-            canPlay={canPlay}
-            hasDrop={hasDrop}
+          <ThrownCards
+            canPlay={canPlay && state.selectedCards.length > 0}
             pickCard={pickCard}
-            previousCards={state.previousCards}
+            thrownCards={state.thrownCards}
           />
-          {state.activeCards.length > 0 && <ActiveCards activeCards={state.activeCards} />}
-          <Stack canPlay={canPlay} hasDrop={hasDrop} pickCard={pickCard} />
+          <Stack canPlay={canPlay && state.selectedCards.length > 0} pickCard={pickCard} />
         </div>
       )}
       <Deck
         canPlay={canPlay}
         hand={hand}
-        hasDrop={hasDrop}
-        resetSelectedCards={resetSelectedCards}
         roomName={roomName}
-        setHasDrop={setHasDrop}
         selectCard={selectCard}
         selectedCards={state.selectedCards}
       />
@@ -143,7 +149,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
             {roundWinner === userUuid ? 'GAGNÉ' : 'PERDU'}
           </div>
         ) : (
-          <MamixtaButton hand={hand} canClick={canPlay && !hasDrop} roomName={roomName} />
+          <MamixtaButton hand={hand} canClick={canPlay} roomName={roomName} />
         )}
       </div>
     </>

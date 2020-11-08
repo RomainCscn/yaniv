@@ -6,10 +6,9 @@ enum ActionType {
   newRound = 'newRound',
   resetSelectedCards = 'resetSelectedCards',
   selectCard = 'selectCard',
-  setActiveCards = 'setActiveCards',
   setOtherPlayers = 'setOtherPlayers',
   setOtherPlayersCards = 'setOtherPlayersCards',
-  setPreviousCards = 'setPreviousCards',
+  setThrownCards = 'setThrownCards',
 }
 
 type ActionTypeKeys = keyof typeof ActionType;
@@ -20,17 +19,11 @@ interface Action {
 }
 
 const reducer = (state: any, action: Action) => {
-  if (action.type === 'setActiveCards') {
-    return { ...state, activeCards: action.payload };
-  }
-
-  if (action.type === 'setPreviousCards') {
-    if (state.activeCards) {
-      return {
-        ...state,
-        previousCards: action.payload || state.activeCards,
-      };
-    }
+  if (action.type === 'setThrownCards') {
+    return {
+      ...state,
+      thrownCards: action.payload,
+    };
   }
 
   if (action.type === 'selectCard') {
@@ -87,7 +80,7 @@ const reducer = (state: any, action: Action) => {
   }
 
   if (action.type === 'newRound') {
-    return { ...state, activeCards: [], previousCards: [], selectedCards: [] };
+    return { ...state, thrownCards: [], selectedCards: [] };
   }
 
   return state;

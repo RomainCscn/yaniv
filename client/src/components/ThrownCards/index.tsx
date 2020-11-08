@@ -6,29 +6,28 @@ import { Card } from '../../types';
 
 import styles from './styles.module.css';
 
-interface PreviousCardsProps {
+interface ThrownCardsProps {
   canPlay: boolean;
-  hasDrop: boolean;
-  previousCards: Card[];
+  thrownCards: Card[];
   pickCard: (card?: Card) => void;
 }
 
-const PreviousCards = ({ canPlay, hasDrop, pickCard, previousCards }: PreviousCardsProps) => {
+const ThrownCards = ({ canPlay, pickCard, thrownCards }: ThrownCardsProps) => {
   const onCardClick = (card: Card, isFirstOrLast: boolean) => {
-    if (canPlay && hasDrop && isFirstOrLast) {
+    if (canPlay && isFirstOrLast) {
       pickCard(card);
     }
   };
 
   return (
-    <div className={styles.previousBoard}>
-      {previousCards.map((card: Card, index) => {
-        const isFirstOrLast = index === 0 || index === previousCards.length - 1;
+    <div className={styles.thrownCardsBoard}>
+      {thrownCards.map((card: Card, index) => {
+        const isFirstOrLast = index === 0 || index === thrownCards.length - 1;
 
         return (
           <GenericCard
             key={getCardUniqueIndex(card)}
-            canClick={canPlay && hasDrop && isFirstOrLast}
+            canClick={canPlay && isFirstOrLast}
             card={card}
             onCardClick={() => onCardClick(card, isFirstOrLast)}
           />
@@ -38,4 +37,4 @@ const PreviousCards = ({ canPlay, hasDrop, pickCard, previousCards }: PreviousCa
   );
 };
 
-export default PreviousCards;
+export default ThrownCards;

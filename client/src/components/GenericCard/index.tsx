@@ -31,7 +31,6 @@ const GenericCard = ({
     })}
     alt={card ? `card-${getCardUniqueIndex(card)}` : 'stack'}
     onClick={canClick ? onCardClick : undefined}
-    onContextMenu={canClick ? onCardClick : undefined}
     src={card ? getCardImagePath(card) : BACK}
   />
 );

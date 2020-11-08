@@ -26,7 +26,6 @@ const canSubmitMamixta = (hand: Card[], canClick: boolean): boolean => {
 
 const MamixtaButton = ({ hand, canClick, roomName }: MamixtaButtonProps) => {
   const canSubmit = canSubmitMamixta(hand, canClick);
-  console.log({ canClick, canSubmit });
 
   const submit = () => send(roomName, { action: 'PLAY', actionType: 'MAMIXTA' });
 

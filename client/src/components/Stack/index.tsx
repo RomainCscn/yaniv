@@ -6,13 +6,12 @@ import styles from './styles.module.css';
 
 interface StackProps {
   canPlay: boolean;
-  hasDrop: boolean;
   pickCard: () => void;
 }
 
-const Stack = ({ canPlay, hasDrop, pickCard }: StackProps) => (
+const Stack = ({ canPlay, pickCard }: StackProps) => (
   <div className={styles.stackContainer}>
-    <GenericCard canClick={canPlay && hasDrop} onCardClick={() => pickCard()} />
+    <GenericCard canClick={canPlay} onCardClick={() => pickCard()} />
   </div>
 );
 

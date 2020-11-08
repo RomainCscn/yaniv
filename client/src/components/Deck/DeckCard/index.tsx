@@ -6,41 +6,23 @@ import { Card } from '../../../types';
 interface CardProps {
   canPlay: boolean;
   card: Card;
-  dropCard: (card: Card) => void;
-  hasDrop: boolean;
   selectCard: (card: Card) => void;
   selectedCards: Card[];
 }
 
-const CardComponent = ({
-  canPlay,
-  card,
-  dropCard,
-  hasDrop,
-  selectCard,
-  selectedCards,
-}: CardProps) => {
-  const canClick = canPlay && !hasDrop && !!dropCard;
+const CardComponent = ({ canPlay, card, selectCard, selectedCards }: CardProps) => {
   const isSelected = selectedCards?.some(
     (selectedCard: Card) => selectedCard.value === card!.value && selectedCard.suit === card!.suit,
   );
 
-  const onCardClick = (e: React.MouseEvent) => {
-    if (e.type === 'click' && canPlay && !hasDrop) {
-      dropCard(card!);
-    } else if (e.type === 'contextmenu' && canPlay && !hasDrop) {
-      e.preventDefault();
+  const onCardClick = () => {
+    if (canPlay) {
       selectCard(card);
     }
   };
 
   return (
-    <GenericCard
-      canClick={canClick}
-      card={card}
-      onCardClick={onCardClick}
-      isSelected={isSelected}
-    />
+    <GenericCard canClick={canPlay} card={card} onCardClick={onCardClick} isSelected={isSelected} />
   );
 };
 
