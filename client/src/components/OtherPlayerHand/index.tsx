@@ -6,7 +6,7 @@ import { Card } from '../../types';
 
 import styles from './styles.module.css';
 
-interface OtherPlayerDeckProps {
+interface OtherPlayerHandProps {
   hand?: Card[];
   isWinner: boolean;
   numberOfCards: number;
@@ -14,13 +14,13 @@ interface OtherPlayerDeckProps {
   username: string;
 }
 
-const OtherPlayerDeck = ({
+const OtherPlayerHand = ({
   hand,
   isWinner,
   numberOfCards,
   score,
   username,
-}: OtherPlayerDeckProps) => {
+}: OtherPlayerHandProps) => {
   return (
     <div>
       {hand
@@ -37,4 +37,4 @@ const OtherPlayerDeck = ({
   );
 };
 
-export default OtherPlayerDeck;
+export default OtherPlayerHand;

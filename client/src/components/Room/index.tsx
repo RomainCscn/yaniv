@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useReducer } from 'react';
 
-import Deck from '../Deck';
+import PlayerHand from '../PlayerHand';
 import MamixtaButton from '../MamixtaButton';
 import NextRoundButton from '../NextRoundButton';
-import OtherPlayerDeck from '../OtherPlayerDeck';
+import OtherPlayerHand from '../OtherPlayerHand';
 import PlayAgainButton from '../PlayAgainButton';
 import ThrownCards from '../ThrownCards';
 import Stack from '../Stack';
@@ -112,7 +112,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
     <div className={styles.mainContainer}>
       <ScoreDashboard scores={scores} />
       {state.otherPlayers.map(({ hand, numberOfCards, username, uuid }: OtherPlayer) => (
-        <OtherPlayerDeck
+        <OtherPlayerHand
           key={username}
           hand={hand}
           isWinner={uuid === roundWinner}
@@ -137,16 +137,16 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
             <div>Gagnant de la partie : {gameWinner} !</div>
             <PlayAgainButton roomName={roomName} />
           </div>
-        ) : isEndOfRound ? (
-          <div>
-            <NextRoundButton roomName={roomName} />
-            {roundWinner === userUuid ? 'GAGNÉ' : 'PERDU'}
-          </div>
         ) : (
-          <MamixtaButton hand={hand} canClick={canPlay} roomName={roomName} />
+          isEndOfRound && (
+            <div>
+              <NextRoundButton roomName={roomName} />
+              {roundWinner === userUuid ? 'GAGNÉ' : 'PERDU'}
+            </div>
+          )
         )}
       </div>
-      <Deck
+      <PlayerHand
         canPlay={canPlay}
         hand={hand}
         roomName={roomName}
@@ -154,6 +154,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
         selectCard={selectCard}
         selectedCards={state.selectedCards}
       />
+      <MamixtaButton hand={hand} canClick={canPlay} roomName={roomName} />
     </div>
   );
 };

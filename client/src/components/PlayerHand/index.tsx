@@ -1,12 +1,12 @@
 import React from 'react';
 
-import CardComponent from './DeckCard';
+import CardComponent from './HandCard';
 import { getCardUniqueIndex } from '../../core/utils';
 import { Card } from '../../types';
 
 import styles from './styles.module.css';
 
-interface DeckProps {
+interface PlayerHandProps {
   canPlay: boolean;
   hand: Card[];
   roomName: string;
@@ -15,7 +15,7 @@ interface DeckProps {
   selectedCards: Card[];
 }
 
-const Deck = ({ canPlay, hand, score, selectCard, selectedCards }: DeckProps) => (
+const PlayerHand = ({ canPlay, hand, score, selectCard, selectedCards }: PlayerHandProps) => (
   <div className={styles.deckContainer}>
     <div style={{ marginRight: '82px' }}>
       {hand.map((card) => (
@@ -32,4 +32,4 @@ const Deck = ({ canPlay, hand, score, selectCard, selectedCards }: DeckProps) =>
   </div>
 );
 
-export default Deck;
+export default PlayerHand;
