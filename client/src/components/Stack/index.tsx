@@ -11,7 +11,7 @@ interface StackProps {
 
 const Stack = ({ canPlay, pickCard }: StackProps) => (
   <div className={styles.stackContainer}>
-    <GenericCard canClick={canPlay} onCardClick={() => pickCard()} />
+    <GenericCard canClick={canPlay} isLast={true} onCardClick={() => pickCard()} />
   </div>
 );
 

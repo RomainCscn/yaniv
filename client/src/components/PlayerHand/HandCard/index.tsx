@@ -6,11 +6,12 @@ import { Card } from '../../../types';
 interface CardProps {
   canPlay: boolean;
   card: Card;
+  isLast: boolean;
   selectCard: (card: Card) => void;
   selectedCards: Card[];
 }
 
-const CardComponent = ({ canPlay, card, selectCard, selectedCards }: CardProps) => {
+const CardComponent = ({ canPlay, card, isLast, selectCard, selectedCards }: CardProps) => {
   const isSelected = selectedCards?.some(
     (selectedCard: Card) => selectedCard.value === card!.value && selectedCard.suit === card!.suit,
   );
@@ -22,7 +23,13 @@ const CardComponent = ({ canPlay, card, selectCard, selectedCards }: CardProps) 
   };
 
   return (
-    <GenericCard canClick={canPlay} card={card} onCardClick={onCardClick} isSelected={isSelected} />
+    <GenericCard
+      canClick={canPlay}
+      card={card}
+      isLast={isLast}
+      onCardClick={onCardClick}
+      isSelected={isSelected}
+    />
   );
 };
 

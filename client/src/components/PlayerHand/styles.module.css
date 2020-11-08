@@ -6,16 +6,27 @@
   justify-content: center;
 }
 
+.scoreContainer {
+  margin-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .score {
-  border: 3px solid #06d6a0;
-  color: #21af89;
-  border-radius: 100%;
-  padding: 2px;
-  margin-top: 12px;
+  border: 3px solid #4fd1c5;
+  border-radius: 12px;
+  color: #2c7a7b;
+  padding: 6px;
   font-weight: bold;
-  width: 36px;
+  width: 56px;
   height: 36px;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.handScore {
+  border: 3px solid #7f9cf5;
+  color: #4c51bf;
 }

@@ -25,10 +25,10 @@ const OtherPlayerHand = ({
     <div>
       {hand
         ? hand.map((card, index) => (
-            <GenericCard canClick={false} key={index} cardType='otherPlayer' card={card} />
+            <GenericCard key={index} canClick={false} cardType='otherPlayer' card={card} />
           ))
         : [...Array(numberOfCards).keys()].map((index) => (
-            <GenericCard canClick={false} cardType='otherPlayer' key={index} />
+            <GenericCard key={index} canClick={false} cardType='otherPlayer' />
           ))}
       <div className={classnames({ [styles.winner]: isWinner })}>
         {username} - {score}

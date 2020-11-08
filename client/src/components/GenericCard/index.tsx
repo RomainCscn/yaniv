@@ -11,6 +11,7 @@ interface GenericCardProps {
   card?: Card;
   canClick: boolean;
   cardType?: 'base' | 'otherPlayer';
+  isLast?: boolean;
   isSelected?: boolean;
   onCardClick?: (() => void) | ((e: React.MouseEvent) => void);
 }
@@ -19,6 +20,7 @@ const GenericCard = ({
   canClick,
   card,
   cardType = 'base',
+  isLast,
   isSelected,
   onCardClick,
 }: GenericCardProps) => (
@@ -28,6 +30,7 @@ const GenericCard = ({
       [styles[`${cardType}Card`]]: true,
       [styles.pointer]: canClick,
       [styles.selected]: isSelected,
+      [styles.last]: isLast,
     })}
     alt={card ? `card-${getCardUniqueIndex(card)}` : 'stack'}
     onClick={canClick ? onCardClick : undefined}

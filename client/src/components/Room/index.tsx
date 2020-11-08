@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useReducer } from 'react';
 
 import PlayerHand from '../PlayerHand';
-import MamixtaButton from '../MamixtaButton';
 import NextRoundButton from '../NextRoundButton';
 import OtherPlayerHand from '../OtherPlayerHand';
 import PlayAgainButton from '../PlayAgainButton';
@@ -154,7 +153,6 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
         selectCard={selectCard}
         selectedCards={state.selectedCards}
       />
-      <MamixtaButton hand={hand} canClick={canPlay} roomName={roomName} />
     </div>
   );
 };

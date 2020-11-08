@@ -29,6 +29,7 @@ const ThrownCards = ({ canPlay, pickCard, thrownCards }: ThrownCardsProps) => {
             key={getCardUniqueIndex(card)}
             canClick={canPlay && isFirstOrLast}
             card={card}
+            isLast={index === thrownCards.length - 1}
             onCardClick={() => onCardClick(card, isFirstOrLast)}
           />
         );

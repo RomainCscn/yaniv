@@ -7,6 +7,10 @@
   transition: all 0.1s ease-in;
 }
 
+.last {
+  margin-right: 0;
+}
+
 .otherPlayerCard {
   border: 1px solid black;
   margin-right: -6px;
