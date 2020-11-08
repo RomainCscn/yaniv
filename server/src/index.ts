@@ -14,7 +14,15 @@ wss.on('connection', (ws: WebSocket) => {
   const userUuid = uuidv4();
 
   ws.on('message', (data: string) => {
-    const { action, actionType, card, cards, room: roomName, username } = JSON.parse(data);
+    const {
+      action,
+      actionType,
+      notPickedCards,
+      pickedCard,
+      room: roomName,
+      thrownCards,
+      username,
+    } = JSON.parse(data);
 
     if (action === 'JOIN') {
       handleJoin(actionType, roomName, username, userUuid, ws);
@@ -23,7 +31,7 @@ wss.on('connection', (ws: WebSocket) => {
     } else if (action === 'READY_TO_PLAY') {
       handleReadyToPlay(roomName);
     } else if (action === 'PLAY') {
-      handlePlay(actionType, card, cards, roomName, userUuid);
+      handlePlay(actionType, { notPickedCards, pickedCard, thrownCards }, roomName, userUuid);
     }
   });
 });

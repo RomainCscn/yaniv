@@ -7,8 +7,14 @@ export interface Card {
   value: number;
 }
 
+export interface PlayedCards {
+  notPickedCards: undefined | Card[];
+  pickedCard: undefined | Card;
+  thrownCards: Card[];
+}
+
 export interface Room {
-  activeCards: Card[];
+  thrownCards: Card[];
   activePlayer: null | string;
   deck: Card[];
   roundWinner: null | string;

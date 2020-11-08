@@ -30,7 +30,7 @@ export const getPlayers = (
 
 export const resetDeck = (room: Room, { resetScore = false } = {}): void => {
   room.deck = getSuffledDeck();
-  room.activeCards = [];
+  room.thrownCards = [];
   room.activePlayer = room.roundWinner;
   room.roundWinner = null;
 
@@ -39,7 +39,7 @@ export const resetDeck = (room: Room, { resetScore = false } = {}): void => {
 
 export default function initRoom(): Room {
   return {
-    activeCards: [],
+    thrownCards: [],
     activePlayer: null,
     deck: getSuffledDeck(),
     roundWinner: null,
