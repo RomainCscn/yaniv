@@ -19,8 +19,6 @@ const handlePlay = (
 
   if (actionType === 'DROP_AND_PICK') {
     handleDropAndPick(room, user, cards);
-    console.log(room.deck);
-    console.log(room.deck.length);
   } else if (actionType === 'MAMIXTA') {
     handleEndRound(room, userUuid);
   } else if (actionType === 'NEXT_ROUND') {

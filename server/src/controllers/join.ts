@@ -38,8 +38,6 @@ const handleJoin = (
     Object.entries(rooms[roomName].users).forEach(([, user]: [string, User]) => {
       user.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', usernameList: usernames }));
     });
-  } else if (actionType === 'REQUEST_PLAYING_ROOM') {
-    console.log('PLAY');
   }
 };
 

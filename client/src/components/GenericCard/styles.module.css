@@ -4,6 +4,7 @@
   border-radius: 8px;
   width: 150px;
   height: 208px;
+  transition: all 0.1s ease-in;
 }
 
 .otherPlayerCard {

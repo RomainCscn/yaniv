@@ -49,7 +49,7 @@ export const handleEndRound = (room: Room, userUuid: string): void => {
     const winner = playersScore.reduce((previous, current) =>
       previous[1] < current[1] ? previous : current,
     );
-    console.log(room.roundWinner);
+
     Object.entries(room.users).forEach(([, user]: [string, User]) => {
       user.ws.send(JSON.stringify({ type: 'GAME_OVER', playersScore, winner: winner[0] }));
     });
