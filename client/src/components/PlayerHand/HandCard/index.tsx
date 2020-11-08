@@ -5,13 +5,23 @@ import { Card } from '../../../types';
 
 interface CardProps {
   canPlay: boolean;
+  canQuickPlay: boolean;
   card: Card;
   isLast: boolean;
+  quickPlay: (card: Card) => void;
   selectCard: (card: Card) => void;
   selectedCards: Card[];
 }
 
-const CardComponent = ({ canPlay, card, isLast, selectCard, selectedCards }: CardProps) => {
+const CardComponent = ({
+  canPlay,
+  canQuickPlay,
+  card,
+  isLast,
+  quickPlay,
+  selectCard,
+  selectedCards,
+}: CardProps) => {
   const isSelected = selectedCards?.some(
     (selectedCard: Card) => selectedCard.value === card!.value && selectedCard.suit === card!.suit,
   );
@@ -22,12 +32,22 @@ const CardComponent = ({ canPlay, card, isLast, selectCard, selectedCards }: Car
     }
   };
 
+  const onCardDoubleClick = () => {
+    if (canQuickPlay) {
+      quickPlay(card);
+      console.log('OK');
+    } else {
+      console.log('NOT OK');
+    }
+  };
+
   return (
     <GenericCard
-      canClick={canPlay}
+      canClick={canPlay || canQuickPlay}
       card={card}
       isLast={isLast}
       onCardClick={onCardClick}
+      onCardDoubleClick={onCardDoubleClick}
       isSelected={isSelected}
     />
   );

@@ -2,6 +2,7 @@ import { handleDropAndPick } from './dropAndPick';
 import { handleEndRound } from './endRound';
 import { handleNextRound } from './nextRound';
 import { handlePlayAgain } from './playAgain';
+import { handleQuickPlay } from './quickPlay';
 
 import rooms from '../../rooms';
 import { PlayedCards } from '../../types';
@@ -19,6 +20,8 @@ const handlePlay = (
 
   if (actionType === 'DROP_AND_PICK') {
     handleDropAndPick(room, user, cards);
+  } else if (actionType === 'QUICK_PLAY') {
+    handleQuickPlay(room, user, cards);
   } else if (actionType === 'MAMIXTA') {
     handleEndRound(room, userUuid);
   } else if (actionType === 'NEXT_ROUND') {

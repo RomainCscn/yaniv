@@ -24,8 +24,8 @@ interface RoomProps {
 const Room = ({ players, roomName, userUuid }: RoomProps) => {
   const [state, dispatch] = useReducer(reducer, {
     otherPlayers: players,
-    thrownCards: [],
     selectedCards: [],
+    thrownCards: [],
   });
   const [canPlay, setCanPlay] = useState(false);
   const [hand, setHand] = useState<Card[]>([]);
@@ -152,6 +152,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
         score={scores.find((score) => score.uuid === userUuid)?.score || 0}
         selectCard={selectCard}
         selectedCards={state.selectedCards}
+        thrownCards={state.thrownCards}
       />
     </div>
   );

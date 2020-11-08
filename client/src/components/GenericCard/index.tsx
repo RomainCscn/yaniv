@@ -14,6 +14,7 @@ interface GenericCardProps {
   isLast?: boolean;
   isSelected?: boolean;
   onCardClick?: (() => void) | ((e: React.MouseEvent) => void);
+  onCardDoubleClick?: (() => void) | ((e: React.MouseEvent) => void);
 }
 
 const GenericCard = ({
@@ -23,6 +24,7 @@ const GenericCard = ({
   isLast,
   isSelected,
   onCardClick,
+  onCardDoubleClick,
 }: GenericCardProps) => (
   <img
     className={classnames({
@@ -34,6 +36,7 @@ const GenericCard = ({
     })}
     alt={card ? `card-${getCardUniqueIndex(card)}` : 'stack'}
     onClick={canClick ? onCardClick : undefined}
+    onDoubleClick={canClick ? onCardDoubleClick : undefined}
     src={card ? getCardImagePath(card) : BACK}
   />
 );
