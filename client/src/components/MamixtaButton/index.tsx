@@ -9,7 +9,7 @@ import styles from './styles.module.css';
 interface MamixtaButtonProps {
   canClick: boolean;
   hand: Card[];
-  roomName: string;
+  roomId: string;
 }
 
 const MIN_VALUE_TO_SUBMIT = 100;
@@ -24,10 +24,10 @@ const canSubmitMamixta = (hand: Card[], canClick: boolean): boolean => {
   return canClick && handSum <= MIN_VALUE_TO_SUBMIT;
 };
 
-const MamixtaButton = ({ hand, canClick, roomName }: MamixtaButtonProps) => {
+const MamixtaButton = ({ hand, canClick, roomId }: MamixtaButtonProps) => {
   const canSubmit = canSubmitMamixta(hand, canClick);
 
-  const submit = () => send(roomName, { action: 'PLAY', actionType: 'MAMIXTA' });
+  const submit = () => send(roomId, { action: 'PLAY', actionType: 'MAMIXTA' });
 
   return (
     <button

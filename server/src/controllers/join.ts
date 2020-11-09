@@ -14,12 +14,12 @@ const handleJoin = (
   userUuid: string,
   ws: WebSocket,
 ): void => {
-  if (actionType === 'REQUEST_WAITING_ROOM') {
+  if (actionType === 'JOINED_WAITING_ROOM') {
     if (!rooms[roomName]) {
       rooms[roomName] = initRoom();
     }
 
-    if (Object.entries(rooms[roomName].users).length > 7) {
+    if (Object.entries(rooms[roomName].users).length > 6) {
       return ws.send(JSON.stringify({ error: 'TOO_MANY_PLAYERS' }));
     }
 
@@ -32,7 +32,7 @@ const handleJoin = (
     }
 
     ws.send(JSON.stringify({ type: 'PLAYER_JOINED' }));
-  } else if (actionType === 'JOINED_WAITING_ROOM') {
+
     const usernames = Object.entries(rooms[roomName].users).map(([, user]) => user.username);
 
     Object.entries(rooms[roomName].users).forEach(([, user]: [string, User]) => {

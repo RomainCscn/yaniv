@@ -14,7 +14,7 @@ interface PlayerHandProps {
   canPlay: boolean;
   hand: Card[];
   quickPlayDone: boolean;
-  roomName: string;
+  roomId: string;
   score: number;
   selectCard: any;
   selectedCards: Card[];
@@ -25,7 +25,7 @@ const PlayerHand = ({
   canPlay,
   hand,
   quickPlayDone,
-  roomName,
+  roomId,
   score,
   selectCard,
   selectedCards,
@@ -44,7 +44,7 @@ const PlayerHand = ({
 
   const quickPlay = (card: Card) => {
     send(
-      roomName,
+      roomId,
       { action: 'PLAY', actionType: 'QUICK_PLAY' },
       { thrownCards: [...thrownCards, card] },
     );
@@ -70,7 +70,7 @@ const PlayerHand = ({
       </div>
       <div className={styles.scoreContainer}>
         <ActualScore score={score} />
-        <MamixtaButton hand={hand} canClick={canPlay} roomName={roomName} />
+        <MamixtaButton hand={hand} canClick={canPlay} roomId={roomId} />
         <HandScore score={handScore} />
       </div>
     </div>

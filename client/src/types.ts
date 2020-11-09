@@ -55,6 +55,4 @@ export type MessageActionType =
   | 'MAMIXTA'
   | 'NEXT_ROUND'
   | 'PLAY_AGAIN'
-  | 'QUICK_PLAY'
-  | 'REQUEST_PLAYING_ROOM'
-  | 'REQUEST_WAITING_ROOM';
+  | 'QUICK_PLAY';

@@ -2,9 +2,9 @@ import React from 'react';
 
 import { send } from '../../core/client';
 
-const NextRoundButton = ({ roomName }: { roomName: string }) => {
+const NextRoundButton = ({ roomId }: { roomId: string }) => {
   const nextRound = () => {
-    send(roomName, { action: 'PLAY', actionType: 'NEXT_ROUND' });
+    send(roomId, { action: 'PLAY', actionType: 'NEXT_ROUND' });
   };
 
   return <button onClick={nextRound}>Next round</button>;

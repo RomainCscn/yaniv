@@ -16,12 +16,12 @@ import styles from './styles.module.css';
 
 interface RoomProps {
   players: OtherPlayer[];
-  roomName: string;
+  roomId: string;
   username: string;
   userUuid: string;
 }
 
-const Room = ({ players, roomName, userUuid }: RoomProps) => {
+const Room = ({ players, roomId, userUuid }: RoomProps) => {
   const [state, dispatch] = useReducer(reducer, {
     otherPlayers: players,
     selectedCards: [],
@@ -36,8 +36,8 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
   const [quickPlayDone, setQuickPlayDone] = useState(false);
 
   useEffect(() => {
-    send(roomName, { action: 'READY_TO_PLAY' });
-  }, [roomName]);
+    send(roomId, { action: 'READY_TO_PLAY' });
+  }, [roomId]);
 
   useEffect(() => {
     client.onmessage = (message) => {
@@ -79,7 +79,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
         setGameWinner(winner);
       }
     };
-  }, [roomName, userUuid]);
+  }, [roomId, userUuid]);
 
   const pickCard = (card?: Card) => {
     if (canDropCards(state.selectedCards)) {
@@ -103,7 +103,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
       }
 
       dispatch({ type: 'resetSelectedCards' });
-      send(roomName, { action: 'PLAY', actionType: 'DROP_AND_PICK' }, { ...cards });
+      send(roomId, { action: 'PLAY', actionType: 'DROP_AND_PICK' }, { ...cards });
     }
   };
 
@@ -128,12 +128,12 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
       {gameWinner ? (
         <div>
           <div>Gagnant de la partie : {gameWinner} !</div>
-          <PlayAgainButton roomName={roomName} />
+          <PlayAgainButton roomId={roomId} />
         </div>
       ) : (
         isEndOfRound && (
           <div>
-            <NextRoundButton roomName={roomName} />
+            <NextRoundButton roomId={roomId} />
             {roundWinner === userUuid ? 'GAGNÉ' : 'PERDU'}
           </div>
         )
@@ -142,7 +142,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
         canPlay={canPlay}
         hand={hand}
         quickPlayDone={quickPlayDone}
-        roomName={roomName}
+        roomId={roomId}
         score={scores.find((score) => score.uuid === userUuid)?.score || 0}
         selectCard={selectCard}
         selectedCards={state.selectedCards}
