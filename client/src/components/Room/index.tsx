@@ -2,7 +2,6 @@ import React, { useEffect, useState, useReducer } from 'react';
 
 import PlayerHand from '../PlayerHand';
 import NextRoundButton from '../NextRoundButton';
-import OtherPlayerHand from '../OtherPlayerHand';
 import PlayAgainButton from '../PlayAgainButton';
 import ThrownCards from '../ThrownCards';
 import Stack from '../Stack';
@@ -13,6 +12,7 @@ import { Card, OtherPlayer, PlayerScore, ReceivedMessage } from '../../types';
 import ScoreDashboard from '../ScoreDashboard';
 
 import styles from './styles.module.css';
+import OtherPlayers from '../OtherPlayers/OtherPlayers';
 
 interface RoomProps {
   players: OtherPlayer[];
@@ -114,16 +114,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
   return (
     <div className={styles.mainContainer}>
       <ScoreDashboard scores={scores} />
-      {state.otherPlayers.map(({ hand, numberOfCards, username, uuid }: OtherPlayer) => (
-        <OtherPlayerHand
-          key={username}
-          hand={hand}
-          isWinner={uuid === roundWinner}
-          numberOfCards={numberOfCards}
-          score={scores.find((score) => score.uuid === uuid)?.score || 0}
-          username={username}
-        />
-      ))}
+      <OtherPlayers otherPlayers={state.otherPlayers} roundWinner={roundWinner} scores={scores} />
       {!isEndOfRound && (
         <div className={styles.cardsArea}>
           <ThrownCards
@@ -134,21 +125,19 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
           <Stack canPlay={canPlay && state.selectedCards.length > 0} pickCard={pickCard} />
         </div>
       )}
-      <div>
-        {gameWinner ? (
+      {gameWinner ? (
+        <div>
+          <div>Gagnant de la partie : {gameWinner} !</div>
+          <PlayAgainButton roomName={roomName} />
+        </div>
+      ) : (
+        isEndOfRound && (
           <div>
-            <div>Gagnant de la partie : {gameWinner} !</div>
-            <PlayAgainButton roomName={roomName} />
+            <NextRoundButton roomName={roomName} />
+            {roundWinner === userUuid ? 'GAGNÉ' : 'PERDU'}
           </div>
-        ) : (
-          isEndOfRound && (
-            <div>
-              <NextRoundButton roomName={roomName} />
-              {roundWinner === userUuid ? 'GAGNÉ' : 'PERDU'}
-            </div>
-          )
-        )}
-      </div>
+        )
+      )}
       <PlayerHand
         canPlay={canPlay}
         hand={hand}

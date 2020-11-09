@@ -1,26 +1,48 @@
 .baseCard {
-  border: 1px solid black;
-  margin-right: -82px;
-  border-radius: 8px;
-  width: 150px;
-  height: 208px;
+  background-color: white;
+  border: 1px solid #1a202c;
+  border-radius: 6px;
+  width: 126px;
+  height: 175px;
   transition: all 0.1s ease-in;
+}
+
+.handCard {
+  width: 126px;
+  height: 175px;
+  border: 1px solid #1a202c;
+  border-radius: 6px;
+  margin-right: -64px;
+  align-self: flex-end;
+  position: relative;
+  transition: all 0.1s ease-in;
+}
+
+.falseCard {
+  position: absolute;
+  z-index: -1;
+  width: 126px;
+  height: 175px;
+}
+
+.stackCard {
+  width: 126px;
+  height: 175px;
+  position: relative;
+  transition: all 0.1s ease-in;
+}
+
+.otherPlayerCard {
+  margin-right: -36px;
+  width: 53px;
+  height: 75px;
 }
 
 .last {
   margin-right: 0;
 }
 
-.otherPlayerCard {
-  border: 1px solid black;
-  margin-right: -6px;
-  border-radius: 8px;
-  width: 75px;
-  height: 105px;
-}
-
 .selected {
-  border: 1px solid green;
   margin-bottom: 36px;
 }
 

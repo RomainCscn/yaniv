@@ -1,8 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import GenericCard from '../GenericCard';
-import { Card } from '../../types';
+import GenericCard from '../../GenericCard';
+import { Card } from '../../../types';
 
 import styles from './styles.module.css';
 
@@ -25,10 +25,21 @@ const OtherPlayerHand = ({
     <div>
       {hand
         ? hand.map((card, index) => (
-            <GenericCard key={index} canClick={false} cardType='otherPlayer' card={card} />
+            <GenericCard
+              key={index}
+              canClick={false}
+              cardType='otherPlayer'
+              card={card}
+              isLast={index === hand.length - 1}
+            />
           ))
         : [...Array(numberOfCards).keys()].map((index) => (
-            <GenericCard key={index} canClick={false} cardType='otherPlayer' />
+            <GenericCard
+              key={index}
+              canClick={false}
+              cardType='otherPlayer'
+              isLast={index === numberOfCards - 1}
+            />
           ))}
       <div className={classnames({ [styles.winner]: isWinner })}>
         {username} - {score}

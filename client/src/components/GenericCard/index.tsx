@@ -10,7 +10,9 @@ import styles from './styles.module.css';
 interface GenericCardProps {
   card?: Card;
   canClick: boolean;
-  cardType?: 'base' | 'otherPlayer';
+  cardType?: 'false' | 'hand' | 'otherPlayer' | 'stack';
+  degree?: number;
+  isHand?: boolean;
   isLast?: boolean;
   isSelected?: boolean;
   onCardClick?: (() => void) | ((e: React.MouseEvent) => void);
@@ -20,20 +22,24 @@ interface GenericCardProps {
 const GenericCard = ({
   canClick,
   card,
-  cardType = 'base',
+  cardType,
+  degree,
   isLast,
   isSelected,
   onCardClick,
   onCardDoubleClick,
 }: GenericCardProps) => (
   <img
-    className={classnames({
+    className={classnames(styles.baseCard, {
       // @ts-ignore
       [styles[`${cardType}Card`]]: true,
       [styles.pointer]: canClick,
       [styles.selected]: isSelected,
       [styles.last]: isLast,
     })}
+    style={{
+      rotate: degree ? `${degree}deg` : '0',
+    }}
     alt={card ? `card-${getCardUniqueIndex(card)}` : 'stack'}
     onClick={canClick ? onCardClick : undefined}
     onDoubleClick={canClick ? onCardDoubleClick : undefined}

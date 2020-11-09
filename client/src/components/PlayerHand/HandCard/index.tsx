@@ -45,6 +45,7 @@ const CardComponent = ({
     <GenericCard
       canClick={canPlay || canQuickPlay}
       card={card}
+      cardType={'hand'}
       isLast={isLast}
       onCardClick={onCardClick}
       onCardDoubleClick={onCardDoubleClick}

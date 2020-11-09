@@ -53,8 +53,8 @@ const PlayerHand = ({
   };
 
   return (
-    <div className={styles.handContainer}>
-      <div>
+    <div className={styles.container}>
+      <div className={styles.handContainer}>
         {hand.map((card, index) => (
           <CardComponent
             key={getCardUniqueIndex(card)}

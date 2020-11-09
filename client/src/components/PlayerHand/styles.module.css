@@ -1,9 +1,14 @@
-.handContainer {
-  margin: auto 0 36px;
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-bottom: 24px;
+}
+
+.handContainer {
+  display: flex;
+  min-height: 246px;
 }
 
 .scoreContainer {
