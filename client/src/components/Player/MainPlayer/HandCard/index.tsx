@@ -1,7 +1,7 @@
 import React from 'react';
 
-import GenericCard from '../../GenericCard';
-import { Card } from '../../../types';
+import GenericCard from '../../../GenericCard';
+import { Card } from '../../../../types';
 
 interface CardProps {
   canPlay: boolean;
@@ -35,9 +35,6 @@ const CardComponent = ({
   const onCardDoubleClick = () => {
     if (canQuickPlay) {
       quickPlay(card);
-      console.log('OK');
-    } else {
-      console.log('NOT OK');
     }
   };
 

@@ -1,14 +1,12 @@
 import React from 'react';
-import classnames from 'classnames';
-
-import { ReactComponent as CardsIcons } from '../../assets/cards-diamonds.svg';
-import { ReactComponent as TrophyIcons } from '../../assets/trophy.svg';
 
 import CardComponent from './HandCard';
-import MamixtaButton from '../MamixtaButton';
-import { send } from '../../core/client';
-import { getCardUniqueIndex } from '../../core/utils';
-import { Card } from '../../types';
+import ActualScore from '../Score/ActualScore';
+import HandScore from '../Score/HandScore';
+import MamixtaButton from '../../MamixtaButton';
+import { send } from '../../../core/client';
+import { getCardUniqueIndex } from '../../../core/utils';
+import { Card } from '../../../types';
 
 import styles from './styles.module.css';
 
@@ -71,14 +69,9 @@ const PlayerHand = ({
         ))}
       </div>
       <div className={styles.scoreContainer}>
-        <div className={styles.score}>
-          <TrophyIcons style={{ marginLeft: '-2px' }} fill={'#2c7a7b'} height={31} />
-          {score}
-        </div>
+        <ActualScore score={score} />
         <MamixtaButton hand={hand} canClick={canPlay} roomName={roomName} />
-        <div className={classnames(styles.score, styles.handScore)}>
-          <CardsIcons fill={'#4c51bf'} /> {handScore}
-        </div>
+        <HandScore score={handScore} />
       </div>
     </div>
   );

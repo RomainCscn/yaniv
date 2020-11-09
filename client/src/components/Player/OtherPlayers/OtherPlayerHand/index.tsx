@@ -1,8 +1,8 @@
 import React from 'react';
-import classnames from 'classnames';
 
-import GenericCard from '../../GenericCard';
-import { Card } from '../../../types';
+import ActualScore from '../../Score/ActualScore';
+import GenericCard from '../../../GenericCard';
+import { Card } from '../../../../types';
 
 import styles from './styles.module.css';
 
@@ -41,8 +41,9 @@ const OtherPlayerHand = ({
               isLast={index === numberOfCards - 1}
             />
           ))}
-      <div className={classnames({ [styles.winner]: isWinner })}>
-        {username} - {score}
+      <div className={styles.scoreContainer}>
+        <div>{username}</div>
+        <ActualScore isOtherPlayer score={score} />
       </div>
     </div>
   );

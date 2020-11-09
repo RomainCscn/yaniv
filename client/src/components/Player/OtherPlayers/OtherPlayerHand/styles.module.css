@@ -1,0 +1,10 @@
+.scoreContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.winner {
+  font-weight: bold;
+  color: green;
+}

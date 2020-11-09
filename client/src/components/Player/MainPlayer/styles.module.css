@@ -18,21 +18,3 @@
   justify-content: space-between;
   align-items: center;
 }
-
-.score {
-  border: 3px solid #4fd1c5;
-  border-radius: 12px;
-  color: #2c7a7b;
-  padding: 6px;
-  font-weight: bold;
-  width: 56px;
-  height: 36px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.handScore {
-  border: 3px solid #7f9cf5;
-  color: #4c51bf;
-}

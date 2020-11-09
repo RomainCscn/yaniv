@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useReducer } from 'react';
 
-import PlayerHand from '../PlayerHand';
 import NextRoundButton from '../NextRoundButton';
 import PlayAgainButton from '../PlayAgainButton';
+import MainPlayer from '../Player/MainPlayer';
+import OtherPlayers from '../Player/OtherPlayers';
 import ThrownCards from '../ThrownCards';
 import Stack from '../Stack';
 import client, { send } from '../../core/client';
@@ -12,7 +13,6 @@ import { Card, OtherPlayer, PlayerScore, ReceivedMessage } from '../../types';
 import ScoreDashboard from '../ScoreDashboard';
 
 import styles from './styles.module.css';
-import OtherPlayers from '../OtherPlayers/OtherPlayers';
 
 interface RoomProps {
   players: OtherPlayer[];
@@ -138,7 +138,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
           </div>
         )
       )}
-      <PlayerHand
+      <MainPlayer
         canPlay={canPlay}
         hand={hand}
         quickPlayDone={quickPlayDone}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import OtherPlayerHand from '../OtherPlayerHand';
+import OtherPlayerHand from './OtherPlayerHand';
 import { OtherPlayer, PlayerScore } from '../../../types';
 
 import styles from './styles.module.css';
