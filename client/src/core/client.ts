@@ -1,6 +1,6 @@
 import { MessageAction, MessageActionType } from '../types';
 
-const client = new WebSocket('ws://localhost:8999/');
+const client = new WebSocket(process.env.REACT_APP_WEB_SOCKET_URL);
 
 export const send = (
   room: string,
