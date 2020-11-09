@@ -53,7 +53,7 @@ const PlayerHand = ({
   };
 
   return (
-    <div className={styles.deckContainer}>
+    <div className={styles.handContainer}>
       <div>
         {hand.map((card, index) => (
           <CardComponent
@@ -69,15 +69,15 @@ const PlayerHand = ({
             selectedCards={selectedCards}
           />
         ))}
-        <div className={styles.scoreContainer}>
-          <div className={styles.score}>
-            <TrophyIcons style={{ marginLeft: '-2px' }} fill={'#2c7a7b'} height={31} />
-            {score}
-          </div>
-          <MamixtaButton hand={hand} canClick={canPlay} roomName={roomName} />
-          <div className={classnames(styles.score, styles.handScore)}>
-            <CardsIcons fill={'#4c51bf'} /> {handScore}
-          </div>
+      </div>
+      <div className={styles.scoreContainer}>
+        <div className={styles.score}>
+          <TrophyIcons style={{ marginLeft: '-2px' }} fill={'#2c7a7b'} height={31} />
+          {score}
+        </div>
+        <MamixtaButton hand={hand} canClick={canPlay} roomName={roomName} />
+        <div className={classnames(styles.score, styles.handScore)}>
+          <CardsIcons fill={'#4c51bf'} /> {handScore}
         </div>
       </div>
     </div>
