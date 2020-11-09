@@ -2,6 +2,7 @@
   background-color: white;
   border: 1px solid #1a202c;
   border-radius: 6px;
+  margin-right: -64px;
   width: 126px;
   height: 175px;
   transition: all 0.1s ease-in;
