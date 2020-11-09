@@ -33,6 +33,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
   const [isEndOfRound, setIsEndOfRound] = useState(false);
   const [roundWinner, setRoundWinner] = useState<string>();
   const [gameWinner, setGameWinner] = useState<string>();
+  const [quickPlayDone, setQuickPlayDone] = useState(false);
 
   useEffect(() => {
     send(roomName, { action: 'READY_TO_PLAY' });
@@ -55,10 +56,13 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
       if (type === 'SET_PLAYER_HAND') {
         setHand(userHand);
       } else if (type === 'SET_THROWN_CARDS') {
+        setQuickPlayDone(false);
         dispatch({ type: 'setThrownCards', payload: thrownCards });
       } else if (type === 'SET_OTHER_PLAYERS_CARDS') {
         const otherPlayers = players.filter((player) => player.uuid !== userUuid);
         dispatch({ type: 'setOtherPlayers', payload: otherPlayers });
+      } else if (type === 'QUICK_PLAY_DONE') {
+        setQuickPlayDone(true);
       } else if (type === 'END_OF_ROUND_UPDATE') {
         setCanPlay(false);
         setIsEndOfRound(true);
@@ -148,6 +152,7 @@ const Room = ({ players, roomName, userUuid }: RoomProps) => {
       <PlayerHand
         canPlay={canPlay}
         hand={hand}
+        quickPlayDone={quickPlayDone}
         roomName={roomName}
         score={scores.find((score) => score.uuid === userUuid)?.score || 0}
         selectCard={selectCard}

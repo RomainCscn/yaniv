@@ -20,6 +20,7 @@ export const handleQuickPlay = (room: Room, user: User, { thrownCards }: PlayedC
 
   // sync players to display other players cards
   Object.entries(room.users).forEach(([, user]: [string, User]) => {
+    user.ws.send(JSON.stringify({ type: 'QUICK_PLAY_DONE' }));
     user.ws.send(JSON.stringify({ type: 'SET_OTHER_PLAYERS_CARDS', players: getPlayers(room) }));
   });
 };

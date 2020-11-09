@@ -40,6 +40,7 @@ export type ReceivedMessageType =
   | 'END_OF_ROUND_UPDATE'
   | 'NEW_ROUND'
   | 'PLAYERS_UPDATE'
+  | 'QUICK_PLAY_DONE'
   | 'SET_ACTIVE_PLAYER'
   | 'SET_OTHER_PLAYERS_CARDS'
   | 'SET_PLAYER_HAND'

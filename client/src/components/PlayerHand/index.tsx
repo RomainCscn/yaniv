@@ -15,6 +15,7 @@ import styles from './styles.module.css';
 interface PlayerHandProps {
   canPlay: boolean;
   hand: Card[];
+  quickPlayDone: boolean;
   roomName: string;
   score: number;
   selectCard: any;
@@ -25,6 +26,7 @@ interface PlayerHandProps {
 const PlayerHand = ({
   canPlay,
   hand,
+  quickPlayDone,
   roomName,
   score,
   selectCard,
@@ -38,7 +40,7 @@ const PlayerHand = ({
   const uniqueValues = [...new Set(thrownCards.map((c) => c.value))].length === 1;
   const isThreeCardsOfSameValue = thrownCards.length === 3 && uniqueValues;
 
-  if (isPair || isThreeCardsOfSameValue) {
+  if (!quickPlayDone && hand.length > 1 && (isPair || isThreeCardsOfSameValue)) {
     sameValueCard = hand.filter((card) => card.value === thrownCards[0].value);
   }
 
@@ -50,7 +52,6 @@ const PlayerHand = ({
     );
   };
 
-  console.log(sameValueCard);
   return (
     <div className={styles.deckContainer}>
       <div>
