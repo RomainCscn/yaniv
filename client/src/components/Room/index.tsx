@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useReducer } from 'react';
+import React, { useEffect, useState, useReducer, useMemo } from 'react';
 
 import NextRoundButton from '../NextRoundButton';
 import PlayAgainButton from '../PlayAgainButton';
@@ -9,13 +9,13 @@ import Stack from '../Stack';
 import client, { send } from '../../core/client';
 import { canDropCards } from '../../core/game';
 import reducer from '../../reducers';
-import { Card, OtherPlayer, PlayerScore, ReceivedMessage } from '../../types';
+import { Card, Player, PlayerScore, ReceivedMessage } from '../../types';
 import ScoreDashboard from '../ScoreDashboard';
 
 import styles from './styles.module.css';
 
 interface RoomProps {
-  players: OtherPlayer[];
+  players: Player[];
   roomId: string;
   username: string;
   userUuid: string;
@@ -23,7 +23,7 @@ interface RoomProps {
 
 const Room = ({ players, roomId, userUuid }: RoomProps) => {
   const [state, dispatch] = useReducer(reducer, {
-    otherPlayers: players,
+    otherPlayers: players.filter((player) => player.uuid !== userUuid),
     selectedCards: [],
     thrownCards: [],
   });
@@ -34,6 +34,8 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
   const [roundWinner, setRoundWinner] = useState<string>();
   const [gameWinner, setGameWinner] = useState<string>();
   const [quickPlayDone, setQuickPlayDone] = useState(false);
+
+  const player = useMemo(() => players.find((p) => p.uuid === userUuid), [players, userUuid]);
 
   useEffect(() => {
     send(roomId, { action: 'READY_TO_PLAY' });
@@ -142,6 +144,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
         canPlay={canPlay}
         hand={hand}
         quickPlayDone={quickPlayDone}
+        player={player!}
         roomId={roomId}
         score={scores.find((score) => score.uuid === userUuid)?.score || 0}
         selectCard={selectCard}

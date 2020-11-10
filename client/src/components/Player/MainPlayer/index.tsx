@@ -3,16 +3,18 @@ import React from 'react';
 import CardComponent from './HandCard';
 import ActualScore from '../Score/ActualScore';
 import HandScore from '../Score/HandScore';
+import Avatar from '../../Avatar/AvatarImage';
 import MamixtaButton from '../../MamixtaButton';
 import { send } from '../../../core/client';
 import { getCardUniqueIndex } from '../../../core/utils';
-import { Card } from '../../../types';
+import { Card, Player } from '../../../types';
 
 import styles from './styles.module.css';
 
 interface PlayerHandProps {
   canPlay: boolean;
   hand: Card[];
+  player: Player;
   quickPlayDone: boolean;
   roomId: string;
   score: number;
@@ -24,6 +26,7 @@ interface PlayerHandProps {
 const PlayerHand = ({
   canPlay,
   hand,
+  player,
   quickPlayDone,
   roomId,
   score,
@@ -67,10 +70,16 @@ const PlayerHand = ({
             selectedCards={selectedCards}
           />
         ))}
+        <div className={styles.button}>
+          <MamixtaButton hand={hand} canClick={canPlay} roomId={roomId} />
+        </div>
       </div>
       <div className={styles.scoreContainer}>
+        <div className={styles.avatarContainer}>
+          <Avatar id={player.avatar} />
+          {player.username}
+        </div>
         <ActualScore score={score} />
-        <MamixtaButton hand={hand} canClick={canPlay} roomId={roomId} />
         <HandScore score={handScore} />
       </div>
     </div>

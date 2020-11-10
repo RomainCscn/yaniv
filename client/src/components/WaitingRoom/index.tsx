@@ -5,7 +5,7 @@ import AVATARS from '../Avatar';
 import AvatarList from '../Avatar/AvatarList';
 import Room from '../Room';
 import client, { send } from '../../core/client';
-import { OtherPlayer, ReceivedMessage } from '../../types';
+import { Player, ReceivedMessage } from '../../types';
 
 const WaitingRoom = () => {
   let { roomId } = useParams() as any;
@@ -22,7 +22,7 @@ const WaitingRoom = () => {
     AVATARS[Math.floor(Math.random() * AVATARS.length)][0],
   );
   const [username, setUsername] = useState(Math.random().toString(36).substring(7));
-  const [players, setPlayers] = useState<OtherPlayer[]>([]);
+  const [players, setPlayers] = useState<Player[]>([]);
   const [userUuid, setUserUuid] = useState('');
 
   useEffect(() => {
@@ -37,12 +37,10 @@ const WaitingRoom = () => {
         const { players, type, uuid }: ReceivedMessage = JSON.parse(message.data);
 
         if (type === 'PLAYERS_UPDATE') {
-          const otherPlayers = players.filter((player) => player.uuid !== uuid);
-          setPlayers(otherPlayers);
+          setPlayers(players);
         } else if (type === 'START_GAME') {
-          const otherPlayers = players.filter((player) => player.username !== username);
           setUserUuid(uuid);
-          setPlayers(otherPlayers);
+          setPlayers(players);
           setPlay(true);
         }
       };

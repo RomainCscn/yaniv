@@ -7,7 +7,7 @@ interface CustomError {
   code: 'GAME_ALREADY_STARTED' | 'TOO_MANY_PLAYERS';
 }
 
-export interface OtherPlayer {
+export interface Player {
   avatar: string;
   username: string;
   uuid: string;
@@ -25,8 +25,8 @@ export type PlayerScore = {
 export interface ReceivedMessage {
   error: CustomError;
   hand: Card[];
-  player: OtherPlayer;
-  players: OtherPlayer[];
+  player: Player;
+  players: Player[];
   playersCard: Record<string, Card[]>;
   playersScore: PlayerScore[];
   thrownCards: Card[];

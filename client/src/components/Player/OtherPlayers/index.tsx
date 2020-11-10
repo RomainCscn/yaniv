@@ -1,12 +1,12 @@
 import React from 'react';
 
 import OtherPlayerHand from './OtherPlayerHand';
-import { OtherPlayer, PlayerScore } from '../../../types';
+import { Player, PlayerScore } from '../../../types';
 
 import styles from './styles.module.css';
 
 interface OtherPlayersProps {
-  otherPlayers: OtherPlayer[];
+  otherPlayers: Player[];
   roundWinner: undefined | string;
   scores: PlayerScore[];
 }
@@ -14,7 +14,7 @@ interface OtherPlayersProps {
 const OtherPlayers = ({ otherPlayers, roundWinner, scores }: OtherPlayersProps) => {
   return (
     <div className={styles.container}>
-      {otherPlayers.map(({ avatar, hand, numberOfCards, username, uuid }: OtherPlayer) => (
+      {otherPlayers.map(({ avatar, hand, numberOfCards, username, uuid }: Player) => (
         <OtherPlayerHand
           key={username}
           avatar={avatar}

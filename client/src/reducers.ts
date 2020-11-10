@@ -1,6 +1,6 @@
 import { canSelectCard } from './core/game';
 import { findCardIndex } from './core/utils';
-import { Card, OtherPlayer } from './types';
+import { Card, Player } from './types';
 
 enum ActionType {
   newRound = 'newRound',
@@ -15,7 +15,7 @@ type ActionTypeKeys = keyof typeof ActionType;
 
 interface Action {
   type: ActionTypeKeys;
-  payload?: Card | Card[] | OtherPlayer[] | Record<string, Card[]>;
+  payload?: Card | Card[] | Player[] | Record<string, Card[]>;
 }
 
 const reducer = (state: any, action: Action) => {
@@ -66,7 +66,7 @@ const reducer = (state: any, action: Action) => {
   }
 
   if (action.type === 'setOtherPlayersCards') {
-    const otherPlayersWithHand = state.otherPlayers.map((player: OtherPlayer) => {
+    const otherPlayersWithHand = state.otherPlayers.map((player: Player) => {
       const otherPlayers = action.payload as Record<string, Card[]>;
       const playerHand = otherPlayers[player.uuid];
 

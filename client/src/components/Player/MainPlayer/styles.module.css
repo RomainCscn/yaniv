@@ -6,9 +6,23 @@
   margin-bottom: 24px;
 }
 
+.button {
+  position: absolute;
+  top: 126px;
+  right: -200px;
+}
+
 .handContainer {
+  position: relative;
   display: flex;
+  justify-content: center;
+  align-items: center;
   min-height: 246px;
+}
+
+.avatarContainer {
+  display: flex;
+  align-items: center;
 }
 
 .scoreContainer {
