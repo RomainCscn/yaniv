@@ -56,4 +56,7 @@ const getHand = (deck: Card[]): Card[] => {
   return sortHand(deck.slice(0, HAND_CARDS_NUMBER));
 };
 
-export { getCardValue, getHand, getSuffledDeck, sortHand };
+const getSmallestScore = (scores: { uuid: string; score: number }[]): number =>
+  scores.reduce((prev, curr) => (prev.score <= curr.score ? prev : curr)).score;
+
+export { getCardValue, getHand, getSmallestScore, getSuffledDeck, sortHand };
