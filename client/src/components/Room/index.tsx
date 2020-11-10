@@ -124,14 +124,16 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
           <Stack canPlay={canPlay && state.selectedCards.length > 0} pickCard={pickCard} />
         </div>
       )}
-      <div className={styles.endRoundContainer}>
-        <EndRound
-          gameWinner={gameWinner}
-          roomId={roomId}
-          roundWinner={roundWinner}
-          userUuid={userUuid}
-        />
-      </div>
+      {(gameWinner || roundWinner) && (
+        <div className={styles.endRoundContainer}>
+          <EndRound
+            gameWinner={gameWinner}
+            roomId={roomId}
+            roundWinner={roundWinner}
+            userUuid={userUuid}
+          />
+        </div>
+      )}
       <MainPlayer
         canPlay={canPlay}
         hand={hand}

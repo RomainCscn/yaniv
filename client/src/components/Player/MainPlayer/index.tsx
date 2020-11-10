@@ -23,6 +23,8 @@ interface PlayerHandProps {
   thrownCards: Card[];
 }
 
+const getCardValue = (card: Card): number => (card.value <= 10 ? card.value : 10);
+
 const PlayerHand = ({
   canPlay,
   hand,
@@ -35,7 +37,7 @@ const PlayerHand = ({
   thrownCards,
 }: PlayerHandProps) => {
   let sameValueCard: Card[] = [];
-  const handScore = hand.reduce((sum, card) => (sum += card.value), 0);
+  const handScore = hand.reduce((sum, card) => (sum += getCardValue(card)), 0);
 
   const isPair = thrownCards.length === 2;
   const uniqueValues = [...new Set(thrownCards.map((c) => c.value))].length === 1;
