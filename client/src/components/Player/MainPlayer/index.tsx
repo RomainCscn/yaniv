@@ -84,6 +84,7 @@ const PlayerHand = ({
         <ActualScore score={score} />
         <HandScore score={handScore} />
       </div>
+      {canPlay && <div className={styles.activePlayer}></div>}
     </div>
   );
 };

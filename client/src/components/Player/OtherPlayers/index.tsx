@@ -6,12 +6,13 @@ import { Player, PlayerScore } from '../../../types';
 import styles from './styles.module.css';
 
 interface OtherPlayersProps {
+  activePlayer: string;
   otherPlayers: Player[];
   roundWinner: undefined | Player;
   scores: PlayerScore[];
 }
 
-const OtherPlayers = ({ otherPlayers, roundWinner, scores }: OtherPlayersProps) => {
+const OtherPlayers = ({ activePlayer, otherPlayers, roundWinner, scores }: OtherPlayersProps) => {
   return (
     <div className={styles.container}>
       {otherPlayers.map(({ avatar, hand, numberOfCards, username, uuid }: Player) => (
@@ -19,7 +20,7 @@ const OtherPlayers = ({ otherPlayers, roundWinner, scores }: OtherPlayersProps) 
           key={username}
           avatar={avatar}
           hand={hand}
-          isWinner={uuid === roundWinner?.uuid}
+          isActivePlayer={uuid === activePlayer}
           numberOfCards={numberOfCards}
           score={scores.find((score) => score.uuid === uuid)?.score || 0}
           username={username}

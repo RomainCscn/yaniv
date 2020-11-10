@@ -13,6 +13,7 @@
 }
 
 .cardsArea {
+  margin-top: 68px;
   display: flex;
   justify-content: center;
 }

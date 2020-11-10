@@ -22,6 +22,7 @@ const EndRound = ({ gameWinner, roomId, roundWinner, userUuid }: Props) => {
       {gameWinner ? (
         <>
           <div className={styles.gameWinnerContainer}>
+            <div className={styles.endGameText}>Fin de la partie</div>
             {gameWinner.uuid === userUuid && (
               <img style={{ marginBottom: '24px' }} src={trophy} alt='trophy' />
             )}

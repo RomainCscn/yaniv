@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 
 import ActualScore from '../../Score/ActualScore';
 import AvatarImage from '../../../Avatar/AvatarImage';
@@ -10,7 +11,7 @@ import styles from './styles.module.css';
 interface OtherPlayerHandProps {
   avatar: string;
   hand?: Card[];
-  isWinner: boolean;
+  isActivePlayer: boolean;
   numberOfCards?: number;
   score: number;
   username: string;
@@ -19,7 +20,7 @@ interface OtherPlayerHandProps {
 const OtherPlayerHand = ({
   avatar,
   hand,
-  isWinner,
+  isActivePlayer,
   numberOfCards,
   score,
   username,
@@ -48,7 +49,7 @@ const OtherPlayerHand = ({
       </div>
       <div className={styles.scoreContainer}>
         <AvatarImage id={avatar} />
-        <div>{username}</div>
+        <div className={classnames({ [styles.activePlayer]: isActivePlayer })}>{username}</div>
         <ActualScore isOtherPlayer score={score} />
       </div>
     </div>

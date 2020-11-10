@@ -31,3 +31,11 @@
   justify-content: space-between;
   align-items: center;
 }
+
+.activePlayer {
+  width: 400px;
+  height: 3px;
+  background-color: #4fd1c5;
+  position: absolute;
+  bottom: 24px;
+}

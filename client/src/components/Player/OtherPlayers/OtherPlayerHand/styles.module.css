@@ -10,7 +10,6 @@
   align-items: center;
 }
 
-.winner {
-  font-weight: bold;
-  color: green;
+.activePlayer {
+  border-bottom: 3px solid #4fd1c5;
 }

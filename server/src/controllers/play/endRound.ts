@@ -2,7 +2,7 @@ import { getPlayer } from '../../room';
 import { getCardValue, getSmallestScore } from '../../game';
 import { Room, User } from '../../types';
 
-const SCORE_LIMIT = 1000;
+const SCORE_LIMIT = 100;
 
 const getScores = (room: Room): { uuid: string; score: number }[] => {
   const usersScore: { uuid: string; score: number }[] = [];

@@ -26,6 +26,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
     selectedCards: [],
     thrownCards: [],
   });
+  const [activePlayer, setActivePlayer] = useState<string>('');
   const [canPlay, setCanPlay] = useState(false);
   const [hand, setHand] = useState<Card[]>([]);
   const [scores, setScores] = useState<PlayerScore[]>([]);
@@ -64,11 +65,13 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
       } else if (type === 'QUICK_PLAY_DONE') {
         setQuickPlayDone(true);
       } else if (type === 'END_OF_ROUND_UPDATE') {
+        setActivePlayer('');
         setCanPlay(false);
         setScores(playersScore);
         setRoundWinner(roundWinner);
         dispatch({ type: 'setOtherPlayersCards', payload: playersCard });
       } else if (type === 'SET_ACTIVE_PLAYER') {
+        setActivePlayer(uuid);
         setCanPlay(uuid === userUuid);
       } else if (type === 'NEW_ROUND') {
         dispatch({ type: 'newRound' });
@@ -113,7 +116,12 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
   return (
     <div className={styles.mainContainer}>
       <ScoreDashboard scores={scores} />
-      <OtherPlayers otherPlayers={state.otherPlayers} roundWinner={roundWinner} scores={scores} />
+      <OtherPlayers
+        activePlayer={activePlayer}
+        otherPlayers={state.otherPlayers}
+        roundWinner={roundWinner}
+        scores={scores}
+      />
       {!roundWinner && (
         <div className={styles.cardsArea}>
           <ThrownCards
