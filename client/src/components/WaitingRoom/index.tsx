@@ -7,6 +7,8 @@ import Room from '../Room';
 import client, { send } from '../../core/client';
 import { Player, ReceivedMessage } from '../../types';
 
+import styles from './styles.module.css';
+
 const WaitingRoom = () => {
   let { roomId } = useParams() as any;
   const history = useHistory();
@@ -64,7 +66,7 @@ const WaitingRoom = () => {
       {play ? (
         <Room players={players} roomId={roomId} username={username} userUuid={userUuid} />
       ) : (
-        <>
+        <div className={styles.container}>
           <div>
             <div>
               <span>Nom du joueur</span>
@@ -91,14 +93,14 @@ const WaitingRoom = () => {
                   src={AVATARS.find((avatar) => avatar[0] === player.avatar)![1]}
                   alt={player.avatar}
                 />
-                {player.username}
+                {player.username} {player.username === username && '(vous)'}
               </div>
             ))}
           </div>
           <br />
           <button onClick={() => startGame()}>PLAY</button>
           {players.length < 2 && error}
-        </>
+        </div>
       )}
     </div>
   );
