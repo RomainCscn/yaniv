@@ -1,30 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
+import AVATARS from '../Avatar';
+import AvatarList from '../Avatar/AvatarList';
 import Room from '../Room';
 import client, { send } from '../../core/client';
 import { OtherPlayer, ReceivedMessage } from '../../types';
-
-import cat from '../../assets/avatar/cat.png';
-import fox from '../../assets/avatar/fox.png';
-import frog from '../../assets/avatar/frog.png';
-import hippo from '../../assets/avatar/hippo.png';
-import kangaroo from '../../assets/avatar/kangaroo.png';
-import octopus from '../../assets/avatar/octopus.png';
-import penguin from '../../assets/avatar/penguin.png';
-import pig from '../../assets/avatar/pig.png';
-import Avatar from './Avatar';
-
-const AVATARS = [
-  ['cat', cat],
-  ['fox', fox],
-  ['frog', frog],
-  ['hippo', hippo],
-  ['kangaroo', kangaroo],
-  ['octopus', octopus],
-  ['penguin', penguin],
-  ['pig', pig],
-];
 
 const WaitingRoom = () => {
   let { roomId } = useParams() as any;
@@ -93,15 +74,7 @@ const WaitingRoom = () => {
             </div>
             <div>
               Avatar
-              {AVATARS.map((avatar) => (
-                <Avatar
-                  key={avatar[0]}
-                  id={avatar[0]}
-                  isSelected={selectedAvatar === avatar[0]}
-                  src={avatar[1]}
-                  setAvatar={setAvatar}
-                />
-              ))}
+              <AvatarList selectedAvatar={selectedAvatar} setAvatar={setAvatar} />
             </div>
             <button onClick={updatePlayerInformation}>Mettre à jour</button>
           </div>

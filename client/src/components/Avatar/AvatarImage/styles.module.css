@@ -1,5 +1,6 @@
 .avatar {
   cursor: pointer;
+  padding: 6px;
 }
 
 .selected {

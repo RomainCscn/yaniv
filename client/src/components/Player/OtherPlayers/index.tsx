@@ -14,9 +14,10 @@ interface OtherPlayersProps {
 const OtherPlayers = ({ otherPlayers, roundWinner, scores }: OtherPlayersProps) => {
   return (
     <div className={styles.container}>
-      {otherPlayers.map(({ hand, numberOfCards, username, uuid }: OtherPlayer) => (
+      {otherPlayers.map(({ avatar, hand, numberOfCards, username, uuid }: OtherPlayer) => (
         <OtherPlayerHand
           key={username}
+          avatar={avatar}
           hand={hand}
           isWinner={uuid === roundWinner}
           numberOfCards={numberOfCards}
