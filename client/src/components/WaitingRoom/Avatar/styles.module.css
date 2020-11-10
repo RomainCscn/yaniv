@@ -1,0 +1,7 @@
+.avatar {
+  cursor: pointer;
+}
+
+.selected {
+  border-bottom: 3px solid rgb(48, 134, 55);
+}

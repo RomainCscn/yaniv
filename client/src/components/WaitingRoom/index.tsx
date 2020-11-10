@@ -5,6 +5,27 @@ import Room from '../Room';
 import client, { send } from '../../core/client';
 import { OtherPlayer, ReceivedMessage } from '../../types';
 
+import cat from '../../assets/avatar/cat.png';
+import fox from '../../assets/avatar/fox.png';
+import frog from '../../assets/avatar/frog.png';
+import hippo from '../../assets/avatar/hippo.png';
+import kangaroo from '../../assets/avatar/kangaroo.png';
+import octopus from '../../assets/avatar/octopus.png';
+import penguin from '../../assets/avatar/penguin.png';
+import pig from '../../assets/avatar/pig.png';
+import Avatar from './Avatar';
+
+const AVATARS = [
+  ['cat', cat],
+  ['fox', fox],
+  ['frog', frog],
+  ['hippo', hippo],
+  ['kangaroo', kangaroo],
+  ['octopus', octopus],
+  ['penguin', penguin],
+  ['pig', pig],
+];
+
 const WaitingRoom = () => {
   let { roomId } = useParams() as any;
   const history = useHistory();
@@ -16,20 +37,27 @@ const WaitingRoom = () => {
 
   const [error, setError] = useState('');
   const [play, setPlay] = useState(false);
-  const [usernames, setUsernames] = useState<string[]>([]);
+  const [selectedAvatar, setAvatar] = useState<string>(
+    AVATARS[Math.floor(Math.random() * AVATARS.length)][0],
+  );
   const [username, setUsername] = useState(Math.random().toString(36).substring(7));
   const [players, setPlayers] = useState<OtherPlayer[]>([]);
   const [userUuid, setUserUuid] = useState('');
 
   useEffect(() => {
     client.addEventListener('open', () => {
-      send(roomId, { action: 'JOIN', actionType: 'JOINED_WAITING_ROOM' }, { username });
+      send(
+        roomId,
+        { action: 'JOIN', actionType: 'JOINED_WAITING_ROOM' },
+        { avatar: selectedAvatar, username },
+      );
 
       client.onmessage = (message) => {
-        const { players, usernameList, type, uuid }: ReceivedMessage = JSON.parse(message.data);
+        const { players, type, uuid }: ReceivedMessage = JSON.parse(message.data);
 
         if (type === 'PLAYERS_UPDATE') {
-          setUsernames(usernameList);
+          const otherPlayers = players.filter((player) => player.uuid !== uuid);
+          setPlayers(otherPlayers);
         } else if (type === 'START_GAME') {
           const otherPlayers = players.filter((player) => player.username !== username);
           setUserUuid(uuid);
@@ -38,14 +66,18 @@ const WaitingRoom = () => {
         }
       };
     });
-  }, [roomId, username]);
+  }, [roomId, selectedAvatar, username]);
 
   const startGame = () => {
-    if (usernames.length >= 2) {
+    if (players.length >= 2) {
       send(roomId, { action: 'START' });
     } else {
       setError('Un seul joueur dans le salon ! Au moins deux joueurs requis pour jouer.');
     }
+  };
+
+  const updatePlayerInformation = () => {
+    send(roomId, { action: 'UPDATE' }, { avatar: selectedAvatar, username });
   };
 
   return (
@@ -55,9 +87,23 @@ const WaitingRoom = () => {
       ) : (
         <>
           <div>
-            <span>Nom du joueur</span>
-            <input value={username} onChange={(e) => setUsername(e.target.value)} />
-            <button onClick={() => console.log('update')}>Mettre à jour</button>
+            <div>
+              <span>Nom du joueur</span>
+              <input value={username} onChange={(e) => setUsername(e.target.value)} />
+            </div>
+            <div>
+              Avatar
+              {AVATARS.map((avatar) => (
+                <Avatar
+                  key={avatar[0]}
+                  id={avatar[0]}
+                  isSelected={selectedAvatar === avatar[0]}
+                  src={avatar[1]}
+                  setAvatar={setAvatar}
+                />
+              ))}
+            </div>
+            <button onClick={updatePlayerInformation}>Mettre à jour</button>
           </div>
           <div>
             <br />
@@ -67,13 +113,20 @@ const WaitingRoom = () => {
           <div>
             <br />
             Joueurs dans le salon :
-            {usernames.map((username) => (
-              <div key={username}>{username}</div>
+            {players.map((player) => (
+              <div key={player.uuid}>
+                <img
+                  width={50}
+                  src={AVATARS.find((avatar) => avatar[0] === player.avatar)![1]}
+                  alt={player.avatar}
+                />
+                {player.username}
+              </div>
             ))}
           </div>
           <br />
           <button onClick={() => startGame()}>PLAY</button>
-          {usernames.length < 2 && error}
+          {players.length < 2 && error}
         </>
       )}
     </div>

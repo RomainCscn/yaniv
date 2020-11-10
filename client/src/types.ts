@@ -8,9 +8,10 @@ interface CustomError {
 }
 
 export interface OtherPlayer {
+  avatar: string;
   username: string;
   uuid: string;
-  numberOfCards: number;
+  numberOfCards?: number;
   hand?: Card[];
 }
 
@@ -28,7 +29,6 @@ export interface ReceivedMessage {
   players: OtherPlayer[];
   playersCard: Record<string, Card[]>;
   playersScore: PlayerScore[];
-  usernameList: string[];
   thrownCards: Card[];
   roundWinner: string;
   type: ReceivedMessageType;
@@ -47,7 +47,7 @@ export type ReceivedMessageType =
   | 'SET_THROWN_CARDS'
   | 'START_GAME';
 
-export type MessageAction = 'JOIN' | 'PLAY' | 'READY_TO_PLAY' | 'START';
+export type MessageAction = 'JOIN' | 'PLAY' | 'READY_TO_PLAY' | 'START' | 'UPDATE';
 
 export type MessageActionType =
   | 'DROP_AND_PICK'

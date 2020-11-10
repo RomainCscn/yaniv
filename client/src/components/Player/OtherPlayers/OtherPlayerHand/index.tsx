@@ -9,7 +9,7 @@ import styles from './styles.module.css';
 interface OtherPlayerHandProps {
   hand?: Card[];
   isWinner: boolean;
-  numberOfCards: number;
+  numberOfCards?: number;
   score: number;
   username: string;
 }
@@ -38,7 +38,7 @@ const OtherPlayerHand = ({
               key={index}
               canClick={false}
               cardType='otherPlayer'
-              isLast={index === numberOfCards - 1}
+              isLast={index === numberOfCards! - 1}
             />
           ))}
       <div className={styles.scoreContainer}>
