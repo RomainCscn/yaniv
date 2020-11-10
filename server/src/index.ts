@@ -3,7 +3,13 @@ import * as http from 'http';
 import { v4 as uuidv4 } from 'uuid';
 import * as WebSocket from 'ws';
 
-import { handleJoin, handlePlay, handleReadyToPlay, handleStart } from './controllers';
+import {
+  handleJoin,
+  handlePlay,
+  handleReadyToPlay,
+  handleStart,
+  handleUpdate,
+} from './controllers';
 
 const app = express();
 
@@ -17,21 +23,24 @@ wss.on('connection', (ws: WebSocket) => {
     const {
       action,
       actionType,
+      avatar,
       notPickedCards,
       pickedCard,
-      room: roomName,
+      room: roomId,
       thrownCards,
       username,
     } = JSON.parse(data);
 
     if (action === 'JOIN') {
-      handleJoin(actionType, roomName, username, userUuid, ws);
+      handleJoin(actionType, avatar, roomId, username, userUuid, ws);
+    } else if (action === 'UPDATE') {
+      handleUpdate(roomId, userUuid, { avatar, username });
     } else if (action === 'START') {
-      handleStart(roomName);
+      handleStart(roomId);
     } else if (action === 'READY_TO_PLAY') {
-      handleReadyToPlay(roomName);
+      handleReadyToPlay(roomId);
     } else if (action === 'PLAY') {
-      handlePlay(actionType, { notPickedCards, pickedCard, thrownCards }, roomName, userUuid);
+      handlePlay(actionType, { notPickedCards, pickedCard, thrownCards }, roomId, userUuid);
     }
   });
 });

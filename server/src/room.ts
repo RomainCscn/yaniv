@@ -13,16 +13,26 @@ export const assignHandToUser = (room: Room, user: User): void => {
 export const addUser = (
   userUuid: string,
   room: Room,
-  username: string,
+  { avatar, username }: { avatar: string; username: string },
   userWs: WebSocket,
 ): void => {
-  room.users[userUuid] = { hand: [], score: 0, scoreHistory: [], username, ws: userWs };
+  room.users[userUuid] = {
+    avatarId: avatar,
+    hand: [],
+    score: 0,
+    scoreHistory: [],
+    username,
+    ws: userWs,
+  };
 };
+
+export const getCurrentUser = (room: Room, userUuid: string): User => room.users[userUuid];
 
 export const getPlayers = (
   room: Room,
 ): { uuid: string; username: string; numberOfCards: number }[] =>
   Object.entries(room.users).map(([uuid, user]: [string, User]) => ({
+    avatar: user.avatarId,
     uuid,
     username: user.username,
     numberOfCards: user.hand.length,

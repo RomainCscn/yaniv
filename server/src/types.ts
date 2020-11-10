@@ -22,6 +22,7 @@ export interface Room {
 }
 
 export interface User {
+  avatarId: string;
   hand: Card[];
   score: number;
   scoreHistory: number[];

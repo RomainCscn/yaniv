@@ -1,42 +1,41 @@
 import * as WebSocket from 'ws';
 
-import initRoom, { addUser } from '../room';
+import initRoom, { addUser, getPlayers } from '../room';
 import rooms from '../rooms';
 import { User } from '../types';
 
-const isExistingUser = (roomName: string, userUuid: string) =>
-  typeof rooms[roomName].users[userUuid] === 'object';
+const isExistingUser = (roomId: string, userUuid: string) =>
+  typeof rooms[roomId].users[userUuid] === 'object';
 
 const handleJoin = (
   actionType: string,
-  roomName: string,
+  avatar: string,
+  roomId: string,
   username: string,
   userUuid: string,
   ws: WebSocket,
 ): void => {
   if (actionType === 'JOINED_WAITING_ROOM') {
-    if (!rooms[roomName]) {
-      rooms[roomName] = initRoom();
+    if (!rooms[roomId]) {
+      rooms[roomId] = initRoom();
     }
 
-    if (Object.entries(rooms[roomName].users).length > 6) {
+    if (Object.entries(rooms[roomId].users).length > 6) {
       return ws.send(JSON.stringify({ error: 'TOO_MANY_PLAYERS' }));
     }
 
-    if (rooms[roomName].activePlayer) {
+    if (rooms[roomId].activePlayer) {
       return ws.send(JSON.stringify({ error: 'GAME_ALREADY_STARTED' }));
     }
 
-    if (!isExistingUser(roomName, userUuid)) {
-      addUser(userUuid, rooms[roomName], username, ws);
+    if (!isExistingUser(roomId, userUuid)) {
+      addUser(userUuid, rooms[roomId], { avatar, username }, ws);
     }
 
     ws.send(JSON.stringify({ type: 'PLAYER_JOINED' }));
 
-    const usernames = Object.entries(rooms[roomName].users).map(([, user]) => user.username);
-
-    Object.entries(rooms[roomName].users).forEach(([, user]: [string, User]) => {
-      user.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', usernameList: usernames }));
+    Object.entries(rooms[roomId].users).forEach(([, user]: [string, User]) => {
+      user.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', players: getPlayers(rooms[roomId]) }));
     });
   }
 };
