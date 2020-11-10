@@ -1,3 +1,4 @@
+import { getPlayer } from '../../room';
 import { getCardValue } from '../../game';
 import { Room, User } from '../../types';
 
@@ -55,7 +56,13 @@ export const handleEndRound = (room: Room, userUuid: string): void => {
     );
 
     Object.entries(room.users).forEach(([, user]: [string, User]) => {
-      user.ws.send(JSON.stringify({ type: 'GAME_OVER', playersScore, winner: winner.username }));
+      user.ws.send(
+        JSON.stringify({
+          type: 'GAME_OVER',
+          playersScore,
+          winner: getPlayer(room, winner.uuid),
+        }),
+      );
     });
   }
 
@@ -69,7 +76,7 @@ export const handleEndRound = (room: Room, userUuid: string): void => {
         type: 'END_OF_ROUND_UPDATE',
         playersCard,
         playersScore,
-        roundWinner: room.roundWinner,
+        roundWinner: getPlayer(room, room.roundWinner ?? ''),
       }),
     );
   });

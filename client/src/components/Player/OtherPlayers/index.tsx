@@ -7,7 +7,7 @@ import styles from './styles.module.css';
 
 interface OtherPlayersProps {
   otherPlayers: Player[];
-  roundWinner: undefined | string;
+  roundWinner: undefined | Player;
   scores: PlayerScore[];
 }
 
@@ -19,7 +19,7 @@ const OtherPlayers = ({ otherPlayers, roundWinner, scores }: OtherPlayersProps) 
           key={username}
           avatar={avatar}
           hand={hand}
-          isWinner={uuid === roundWinner}
+          isWinner={uuid === roundWinner?.uuid}
           numberOfCards={numberOfCards}
           score={scores.find((score) => score.uuid === uuid)?.score || 0}
           username={username}

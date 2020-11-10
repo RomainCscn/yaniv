@@ -30,10 +30,10 @@ export interface ReceivedMessage {
   playersCard: Record<string, Card[]>;
   playersScore: PlayerScore[];
   thrownCards: Card[];
-  roundWinner: string;
+  roundWinner: Player;
   type: ReceivedMessageType;
   uuid: string;
-  winner: string;
+  winner: Player;
 }
 
 export type ReceivedMessageType =

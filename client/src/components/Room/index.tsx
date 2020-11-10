@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useReducer, useMemo } from 'react';
 
-import NextRoundButton from '../NextRoundButton';
-import PlayAgainButton from '../PlayAgainButton';
 import MainPlayer from '../Player/MainPlayer';
 import OtherPlayers from '../Player/OtherPlayers';
 import ThrownCards from '../ThrownCards';
@@ -13,6 +11,7 @@ import { Card, Player, PlayerScore, ReceivedMessage } from '../../types';
 import ScoreDashboard from '../ScoreDashboard';
 
 import styles from './styles.module.css';
+import EndRound from '../EndRound';
 
 interface RoomProps {
   players: Player[];
@@ -30,9 +29,8 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
   const [canPlay, setCanPlay] = useState(false);
   const [hand, setHand] = useState<Card[]>([]);
   const [scores, setScores] = useState<PlayerScore[]>([]);
-  const [isEndOfRound, setIsEndOfRound] = useState(false);
-  const [roundWinner, setRoundWinner] = useState<string>();
-  const [gameWinner, setGameWinner] = useState<string>();
+  const [roundWinner, setRoundWinner] = useState<Player>();
+  const [gameWinner, setGameWinner] = useState<Player>();
   const [quickPlayDone, setQuickPlayDone] = useState(false);
 
   const player = useMemo(() => players.find((p) => p.uuid === userUuid), [players, userUuid]);
@@ -67,7 +65,6 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
         setQuickPlayDone(true);
       } else if (type === 'END_OF_ROUND_UPDATE') {
         setCanPlay(false);
-        setIsEndOfRound(true);
         setScores(playersScore);
         setRoundWinner(roundWinner);
         dispatch({ type: 'setOtherPlayersCards', payload: playersCard });
@@ -75,8 +72,8 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
         setCanPlay(uuid === userUuid);
       } else if (type === 'NEW_ROUND') {
         dispatch({ type: 'newRound' });
-        setGameWinner('');
-        setIsEndOfRound(false);
+        setGameWinner(undefined);
+        setRoundWinner(undefined);
       } else if ('GAME_OVER') {
         setGameWinner(winner);
       }
@@ -117,7 +114,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
     <div className={styles.mainContainer}>
       <ScoreDashboard scores={scores} />
       <OtherPlayers otherPlayers={state.otherPlayers} roundWinner={roundWinner} scores={scores} />
-      {!isEndOfRound && (
+      {!roundWinner && (
         <div className={styles.cardsArea}>
           <ThrownCards
             canPlay={canPlay && state.selectedCards.length > 0}
@@ -127,19 +124,12 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
           <Stack canPlay={canPlay && state.selectedCards.length > 0} pickCard={pickCard} />
         </div>
       )}
-      {gameWinner ? (
-        <div>
-          <div>Gagnant de la partie : {gameWinner} !</div>
-          <PlayAgainButton roomId={roomId} />
-        </div>
-      ) : (
-        isEndOfRound && (
-          <div>
-            <NextRoundButton roomId={roomId} />
-            {roundWinner === userUuid ? 'GAGNÉ' : 'PERDU'}
-          </div>
-        )
-      )}
+      <EndRound
+        gameWinner={gameWinner}
+        roomId={roomId}
+        roundWinner={roundWinner}
+        userUuid={userUuid}
+      />
       <MainPlayer
         canPlay={canPlay}
         hand={hand}
