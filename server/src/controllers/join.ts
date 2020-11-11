@@ -1,5 +1,5 @@
-import initRoom, { addUser, getFormattedPlayers } from '../room';
-import rooms from '../rooms';
+import initRoom, { addUser, getFormattedPlayers } from '../core/room';
+import rooms from '../core/rooms';
 import { CustomWebSocket, User } from '../types';
 
 const isExistingUser = (roomId: string, userUuid: string) =>

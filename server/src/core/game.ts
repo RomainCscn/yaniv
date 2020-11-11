@@ -1,5 +1,5 @@
-import { HAND_CARDS_NUMBER, SUITS, VALUES } from './constants';
-import { Card } from './types';
+import { HAND_CARDS_NUMBER, SUITS, VALUES } from '../constants';
+import { Card } from '../types';
 
 const getCardValue = (card: Card): number => (card.value <= 10 ? card.value : 10);
 

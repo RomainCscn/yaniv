@@ -4,7 +4,7 @@ import { handleNextRound } from './nextRound';
 import { handlePlayAgain } from './playAgain';
 import { handleQuickPlay } from './quickPlay';
 
-import rooms from '../../rooms';
+import rooms from '../../core/rooms';
 import { PlayedCards } from '../../types';
 
 const getPlayerByUuid = (roomId: string, userUuid: string) => rooms[roomId].users[userUuid];

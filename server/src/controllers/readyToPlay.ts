@@ -1,4 +1,4 @@
-import rooms from '../rooms';
+import rooms from '../core/rooms';
 import { User } from '../types';
 
 const handleReadyToPlay = (roomId: string): void => {

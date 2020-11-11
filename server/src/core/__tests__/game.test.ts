@@ -1,5 +1,5 @@
 import { getCardValue, getHand, getSmallestScore, getSuffledDeck, sortHand } from '../game';
-import { Card } from '../types';
+import { Card } from '../../types';
 
 const scores = [
   { uuid: 'ghi', score: 3 },
@@ -19,7 +19,7 @@ const mockHandCardsNumber = jest.fn();
 const mockSuits = jest.fn();
 const mockValues = jest.fn();
 
-jest.mock('../constants.ts', () => ({
+jest.mock('../../constants.ts', () => ({
   get HAND_CARDS_NUMBER() {
     return mockHandCardsNumber();
   },

@@ -1,5 +1,5 @@
-import { assignHandToPlayer, getFormattedPlayers } from '../room';
-import rooms from '../rooms';
+import { assignHandToPlayer, getFormattedPlayers } from '../core/room';
+import rooms from '../core/rooms';
 import { User } from '../types';
 
 const handleStart = (roomId: string): void => {

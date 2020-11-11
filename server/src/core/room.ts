@@ -1,6 +1,6 @@
-import { HAND_CARDS_NUMBER } from './constants';
 import { getHand, getSuffledDeck } from './game';
-import { CustomWebSocket, Room, User } from './types';
+import { HAND_CARDS_NUMBER } from '../constants';
+import { CustomWebSocket, Room, User } from '../types';
 
 export const assignHandToPlayer = (room: Room, user: User): void => {
   const userHand = getHand(room.deck);

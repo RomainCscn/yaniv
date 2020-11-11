@@ -1,5 +1,5 @@
-import { getFormattedPlayer } from '../../room';
-import { getCardValue, getSmallestScore } from '../../game';
+import { getFormattedPlayer } from '../../core/room';
+import { getCardValue, getSmallestScore } from '../../core/game';
 import { Room, User } from '../../types';
 
 const SCORE_LIMIT = 100;

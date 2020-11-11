@@ -1,4 +1,4 @@
-import { Card, Room, User, Users } from './types';
+import { Card, Room, User, Users } from '../types';
 
 const removePreviousCards = (room: Room): void => {
   Object.entries(room.users).forEach(([, user]: [string, User]) =>

@@ -8,7 +8,7 @@ import initRoom, {
   getFormattedPlayers,
   resetDeck,
 } from '../room';
-import { CustomWebSocket, Room, User } from '../types';
+import { CustomWebSocket, Room, User } from '../../types';
 
 jest.mock('../game');
 

@@ -1,6 +1,6 @@
-import { getPlayerByUuid, getFormattedPlayers } from '../room';
+import { getPlayerByUuid, getFormattedPlayers } from '../core/room';
 import { User } from '../types';
-import rooms from '../rooms';
+import rooms from '../core/rooms';
 
 interface UserInformation {
   avatar: string;

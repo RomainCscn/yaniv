@@ -1,6 +1,6 @@
-import { sendThrownCards } from '../../dispatcher';
-import { sortHand } from '../../game';
-import { getFormattedPlayers } from '../../room';
+import { sendThrownCards } from '../../core/dispatcher';
+import { sortHand } from '../../core/game';
+import { getFormattedPlayers } from '../../core/room';
 import { Card, PlayedCards, Room, User } from '../../types';
 
 export const handleDropAndPick = (

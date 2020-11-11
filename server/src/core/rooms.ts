@@ -1,6 +1,6 @@
 import * as WebSocket from 'ws';
 
-import { Room } from './types';
+import { Room } from '../types';
 
 const rooms: Record<string, Room> = {};
 

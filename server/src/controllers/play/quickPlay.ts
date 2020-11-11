@@ -1,5 +1,5 @@
-import { sendThrownCards } from '../../dispatcher';
-import { getFormattedPlayers } from '../../room';
+import { sendThrownCards } from '../../core/dispatcher';
+import { getFormattedPlayers } from '../../core/room';
 import { Card, PlayedCards, Room, User } from '../../types';
 
 export const handleQuickPlay = (room: Room, user: User, { thrownCards }: PlayedCards): void => {

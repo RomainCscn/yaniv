@@ -10,7 +10,7 @@ import {
   handleStart,
   handleUpdate,
 } from './controllers';
-import { handleWebSocketClosed } from './rooms';
+import { handleWebSocketClosed } from './core/rooms';
 import { CustomWebSocket } from './types';
 
 const app = express();

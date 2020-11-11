@@ -1,5 +1,5 @@
 import { Room, User } from '../../types';
-import { assignHandToPlayer, getFormattedPlayers, resetDeck } from '../../room';
+import { assignHandToPlayer, getFormattedPlayers, resetDeck } from '../../core/room';
 
 export const handlePlayAgain = (room: Room): void => {
   resetDeck(room, { resetScore: true });
