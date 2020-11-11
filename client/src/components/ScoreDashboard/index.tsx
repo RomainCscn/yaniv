@@ -7,6 +7,7 @@ import styles from './styles.module.css';
 
 const ScoreDashboard = ({ scores }: { scores: PlayerScore[] }) => {
   const [showScores, setShowScores] = useState(false);
+
   const getRowScores = (index: number) =>
     scores.map((score) => {
       const isWinningCell =
@@ -25,7 +26,7 @@ const ScoreDashboard = ({ scores }: { scores: PlayerScore[] }) => {
       <button className={styles.button} onClick={() => setShowScores(!showScores)}>
         SCORES
       </button>
-      {showScores && scores.length > 0 && (
+      {showScores && (
         <table className={styles.table}>
           <thead>
             <tr>

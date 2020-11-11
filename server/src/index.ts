@@ -45,7 +45,7 @@ wss.on('connection', (ws: CustomWebSocket) => {
     } else if (action === 'START') {
       handleStart(roomId);
     } else if (action === 'READY_TO_PLAY') {
-      handleReadyToPlay(roomId);
+      handleReadyToPlay(roomId, userUuid);
     } else if (action === 'PLAY') {
       handlePlay(actionType, { notPickedCards, pickedCard, thrownCards }, roomId, userUuid);
     }

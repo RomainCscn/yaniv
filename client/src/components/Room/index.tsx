@@ -70,6 +70,8 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
         setScores(playersScore);
         setRoundWinner(roundWinner);
         dispatch({ type: 'setOtherPlayersCards', payload: playersCard });
+      } else if (type === 'SET_INTIAL_SCORES') {
+        setScores(playersScore);
       } else if (type === 'SET_ACTIVE_PLAYER') {
         setActivePlayer(uuid);
         setCanPlay(uuid === userUuid);
