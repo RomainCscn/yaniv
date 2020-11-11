@@ -71,4 +71,6 @@ wss.on('close', () => {
   clearInterval(interval);
 });
 
+console.log('Server started on port ', process.env.PORT || 8999);
+
 server.listen(process.env.PORT || 8999);
