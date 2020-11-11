@@ -7,7 +7,7 @@ import { handleQuickPlay } from './quickPlay';
 import rooms from '../../rooms';
 import { PlayedCards } from '../../types';
 
-const getCurrentUser = (roomId: string, userUuid: string) => rooms[roomId].users[userUuid];
+const getPlayerByUuid = (roomId: string, userUuid: string) => rooms[roomId].users[userUuid];
 
 const handlePlay = (
   actionType: string,
@@ -16,7 +16,7 @@ const handlePlay = (
   userUuid: string,
 ): void => {
   const room = rooms[roomId];
-  const user = getCurrentUser(roomId, userUuid);
+  const user = getPlayerByUuid(roomId, userUuid);
 
   if (actionType === 'DROP_AND_PICK') {
     handleDropAndPick(room, user, cards);

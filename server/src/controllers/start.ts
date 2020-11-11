@@ -1,4 +1,4 @@
-import { assignHandToUser, getPlayers } from '../room';
+import { assignHandToPlayer, getFormattedPlayers } from '../room';
 import rooms from '../rooms';
 import { User } from '../types';
 
@@ -6,11 +6,11 @@ const handleStart = (roomId: string): void => {
   const room = rooms[roomId];
 
   Object.entries(room.users).forEach(([, user]: [string, User]) => {
-    assignHandToUser(room, user);
+    assignHandToPlayer(room, user);
   });
 
   Object.entries(room.users).forEach(([uuid, user]: [string, User]) => {
-    user.ws.send(JSON.stringify({ type: 'START_GAME', players: getPlayers(room), uuid }));
+    user.ws.send(JSON.stringify({ type: 'START_GAME', players: getFormattedPlayers(room), uuid }));
   });
 };
 

@@ -32,7 +32,7 @@ jest.mock('../constants.ts', () => ({
 }));
 
 describe('game', () => {
-  it('should returns valid card value', () => {
+  it('should return valid card value', () => {
     expect(getCardValue({ suit: 'club', value: 1 })).toEqual(1);
     expect(getCardValue({ suit: 'diamond', value: 2 })).toEqual(2);
     expect(getCardValue({ suit: 'heart', value: 3 })).toEqual(3);
@@ -42,16 +42,16 @@ describe('game', () => {
     expect(getCardValue({ suit: 'club', value: 10 })).toEqual(10);
   });
 
-  it('should returns a player hand', () => {
+  it('should return a player hand', () => {
     mockHandCardsNumber.mockReturnValue(1);
     expect(getHand(deck)).toEqual([{ suit: 'club', value: 1 }]);
   });
 
-  it('should returns the smallest score', () => {
+  it('should return the smallest score', () => {
     expect(getSmallestScore(scores)).toEqual(1);
   });
 
-  it('should returns a valid shuffled deck', () => {
+  it('should return a valid shuffled deck', () => {
     mockSuits.mockReturnValue(['spade', 'diamond']);
     mockValues.mockReturnValue([1, 2]);
 
@@ -64,7 +64,7 @@ describe('game', () => {
     expect(shuffledDeck.findIndex((c) => c.suit === 'heart' && c.value === 1)).toEqual(-1);
   });
 
-  it('should returns a sorted hand', () => {
+  it('should return a sorted hand', () => {
     const hand: Card[] = [
       { suit: 'club', value: 7 },
       { suit: 'club', value: 1 },

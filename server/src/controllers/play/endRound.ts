@@ -1,4 +1,4 @@
-import { getPlayer } from '../../room';
+import { getFormattedPlayer } from '../../room';
 import { getCardValue, getSmallestScore } from '../../game';
 import { Room, User } from '../../types';
 
@@ -68,7 +68,7 @@ export const handleEndRound = (room: Room, userUuid: string): void => {
         JSON.stringify({
           type: 'GAME_OVER',
           playersScore,
-          winner: getPlayer(room, winner.uuid),
+          winner: getFormattedPlayer(room, winner.uuid),
         }),
       );
     });
@@ -84,7 +84,7 @@ export const handleEndRound = (room: Room, userUuid: string): void => {
         type: 'END_OF_ROUND_UPDATE',
         playersCard,
         playersScore,
-        roundWinner: getPlayer(room, room.roundWinner ?? ''),
+        roundWinner: getFormattedPlayer(room, room.roundWinner ?? ''),
       }),
     );
   });

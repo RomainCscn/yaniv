@@ -1,6 +1,6 @@
 import { sendThrownCards } from '../../dispatcher';
 import { sortHand } from '../../game';
-import { getPlayers } from '../../room';
+import { getFormattedPlayers } from '../../room';
 import { Card, PlayedCards, Room, User } from '../../types';
 
 export const handleDropAndPick = (
@@ -48,6 +48,8 @@ export const handleDropAndPick = (
   // sync players to display other players cards
   Object.entries(room.users).forEach(([, user]: [string, User]) => {
     user.ws.send(JSON.stringify({ type: 'SET_ACTIVE_PLAYER', uuid: nextPlayerUuid }));
-    user.ws.send(JSON.stringify({ type: 'SET_OTHER_PLAYERS_CARDS', players: getPlayers(room) }));
+    user.ws.send(
+      JSON.stringify({ type: 'SET_OTHER_PLAYERS_CARDS', players: getFormattedPlayers(room) }),
+    );
   });
 };

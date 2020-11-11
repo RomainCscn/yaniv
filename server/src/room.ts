@@ -2,7 +2,7 @@ import { HAND_CARDS_NUMBER } from './constants';
 import { getHand, getSuffledDeck } from './game';
 import { CustomWebSocket, Room, User } from './types';
 
-export const assignHandToUser = (room: Room, user: User): void => {
+export const assignHandToPlayer = (room: Room, user: User): void => {
   const userHand = getHand(room.deck);
 
   user.hand = userHand;
@@ -25,9 +25,9 @@ export const addUser = (
   };
 };
 
-export const getCurrentUser = (room: Room, userUuid: string): User => room.users[userUuid];
+export const getPlayerByUuid = (room: Room, userUuid: string): User => room.users[userUuid];
 
-export const getPlayers = (
+export const getFormattedPlayers = (
   room: Room,
 ): { avatar: string; uuid: string; username: string; numberOfCards: number }[] =>
   Object.entries(room.users).map(([uuid, user]: [string, User]) => ({
@@ -37,7 +37,7 @@ export const getPlayers = (
     numberOfCards: user.hand.length,
   }));
 
-export const getPlayer = (
+export const getFormattedPlayer = (
   room: Room,
   uuid: string,
 ): { avatar: string; uuid: string; username: string; numberOfCards: number } => {

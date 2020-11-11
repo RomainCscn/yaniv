@@ -1,4 +1,4 @@
-import { getCurrentUser, getPlayers } from '../room';
+import { getPlayerByUuid, getFormattedPlayers } from '../room';
 import { User } from '../types';
 import rooms from '../rooms';
 
@@ -13,13 +13,13 @@ const handleUpdate = (
   { avatar, username }: UserInformation,
 ): void => {
   const room = rooms[roomId];
-  const user = getCurrentUser(room, userUuid);
+  const user = getPlayerByUuid(room, userUuid);
 
   user.avatarId = avatar;
   user.username = username;
 
   Object.entries(rooms[roomId].users).forEach(([, user]: [string, User]) => {
-    user.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', players: getPlayers(room) }));
+    user.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', players: getFormattedPlayers(room) }));
   });
 };
 
