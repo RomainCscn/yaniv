@@ -1,4 +1,5 @@
-import { HAND_CARDS_NUMBER, getHand, getSuffledDeck } from './game';
+import { HAND_CARDS_NUMBER } from './constants';
+import { getHand, getSuffledDeck } from './game';
 import { CustomWebSocket, Room, User } from './types';
 
 export const assignHandToUser = (room: Room, user: User): void => {

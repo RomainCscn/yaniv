@@ -1,5 +1,6 @@
 import * as WebSocket from 'ws';
 
+import { SUITS, VALUES } from './constants';
 export interface CustomWebSocket extends WebSocket {
   isAlive: boolean;
 }
@@ -7,8 +8,8 @@ export interface CustomWebSocket extends WebSocket {
 export type ActionType = 'DROP' | 'MAMIXTA' | 'PICK';
 
 export interface Card {
-  suit: string;
-  value: number;
+  suit: typeof SUITS[number];
+  value: typeof VALUES[number];
 }
 
 export interface PlayedCards {
