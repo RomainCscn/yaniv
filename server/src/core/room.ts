@@ -1,4 +1,5 @@
 import { getHand, getSuffledDeck } from './game';
+import rooms from './rooms';
 import { HAND_CARDS_NUMBER } from '../constants';
 import { CustomWebSocket, Room, User } from '../types';
 
@@ -23,6 +24,16 @@ export const addUser = (
     username,
     ws: userWs,
   };
+};
+
+export const findRoom = (userUuid: string): [string, Room] | [] => {
+  for (const [roomId, room] of Object.entries(rooms)) {
+    if (room.users[userUuid]) {
+      return [roomId, room];
+    }
+  }
+
+  return [];
 };
 
 export const getPlayerByUuid = (room: Room, userUuid: string): User => room.users[userUuid];

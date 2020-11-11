@@ -3,6 +3,7 @@ import { getHand, getSuffledDeck } from '../game';
 import initRoom, {
   addUser,
   assignHandToPlayer,
+  findRoom,
   getPlayerByUuid,
   getFormattedPlayer,
   getFormattedPlayers,
@@ -10,7 +11,15 @@ import initRoom, {
 } from '../room';
 import { CustomWebSocket, Room, User } from '../../types';
 
+const mockRooms = jest.fn();
+
 jest.mock('../game');
+jest.mock('../rooms', () => ({
+  __esModule: true,
+  get default() {
+    return mockRooms();
+  },
+}));
 
 describe('room', () => {
   let room: any;
@@ -78,6 +87,17 @@ describe('room', () => {
       username: 'toto',
       ws: {},
     });
+  });
+
+  it('should return a room from a user uuid', () => {
+    mockRooms.mockReturnValue({
+      abc: { users: { '1': {} } },
+      def: { users: { '2': {} } },
+    });
+
+    expect(findRoom('1')).toEqual(['abc', { users: { '1': {} } }]);
+    expect(findRoom('2')).toEqual(['def', { users: { '2': {} } }]);
+    expect(findRoom('3')).toEqual([]);
   });
 
   it('should return a player by uuid', () => {
