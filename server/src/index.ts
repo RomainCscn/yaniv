@@ -10,14 +10,21 @@ import {
   handleStart,
   handleUpdate,
 } from './controllers';
+import { handleWebSocketClosed } from './rooms';
+import { CustomWebSocket } from './types';
 
 const app = express();
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-wss.on('connection', (ws: WebSocket) => {
+wss.on('connection', (ws: CustomWebSocket) => {
   const userUuid = uuidv4();
+  ws.isAlive = true;
+
+  ws.on('pong', () => {
+    ws.isAlive = true;
+  });
 
   ws.on('message', (data: string) => {
     const {
@@ -43,6 +50,25 @@ wss.on('connection', (ws: WebSocket) => {
       handlePlay(actionType, { notPickedCards, pickedCard, thrownCards }, roomId, userUuid);
     }
   });
+
+  ws.onclose = () => {
+    handleWebSocketClosed(userUuid);
+  };
+});
+
+const interval = setInterval(() => {
+  wss.clients.forEach((ws: WebSocket) => {
+    const customWs = ws as CustomWebSocket;
+
+    if (!customWs.isAlive) return customWs.terminate();
+
+    customWs.isAlive = false;
+    customWs.ping(null, undefined);
+  });
+}, 10000);
+
+wss.on('close', () => {
+  clearInterval(interval);
 });
 
 server.listen(process.env.PORT || 8999);

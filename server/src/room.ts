@@ -1,7 +1,5 @@
-import * as WebSocket from 'ws';
-
 import { HAND_CARDS_NUMBER, getHand, getSuffledDeck } from './game';
-import { Room, User } from './types';
+import { CustomWebSocket, Room, User } from './types';
 
 export const assignHandToUser = (room: Room, user: User): void => {
   const userHand = getHand(room.deck);
@@ -14,7 +12,7 @@ export const addUser = (
   userUuid: string,
   room: Room,
   { avatar, username }: { avatar: string; username: string },
-  userWs: WebSocket,
+  userWs: CustomWebSocket,
 ): void => {
   room.users[userUuid] = {
     avatarId: avatar,

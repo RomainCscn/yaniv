@@ -1,8 +1,6 @@
-import * as WebSocket from 'ws';
-
 import initRoom, { addUser, getPlayers } from '../room';
 import rooms from '../rooms';
-import { User } from '../types';
+import { CustomWebSocket, User } from '../types';
 
 const isExistingUser = (roomId: string, userUuid: string) =>
   typeof rooms[roomId].users[userUuid] === 'object';
@@ -13,9 +11,9 @@ const handleJoin = (
   roomId: string,
   username: string,
   userUuid: string,
-  ws: WebSocket,
+  ws: CustomWebSocket,
 ): void => {
-  if (actionType === 'JOINED_WAITING_ROOM') {
+  if (actionType === 'JOINED_LOBBY') {
     if (!rooms[roomId]) {
       rooms[roomId] = initRoom();
     }

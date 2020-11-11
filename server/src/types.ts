@@ -1,5 +1,9 @@
 import * as WebSocket from 'ws';
 
+export interface CustomWebSocket extends WebSocket {
+  isAlive: boolean;
+}
+
 export type ActionType = 'DROP' | 'MAMIXTA' | 'PICK';
 
 export interface Card {
@@ -27,7 +31,7 @@ export interface User {
   score: number;
   scoreHistory: number[];
   username: string;
-  ws: WebSocket;
+  ws: CustomWebSocket;
 }
 
 export type Users = Record<string, User>;
