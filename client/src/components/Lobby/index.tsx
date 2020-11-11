@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import classnames from 'classnames';
 import { useHistory, useParams } from 'react-router-dom';
 
+import Players from './Players';
+import Profile from './Profile';
+import ShareLink from './ShareLink';
 import AVATARS from '../Avatar';
-import AvatarList from '../Avatar/AvatarList';
 import Room from '../Room';
 import client, { send } from '../../core/client';
 import { Player, ReceivedMessage } from '../../types';
 
 import styles from './styles.module.css';
+
+const randomAvatar = AVATARS[Math.floor(Math.random() * AVATARS.length)][0];
+const randomUsername = Math.random().toString(36).substring(7);
 
 const Lobby = () => {
   let { roomId } = useParams() as any;
@@ -19,12 +23,9 @@ const Lobby = () => {
     history.replace('/' + roomId);
   }
 
-  const [error, setError] = useState('');
   const [play, setPlay] = useState(false);
-  const [selectedAvatar, setAvatar] = useState<string>(
-    AVATARS[Math.floor(Math.random() * AVATARS.length)][0],
-  );
-  const [username, setUsername] = useState(Math.random().toString(36).substring(7));
+  const [selectedAvatar, setAvatar] = useState<string>(randomAvatar);
+  const [username, setUsername] = useState(randomUsername);
   const [players, setPlayers] = useState<Player[]>([]);
   const [userUuid, setUserUuid] = useState('');
 
@@ -50,18 +51,6 @@ const Lobby = () => {
     });
   }, [roomId, selectedAvatar, username]);
 
-  const startGame = () => {
-    if (players.length >= 2) {
-      send(roomId, { action: 'START' });
-    } else {
-      setError('Un seul joueur dans le salon ! Au moins deux joueurs requis pour jouer.');
-    }
-  };
-
-  const updatePlayerInformation = () => {
-    send(roomId, { action: 'UPDATE' }, { avatar: selectedAvatar, username });
-  };
-
   return (
     <div>
       {play ? (
@@ -69,59 +58,16 @@ const Lobby = () => {
       ) : (
         <div className={styles.container}>
           <h1 className={styles.title}>Yaniv</h1>
-          <div>
-            <p className={styles.linkText}>
-              Partagez ce lien à vos amis pour qu'ils vous rejoignent
-            </p>
-            <p className={styles.link}>
-              <a href={window.location.href}>{window.location.host + window.location.pathname}</a>
-            </p>
-          </div>
+          <ShareLink />
           <div className={styles.sectionContainer}>
-            <div className={styles.playersContainer}>
-              <h2 className={classnames(styles.sectionTitle, styles.green)}>
-                Joueurs dans le salon
-              </h2>
-              <div className={styles.playersAvatarContainer}>
-                {players.map((player) => (
-                  <div className={styles.avatarPlayer} key={player.uuid}>
-                    <img
-                      width={50}
-                      src={AVATARS.find((avatar) => avatar[0] === player.avatar)![1]}
-                      alt={player.avatar}
-                    />
-                    <div className={styles.playerName}>
-                      {player.username} {player.username === username && '(vous)'}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className={styles.playButtonContainer}>
-                <button className={styles.playButton} onClick={() => startGame()}>
-                  Commencer la partie
-                </button>
-                {players.length < 2 && error}
-              </div>
-            </div>
-            <div className={styles.userProfileContainer}>
-              <h2 className={classnames(styles.sectionTitle, styles.indigo)}>
-                Modifier votre profil
-              </h2>
-              <div style={{ marginBottom: '24px' }}>
-                <label className={styles.label}>Nom</label>
-                <input
-                  className={styles.usernameInput}
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                />
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <AvatarList selectedAvatar={selectedAvatar} setAvatar={setAvatar} />
-              </div>
-              <button className={styles.updateButton} onClick={updatePlayerInformation}>
-                Mettre à jour
-              </button>
-            </div>
+            <Players players={players} roomId={roomId} username={username} />
+            <Profile
+              roomId={roomId}
+              setAvatar={setAvatar}
+              setUsername={setUsername}
+              selectedAvatar={selectedAvatar}
+              username={username}
+            />
           </div>
         </div>
       )}

@@ -47,8 +47,10 @@ a:visited {
 }
 
 .playersContainer {
+  display: flex;
+  flex-direction: column;
   background: #e6fffa;
-  padding: 12px 24px 42px;
+  padding: 12px 24px 24px;
   border-radius: 12px;
   margin: 12px;
   width: 600px;
@@ -73,10 +75,11 @@ a:visited {
   margin-left: 12px;
 }
 
-.playButtonContainer {
-  margin-top: 24px;
+.buttonContainer {
+  margin-top: auto;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  position: relative;
 }
 
 .playButton {
@@ -91,9 +94,16 @@ a:visited {
   border-bottom: 4px solid #2f855a;
 }
 
+.error {
+  position: absolute;
+  bottom: -24px;
+}
+
 .userProfileContainer {
+  display: flex;
+  flex-direction: column;
   background: #c3dafe;
-  padding: 12px 24px;
+  padding: 12px 24px 24px;
   border-radius: 12px;
   width: 600px;
   margin: 12px;
@@ -125,7 +135,7 @@ a:visited {
 .updateButton {
   margin-top: 24px;
   padding: 12px;
-  font-size: 16px;
+  font-size: 2rem;
   font-weight: bold;
   border: none;
   border-radius: 12px;
