@@ -1,3 +1,136 @@
 .container {
   margin: 0 auto;
 }
+
+.title {
+  margin-top: 0;
+  color: #2c5282;
+  text-align: center;
+  font-size: 76px;
+  font-family: 'Alloy';
+}
+
+.sectionContainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.sectionTitle {
+  letter-spacing: 1px;
+  font-family: 'Simplicity';
+  font-size: 48px;
+  margin: 12px 0;
+}
+
+.green {
+  color: #2f855a;
+}
+
+.indigo {
+  color: #4c51bf;
+}
+
+.linkText {
+  font-style: italic;
+  font-size: 24px;
+  text-align: center;
+}
+
+.link,
+a:link,
+a:visited {
+  text-align: center;
+  font-weight: bold;
+  font-size: 32px;
+  color: #2c5282;
+}
+
+.playersContainer {
+  background: #e6fffa;
+  padding: 12px 24px 42px;
+  border-radius: 12px;
+  margin: 12px;
+  width: 600px;
+}
+
+.playersAvatarContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 10px;
+  grid-auto-rows: 75px;
+}
+
+.avatarPlayer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  word-break: break-word;
+}
+
+.playerName {
+  font-size: 20px;
+  margin-left: 12px;
+}
+
+.playButtonContainer {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.playButton {
+  padding: 12px;
+  font-size: 2rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  background-color: #48bb78;
+  color: #f0fff4;
+  cursor: pointer;
+  border-bottom: 4px solid #2f855a;
+}
+
+.userProfileContainer {
+  background: #c3dafe;
+  padding: 12px 24px;
+  border-radius: 12px;
+  width: 600px;
+  margin: 12px;
+}
+
+.label {
+  font-size: 16px;
+  margin-right: 12px;
+}
+
+.usernameInput {
+  font-size: 16px;
+  padding: 12px;
+  border-radius: 6px;
+  appearance: none;
+  background-color: #ebf4ff;
+  border-width: 2px;
+  border-color: #ebf4ff;
+  border-style: solid;
+  line-height: 1.25;
+  box-shadow: none;
+  outline: none;
+}
+
+.usernameInput:focus {
+  border-color: #7f9cf5;
+}
+
+.updateButton {
+  margin-top: 24px;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  background-color: #667eea;
+  color: #f0fff4;
+  cursor: pointer;
+  border-bottom: 4px solid #4c51bf;
+}

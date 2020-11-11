@@ -1,15 +1,20 @@
+import { getFormattedPlayers } from '../core/room';
 import { Card, Room, User, Users } from '../types';
 
-const removePreviousCards = (room: Room): void => {
+export const removePreviousCards = (room: Room): void => {
   Object.entries(room.users).forEach(([, user]: [string, User]) =>
     user.ws.send(JSON.stringify({ type: 'SET_PREVIOUS_CARDS', previousCards: [] })),
   );
 };
 
-const sendThrownCards = (users: Users, cards: Card[]): void => {
+export const sendPlayersUpdate = (room: Room): void => {
+  Object.entries(room.users).forEach(([, user]: [string, User]) => {
+    user.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', players: getFormattedPlayers(room) }));
+  });
+};
+
+export const sendThrownCards = (users: Users, cards: Card[]): void => {
   Object.entries(users).forEach(([, user]: [string, User]) =>
     user.ws.send(JSON.stringify({ type: 'SET_THROWN_CARDS', thrownCards: cards })),
   );
 };
-
-export { removePreviousCards, sendThrownCards };

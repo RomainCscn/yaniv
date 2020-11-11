@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import classnames from 'classnames';
 import { useHistory, useParams } from 'react-router-dom';
 
 import AVATARS from '../Avatar';
@@ -67,39 +68,61 @@ const Lobby = () => {
         <Room players={players} roomId={roomId} username={username} userUuid={userUuid} />
       ) : (
         <div className={styles.container}>
+          <h1 className={styles.title}>Yaniv</h1>
           <div>
-            <div>
-              <span>Nom du joueur</span>
-              <input value={username} onChange={(e) => setUsername(e.target.value)} />
-            </div>
-            <div>
-              Avatar
-              <AvatarList selectedAvatar={selectedAvatar} setAvatar={setAvatar} />
-            </div>
-            <button onClick={updatePlayerInformation}>Mettre à jour</button>
+            <p className={styles.linkText}>
+              Partagez ce lien à vos amis pour qu'ils vous rejoignent
+            </p>
+            <p className={styles.link}>
+              <a href={window.location.href}>{window.location.host + window.location.pathname}</a>
+            </p>
           </div>
-          <div>
-            <br />
-            Partager cette url à vos amis pour qu'ils vous rejoignent :{' '}
-            <a href={window.location.href}>{window.location.href}</a>
-          </div>
-          <div>
-            <br />
-            Joueurs dans le salon :
-            {players.map((player) => (
-              <div key={player.uuid}>
-                <img
-                  width={50}
-                  src={AVATARS.find((avatar) => avatar[0] === player.avatar)![1]}
-                  alt={player.avatar}
-                />
-                {player.username} {player.username === username && '(vous)'}
+          <div className={styles.sectionContainer}>
+            <div className={styles.playersContainer}>
+              <h2 className={classnames(styles.sectionTitle, styles.green)}>
+                Joueurs dans le salon
+              </h2>
+              <div className={styles.playersAvatarContainer}>
+                {players.map((player) => (
+                  <div className={styles.avatarPlayer} key={player.uuid}>
+                    <img
+                      width={50}
+                      src={AVATARS.find((avatar) => avatar[0] === player.avatar)![1]}
+                      alt={player.avatar}
+                    />
+                    <div className={styles.playerName}>
+                      {player.username} {player.username === username && '(vous)'}
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+              <div className={styles.playButtonContainer}>
+                <button className={styles.playButton} onClick={() => startGame()}>
+                  Commencer la partie
+                </button>
+                {players.length < 2 && error}
+              </div>
+            </div>
+            <div className={styles.userProfileContainer}>
+              <h2 className={classnames(styles.sectionTitle, styles.indigo)}>
+                Modifier votre profil
+              </h2>
+              <div style={{ marginBottom: '24px' }}>
+                <label className={styles.label}>Nom</label>
+                <input
+                  className={styles.usernameInput}
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <AvatarList selectedAvatar={selectedAvatar} setAvatar={setAvatar} />
+              </div>
+              <button className={styles.updateButton} onClick={updatePlayerInformation}>
+                Mettre à jour
+              </button>
+            </div>
           </div>
-          <br />
-          <button onClick={() => startGame()}>PLAY</button>
-          {players.length < 2 && error}
         </div>
       )}
     </div>

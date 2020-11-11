@@ -1,5 +1,5 @@
-import { getPlayerByUuid, getFormattedPlayers } from '../core/room';
-import { User } from '../types';
+import { sendPlayersUpdate } from '../core/dispatcher';
+import { getPlayerByUuid } from '../core/room';
 import rooms from '../core/rooms';
 
 interface UserInformation {
@@ -18,9 +18,7 @@ const handleUpdate = (
   user.avatarId = avatar;
   user.username = username;
 
-  Object.entries(rooms[roomId].users).forEach(([, user]: [string, User]) => {
-    user.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', players: getFormattedPlayers(room) }));
-  });
+  sendPlayersUpdate(room);
 };
 
 export default handleUpdate;

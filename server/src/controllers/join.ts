@@ -1,3 +1,4 @@
+import { sendPlayersUpdate } from '../core/dispatcher';
 import initRoom, { addUser, getFormattedPlayers } from '../core/room';
 import rooms from '../core/rooms';
 import { CustomWebSocket, User } from '../types';
@@ -32,11 +33,7 @@ const handleJoin = (
 
     ws.send(JSON.stringify({ type: 'PLAYER_JOINED' }));
 
-    Object.entries(rooms[roomId].users).forEach(([, user]: [string, User]) => {
-      user.ws.send(
-        JSON.stringify({ type: 'PLAYERS_UPDATE', players: getFormattedPlayers(rooms[roomId]) }),
-      );
-    });
+    sendPlayersUpdate(rooms[roomId]);
   }
 };
 
