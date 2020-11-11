@@ -4,7 +4,7 @@ import CardComponent from './HandCard';
 import ActualScore from '../Score/ActualScore';
 import HandScore from '../Score/HandScore';
 import Avatar from '../../Avatar/AvatarImage';
-import MamixtaButton from '../../MamixtaButton';
+import YanivButton from '../../YanivButton';
 import { send } from '../../../core/client';
 import { getCardUniqueIndex } from '../../../core/utils';
 import { Card, Player } from '../../../types';
@@ -73,7 +73,7 @@ const PlayerHand = ({
           />
         ))}
         <div className={styles.button}>
-          <MamixtaButton hand={hand} canClick={canPlay} roomId={roomId} />
+          <YanivButton hand={hand} canClick={canPlay} roomId={roomId} />
         </div>
       </div>
       <div className={styles.scoreContainer}>

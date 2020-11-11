@@ -6,7 +6,7 @@ import { Card } from '../../types';
 
 import styles from './styles.module.css';
 
-interface MamixtaButtonProps {
+interface YanivButtonProps {
   canClick: boolean;
   hand: Card[];
   roomId: string;
@@ -16,7 +16,7 @@ const MIN_VALUE_TO_SUBMIT = 100;
 
 const getCardValue = (card: Card) => (card.value <= 10 ? card.value : 10);
 
-const canSubmitMamixta = (hand: Card[], canClick: boolean): boolean => {
+const canSubmitYaniv = (hand: Card[], canClick: boolean): boolean => {
   const handSum = hand.reduce((sum: number, card) => {
     return sum + getCardValue(card);
   }, 0);
@@ -24,19 +24,19 @@ const canSubmitMamixta = (hand: Card[], canClick: boolean): boolean => {
   return canClick && handSum <= MIN_VALUE_TO_SUBMIT;
 };
 
-const MamixtaButton = ({ hand, canClick, roomId }: MamixtaButtonProps) => {
-  const canSubmit = canSubmitMamixta(hand, canClick);
+const YanivButton = ({ hand, canClick, roomId }: YanivButtonProps) => {
+  const canSubmit = canSubmitYaniv(hand, canClick);
 
-  const submit = () => send(roomId, { action: 'PLAY', actionType: 'MAMIXTA' });
+  const submit = () => send(roomId, { action: 'PLAY', actionType: 'YANIV' });
 
   return (
     <button
       className={classnames(styles.button, { [styles.pointer]: canSubmit })}
       onClick={canSubmit ? submit : undefined}
     >
-      MAMIXTA
+      YANIV
     </button>
   );
 };
 
-export default MamixtaButton;
+export default YanivButton;

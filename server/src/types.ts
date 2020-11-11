@@ -5,7 +5,7 @@ export interface CustomWebSocket extends WebSocket {
   isAlive: boolean;
 }
 
-export type ActionType = 'DROP' | 'MAMIXTA' | 'PICK';
+export type ActionType = 'DROP' | 'PICK' | 'YANIV';
 
 export interface Card {
   suit: typeof SUITS[number];

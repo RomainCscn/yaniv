@@ -22,7 +22,7 @@ const handlePlay = (
     handleDropAndPick(room, user, cards);
   } else if (actionType === 'QUICK_PLAY') {
     handleQuickPlay(room, user, cards);
-  } else if (actionType === 'MAMIXTA') {
+  } else if (actionType === 'YANIV') {
     handleEndRound(room, userUuid);
   } else if (actionType === 'NEXT_ROUND') {
     handleNextRound(room);
