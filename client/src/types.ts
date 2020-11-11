@@ -51,7 +51,7 @@ export type MessageAction = 'JOIN' | 'PLAY' | 'READY_TO_PLAY' | 'START' | 'UPDAT
 
 export type MessageActionType =
   | 'DROP_AND_PICK'
-  | 'JOINED_WAITING_ROOM'
+  | 'JOINED_LOBBY'
   | 'MAMIXTA'
   | 'NEXT_ROUND'
   | 'PLAY_AGAIN'

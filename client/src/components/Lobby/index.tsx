@@ -9,7 +9,7 @@ import { Player, ReceivedMessage } from '../../types';
 
 import styles from './styles.module.css';
 
-const WaitingRoom = () => {
+const Lobby = () => {
   let { roomId } = useParams() as any;
   const history = useHistory();
 
@@ -31,7 +31,7 @@ const WaitingRoom = () => {
     client.addEventListener('open', () => {
       send(
         roomId,
-        { action: 'JOIN', actionType: 'JOINED_WAITING_ROOM' },
+        { action: 'JOIN', actionType: 'JOINED_LOBBY' },
         { avatar: selectedAvatar, username },
       );
 
@@ -106,4 +106,4 @@ const WaitingRoom = () => {
   );
 };
 
-export default WaitingRoom;
+export default Lobby;

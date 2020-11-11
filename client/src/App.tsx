@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import WaitingRoom from './components/WaitingRoom';
+import Lobby from './components/Lobby';
 
 const App = () => (
   <Router>
     <Switch>
       <Route path='/:roomId?'>
-        <WaitingRoom />
+        <Lobby />
       </Route>
     </Switch>
   </Router>
