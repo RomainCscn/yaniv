@@ -22,13 +22,11 @@ const getDeck = () => {
 const shuffle = (deck: Card[]) => {
   const shuffledDeck = [...deck];
 
-  for (let i = 0; i < 1000; i++) {
-    const location1 = Math.floor(Math.random() * shuffledDeck.length);
-    const location2 = Math.floor(Math.random() * shuffledDeck.length);
-    const tmp = shuffledDeck[location1];
-
-    shuffledDeck[location1] = shuffledDeck[location2];
-    shuffledDeck[location2] = tmp;
+  for (let i = shuffledDeck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * i);
+    const temp = shuffledDeck[i];
+    shuffledDeck[i] = shuffledDeck[j];
+    shuffledDeck[j] = temp;
   }
 
   return shuffledDeck;

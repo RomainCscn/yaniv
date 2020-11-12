@@ -40,7 +40,7 @@ const GenericCard = ({
       [styles.new]: isNew,
     })}
     style={{
-      rotate: degree ? `${degree}deg` : '0',
+      transform: degree ? `rotate(${degree}deg)` : 'rotate(0)',
     }}
     alt={card ? `card-${getCardUniqueIndex(card)}` : 'stack'}
     onClick={canClick ? onCardClick : undefined}
