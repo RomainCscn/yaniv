@@ -14,27 +14,27 @@ import styles from './styles.module.css';
 const randomAvatar = AVATARS[Math.floor(Math.random() * AVATARS.length)][0];
 const randomUsername = Math.random().toString(36).substring(7);
 
+const initialPlayer: Player = { avatar: randomAvatar, username: randomUsername, uuid: '' };
+
 const Lobby = () => {
   let { roomId } = useParams() as any;
   const history = useHistory();
+
+  const [play, setPlay] = useState(false);
+  const [player, setPlayer] = useState<Player>(initialPlayer);
+  const [players, setPlayers] = useState<Player[]>([]);
 
   if (!roomId) {
     roomId = Math.random().toString(36).substring(7);
     history.replace('/' + roomId);
   }
 
-  const [play, setPlay] = useState(false);
-  const [selectedAvatar, setAvatar] = useState<string>(randomAvatar);
-  const [username, setUsername] = useState(randomUsername);
-  const [players, setPlayers] = useState<Player[]>([]);
-  const [userUuid, setUserUuid] = useState('');
-
   useEffect(() => {
     client.addEventListener('open', () => {
       send(
         roomId,
         { action: 'JOIN', actionType: 'JOINED_LOBBY' },
-        { avatar: selectedAvatar, username },
+        { avatar: player.avatar, username: player.username },
       );
 
       client.onmessage = (message) => {
@@ -43,31 +43,24 @@ const Lobby = () => {
         if (type === 'PLAYERS_UPDATE') {
           setPlayers(players);
         } else if (type === 'START_GAME') {
-          setUserUuid(uuid);
-          setPlayers(players);
+          setPlayer((prevPlayer) => ({ ...prevPlayer, uuid }));
           setPlay(true);
         }
       };
     });
-  }, [roomId, selectedAvatar, username]);
+  }, [player, roomId]);
 
   return (
     <div>
       {play ? (
-        <Room players={players} roomId={roomId} username={username} userUuid={userUuid} />
+        <Room players={players} roomId={roomId} username={player.username} userUuid={player.uuid} />
       ) : (
         <div className={styles.container}>
           <h1 className={styles.title}>Yaniv</h1>
           <ShareLink />
           <div className={styles.sectionContainer}>
-            <Players players={players} roomId={roomId} username={username} />
-            <Profile
-              roomId={roomId}
-              setAvatar={setAvatar}
-              setUsername={setUsername}
-              selectedAvatar={selectedAvatar}
-              username={username}
-            />
+            <Players players={players} roomId={roomId} username={player.username} />
+            <Profile player={player} roomId={roomId} setPlayer={setPlayer} />
           </div>
         </div>
       )}
