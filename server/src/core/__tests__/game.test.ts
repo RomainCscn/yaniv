@@ -74,10 +74,10 @@ describe('game', () => {
     ];
 
     const sortedHand: Card[] = [
-      { suit: 'club', value: 7 },
       { suit: 'club', value: 1 },
-      { suit: 'diamond', value: 13 },
+      { suit: 'club', value: 7 },
       { suit: 'diamond', value: 2 },
+      { suit: 'diamond', value: 13 },
       { suit: 'heart', value: 1 },
     ];
 

@@ -1,12 +1,13 @@
 import { canDropCards, canSelectCard, getCardsAfterPick, isAdjacent, isSameValue } from '../game';
+import { Card } from '../../types';
 
-const cardA1 = { suit: 'a', value: 1 };
-const cardA2 = { suit: 'a', value: 2 };
-const cardA3 = { suit: 'a', value: 3 };
-const cardA4 = { suit: 'a', value: 4 };
-const cardB1 = { suit: 'b', value: 1 };
-const cardB2 = { suit: 'b', value: 2 };
-const cardZ1 = { suit: 'zzzz', value: 1 };
+const cardA1: Card = { suit: 'heart', value: 1 };
+const cardA2: Card = { suit: 'heart', value: 2 };
+const cardA3: Card = { suit: 'heart', value: 3 };
+const cardA4: Card = { suit: 'heart', value: 4 };
+const cardB1: Card = { suit: 'diamond', value: 1 };
+const cardB2: Card = { suit: 'diamond', value: 2 };
+const cardZ1: Card = { suit: 'club', value: 1 };
 
 it('should return if two cards are adjacent', () => {
   expect(isAdjacent(cardA1, cardA1)).toBeFalsy();
@@ -31,8 +32,8 @@ it('should return if the player can select a given card', () => {
   expect(canSelectCard(cardA1, [cardB1, cardZ1])).toBeTruthy();
   expect(canSelectCard(cardA1, [cardB1, cardZ1])).toBeTruthy();
   expect(canSelectCard(cardA1, [cardA2, cardA3])).toBeTruthy();
+  expect(canSelectCard(cardA1, [cardA3])).toBeTruthy();
   expect(canSelectCard(cardA1, [cardB2])).toBeFalsy();
-  expect(canSelectCard(cardA1, [cardA3])).toBeFalsy();
 });
 
 it('should return if the player can drop the given cards', () => {

@@ -6,6 +6,7 @@ import rooms from '../rooms';
 
 const mockRooms = jest.fn();
 
+jest.mock('../dispatcher.ts');
 jest.mock('../room');
 jest.mock('../rooms', () => ({
   __esModule: true,

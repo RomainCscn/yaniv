@@ -29,6 +29,9 @@ const App = () => {
       });
     });
 
+    images.push(getCardImagePath({ suit: 'joker', value: 0 }));
+    images.push(`${process.env.PUBLIC_URL}back.svg`);
+
     cacheImages(images);
   }, []);
 
