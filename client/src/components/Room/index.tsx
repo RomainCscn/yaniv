@@ -5,7 +5,7 @@ import OtherPlayers from '../Player/OtherPlayers';
 import ThrownCards from '../ThrownCards';
 import Stack from '../Stack';
 import client, { send } from '../../core/client';
-import { canDropCards } from '../../core/game';
+import { canDropCards, getCardsAfterPick } from '../../core/game';
 import reducer from '../../reducers';
 import { Card, Player, PlayerScore, ReceivedMessage } from '../../types';
 import ScoreDashboard from '../ScoreDashboard';
@@ -89,24 +89,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
 
   const pickCard = (card?: Card) => {
     if (canDropCards(state.selectedCards)) {
-      let cards = {};
-      if (card && state.thrownCards.length > 1) {
-        // remove picked card from the thrown one
-        const remainingThrownCards = state.thrownCards.filter(
-          (thrownCard: Card) => thrownCard.value !== card.value || thrownCard.suit !== card.suit,
-        );
-
-        cards = {
-          pickedCard: card,
-          notPickedCards: remainingThrownCards,
-          thrownCards: state.selectedCards,
-        };
-      } else {
-        cards = {
-          ...(card ? { pickedCard: card } : { notPickedCards: state.thrownCards }),
-          thrownCards: state.selectedCards,
-        };
-      }
+      const cards = getCardsAfterPick(card, state.selectedCards, state.thrownCards);
 
       resetSelectedCards();
       send(roomId, { action: 'PLAY', actionType: 'DROP_AND_PICK' }, { ...cards });

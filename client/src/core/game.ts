@@ -36,4 +36,24 @@ const canDropCards = (selectedCards: Card[]) => {
   return isUniqueValue || isConsecutive;
 };
 
-export { canDropCards, canSelectCard, isAdjacent, isSameValue };
+const getCardsAfterPick = (card: undefined | Card, selectedCards: Card[], thrownCards: Card[]) => {
+  if (card && thrownCards.length > 1) {
+    // remove picked card from the thrown one
+    const remainingThrownCards = thrownCards.filter(
+      (thrownCard: Card) => thrownCard.value !== card.value || thrownCard.suit !== card.suit,
+    );
+
+    return {
+      pickedCard: card,
+      notPickedCards: remainingThrownCards,
+      thrownCards: selectedCards,
+    };
+  } else {
+    return {
+      ...(card ? { pickedCard: card } : { notPickedCards: thrownCards }),
+      thrownCards: selectedCards,
+    };
+  }
+};
+
+export { canDropCards, canSelectCard, getCardsAfterPick, isAdjacent, isSameValue };
