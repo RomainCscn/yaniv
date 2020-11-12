@@ -44,6 +44,7 @@ const Lobby = () => {
           setPlayers(players);
         } else if (type === 'START_GAME') {
           setPlayer((prevPlayer) => ({ ...prevPlayer, uuid }));
+          setPlayers(players);
           setPlay(true);
         }
       };
