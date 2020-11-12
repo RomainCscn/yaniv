@@ -16,6 +16,7 @@ interface PlayerHandProps {
   hand: Card[];
   player: Player;
   quickPlayDone: boolean;
+  resetSelectedCards: () => void;
   roomId: string;
   score: number;
   selectCard: any;
@@ -30,6 +31,7 @@ const PlayerHand = ({
   hand,
   player,
   quickPlayDone,
+  resetSelectedCards,
   roomId,
   score,
   selectCard,
@@ -48,6 +50,7 @@ const PlayerHand = ({
   }
 
   const quickPlay = (card: Card) => {
+    resetSelectedCards();
     send(
       roomId,
       { action: 'PLAY', actionType: 'QUICK_PLAY' },

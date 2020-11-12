@@ -85,6 +85,8 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
     };
   }, [roomId, userUuid]);
 
+  const resetSelectedCards = () => dispatch({ type: 'resetSelectedCards' });
+
   const pickCard = (card?: Card) => {
     if (canDropCards(state.selectedCards)) {
       let cards = {};
@@ -106,7 +108,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
         };
       }
 
-      dispatch({ type: 'resetSelectedCards' });
+      resetSelectedCards();
       send(roomId, { action: 'PLAY', actionType: 'DROP_AND_PICK' }, { ...cards });
     }
   };
@@ -149,6 +151,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
         hand={hand}
         quickPlayDone={quickPlayDone}
         player={player!}
+        resetSelectedCards={resetSelectedCards}
         roomId={roomId}
         score={scores.find((score) => score.uuid === userUuid)?.score || 0}
         selectCard={selectCard}
