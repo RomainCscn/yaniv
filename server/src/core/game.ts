@@ -38,7 +38,7 @@ const getSuffledDeck = (): Card[] => shuffle(getDeck());
 
 const sortHand = (hand: Card[]): Card[] => {
   return hand
-    .sort((a, b) => b.value - a.value)
+    .sort((a, b) => a.value - b.value)
     .sort((a, b) => {
       if (a.suit < b.suit) {
         return -1;

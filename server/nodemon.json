@@ -6,6 +6,6 @@
   "watch": [
     "./"
   ],
-  "exec": "npm start",
+  "exec": "ts-node src/index.ts",
   "ext": "ts"
 }
