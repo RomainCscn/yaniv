@@ -4,7 +4,7 @@ import { Card } from '../types';
 const getCardValue = (card: Card): number => (card.value <= 10 ? card.value : 10);
 
 const getDeck = () => {
-  const deck = [];
+  const deck: Card[] = [];
 
   for (let i = 0; i < SUITS.length; i++) {
     for (let j = 0; j < VALUES.length; j++) {
@@ -12,6 +12,9 @@ const getDeck = () => {
       deck.push(card);
     }
   }
+
+  deck.push({ suit: 'joker', value: 0 });
+  deck.push({ suit: 'joker', value: 0 });
 
   return deck;
 };
