@@ -1,8 +1,8 @@
-import { SUITS, VALUES } from './constants';
+import { JOKER, SUITS, VALUES } from './constants';
 
 export interface Card {
-  suit: typeof SUITS[number];
-  value: typeof VALUES[number];
+  suit: typeof SUITS[number] | typeof JOKER;
+  value: typeof VALUES[number] | 0;
 }
 
 interface CustomError {

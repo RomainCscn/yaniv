@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useReducer, useMemo } from 'react';
 
+import EndRound from '../EndRound';
 import MainPlayer from '../Player/MainPlayer';
 import OtherPlayers from '../Player/OtherPlayers';
 import ThrownCards from '../ThrownCards';
@@ -11,7 +12,6 @@ import { Card, Player, PlayerScore, ReceivedMessage } from '../../types';
 import ScoreDashboard from '../ScoreDashboard';
 
 import styles from './styles.module.css';
-import EndRound from '../EndRound';
 
 interface RoomProps {
   players: Player[];

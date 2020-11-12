@@ -7,20 +7,28 @@ const isSameValue = (cardA: Card, cardB: Card) => cardA.value === cardB.value;
 const isAdjacent = (cardA: Card, cardB: Card) =>
   cardA.suit === cardB.suit && (cardA.value === cardB.value - 1 || cardA.value === cardB.value + 1);
 
+const isAdjacentWithJoker = (cardA: Card, cardB: Card) =>
+  cardA.suit === cardB.suit && (cardA.value === cardB.value - 2 || cardA.value === cardB.value + 2);
+
 const canSelectCard = (card: Card, selectedCards: Card[]) => {
   if (selectedCards.length <= 0) {
     return true;
   }
 
+  if (selectedCards.length === 1 && selectedCards[0].suit === 'joker') {
+    return true;
+  }
+
+  const isJoker = card.suit === 'joker';
   const sameValue = selectedCards.filter((c) => !isSameValue(card, c)).length <= 0;
-
   const hasOneAdjacent = selectedCards.find((c) => isAdjacent(card, c));
+  const hasOneAdjacentWithJoker = selectedCards.find((c) => isAdjacentWithJoker(card, c));
 
-  return sameValue || !!hasOneAdjacent;
+  return sameValue || !!hasOneAdjacent || !!hasOneAdjacentWithJoker || isJoker;
 };
 
 const canDropCards = (selectedCards: Card[]) => {
-  if (selectedCards.length === 1) return true;
+  if (selectedCards.length === 1) return selectedCards[0].suit !== 'joker';
 
   const uniqueCardsValue = new Set(selectedCards.map((c) => c.value));
   const isUniqueValue = Array.from(uniqueCardsValue).length === 1;
@@ -33,7 +41,18 @@ const canDropCards = (selectedCards: Card[]) => {
   const isConsecutive =
     CARDS_VALUE_SEQUENCES.indexOf(consecutiveCards) !== -1 && selectedCards.length >= 3;
 
-  return isUniqueValue || isConsecutive;
+  const cardsWithoutJoker = selectedCards
+    .filter((c) => c.suit !== 'joker')
+    .sort((a, b) => a.value - b.value);
+
+  const isConsecutiveWithJoker =
+    consecutiveCards[0] === '0' &&
+    cardsWithoutJoker.some(
+      (card, index) =>
+        cardsWithoutJoker[index + 1] && card.value + 2 === cardsWithoutJoker[index + 1].value,
+    );
+
+  return isUniqueValue || isConsecutive || isConsecutiveWithJoker;
 };
 
 const getCardsAfterPick = (card: undefined | Card, selectedCards: Card[], thrownCards: Card[]) => {
