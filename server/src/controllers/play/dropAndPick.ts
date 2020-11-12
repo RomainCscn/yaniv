@@ -19,6 +19,8 @@ export const handleDropAndPick = (
     );
   });
 
+  let newCardInHand = pickedCard;
+
   // player picked one card from mutiple thrown cards
   if (pickedCard && notPickedCards) {
     user.hand = sortHand([...user.hand, pickedCard]);
@@ -28,13 +30,14 @@ export const handleDropAndPick = (
     user.hand = sortHand([...user.hand, pickedCard]);
     // player picked one card from the stack
   } else if (notPickedCards) {
+    newCardInHand = room.deck[0];
     user.hand = sortHand([...user.hand, room.deck[0]]);
     room.deck = room.deck.slice(1);
     room.deck.push(...notPickedCards);
   }
 
   // send the hand to the user who picked the card
-  user.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: user.hand }));
+  user.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: user.hand, newCardInHand }));
 
   const playersUuid = Object.entries(room.users).map(([uuid]) => uuid);
   const activePlayerIndex = playersUuid.indexOf(room.activePlayer as string);

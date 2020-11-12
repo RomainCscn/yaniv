@@ -43,6 +43,26 @@
   margin-right: 0;
 }
 
+.new {
+  animation: newCard 2s forwards;
+}
+
+@keyframes newCard {
+  0% {
+    opacity: 0;
+    top: -64px;
+  }
+
+  50% {
+    opacity: 75;
+  }
+
+  100% {
+    opacity: 1;
+    top: 0;
+  }
+}
+
 .selected {
   margin-bottom: 36px;
 }

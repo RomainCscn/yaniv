@@ -8,6 +8,7 @@ interface CardProps {
   canQuickPlay: boolean;
   card: Card;
   isLast: boolean;
+  isNew: boolean;
   quickPlay: (card: Card) => void;
   selectCard: (card: Card) => void;
   selectedCards: Card[];
@@ -18,6 +19,7 @@ const CardComponent = ({
   canQuickPlay,
   card,
   isLast,
+  isNew,
   quickPlay,
   selectCard,
   selectedCards,
@@ -44,6 +46,7 @@ const CardComponent = ({
       card={card}
       cardType={'hand'}
       isLast={isLast}
+      isNew={isNew}
       onCardClick={onCardClick}
       onCardDoubleClick={onCardDoubleClick}
       isSelected={isSelected}

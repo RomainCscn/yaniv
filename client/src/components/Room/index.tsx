@@ -29,6 +29,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
   const [activePlayer, setActivePlayer] = useState<string>('');
   const [canPlay, setCanPlay] = useState(false);
   const [hand, setHand] = useState<Card[]>([]);
+  const [newCard, setNewCard] = useState<Card>();
   const [scores, setScores] = useState<PlayerScore[]>([]);
   const [roundWinner, setRoundWinner] = useState<Player>();
   const [gameWinner, setGameWinner] = useState<Player>();
@@ -44,6 +45,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
     client.onmessage = (message) => {
       const {
         hand: userHand,
+        newCardInHand,
         players,
         playersCard,
         playersScore,
@@ -56,6 +58,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
 
       if (type === 'SET_PLAYER_HAND') {
         setHand(userHand);
+        setNewCard(newCardInHand);
       } else if (type === 'SET_THROWN_CARDS') {
         setQuickPlayDone(false);
         dispatch({ type: 'setThrownCards', payload: thrownCards });
@@ -132,6 +135,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
       <MainPlayer
         canPlay={canPlay}
         hand={hand}
+        newCard={newCard}
         quickPlayDone={quickPlayDone}
         player={player!}
         resetSelectedCards={resetSelectedCards}

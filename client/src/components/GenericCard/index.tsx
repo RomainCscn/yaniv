@@ -12,7 +12,7 @@ interface GenericCardProps {
   canClick: boolean;
   cardType?: 'false' | 'hand' | 'otherPlayer' | 'stack';
   degree?: number;
-  isHand?: boolean;
+  isNew?: boolean;
   isLast?: boolean;
   isSelected?: boolean;
   onCardClick?: (() => void) | ((e: React.MouseEvent) => void);
@@ -25,6 +25,7 @@ const GenericCard = ({
   cardType,
   degree,
   isLast,
+  isNew,
   isSelected,
   onCardClick,
   onCardDoubleClick,
@@ -36,6 +37,7 @@ const GenericCard = ({
       [styles.pointer]: canClick,
       [styles.selected]: isSelected,
       [styles.last]: isLast,
+      [styles.new]: isNew,
     })}
     style={{
       rotate: degree ? `${degree}deg` : '0',

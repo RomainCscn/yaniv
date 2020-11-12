@@ -1,6 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
+import { MIN_VALUE_TO_SUBMIT } from '../../constants';
 import { send } from '../../core/client';
 import { Card } from '../../types';
 
@@ -11,8 +12,6 @@ interface YanivButtonProps {
   hand: Card[];
   roomId: string;
 }
-
-const MIN_VALUE_TO_SUBMIT = 100;
 
 const getCardValue = (card: Card) => (card.value <= 10 ? card.value : 10);
 

@@ -1,8 +1,7 @@
+import { SCORE_LIMIT } from '../../constants';
 import { getFormattedPlayer } from '../../core/room';
 import { getCardValue, getSmallestScore } from '../../core/game';
 import { Room, User } from '../../types';
-
-const SCORE_LIMIT = 100;
 
 const getScores = (room: Room): { uuid: string; score: number }[] => {
   const usersScore: { uuid: string; score: number }[] = [];

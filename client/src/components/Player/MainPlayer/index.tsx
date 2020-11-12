@@ -14,6 +14,7 @@ import styles from './styles.module.css';
 interface PlayerHandProps {
   canPlay: boolean;
   hand: Card[];
+  newCard?: Card;
   player: Player;
   quickPlayDone: boolean;
   resetSelectedCards: () => void;
@@ -29,6 +30,7 @@ const getCardValue = (card: Card): number => (card.value <= 10 ? card.value : 10
 const PlayerHand = ({
   canPlay,
   hand,
+  newCard,
   player,
   quickPlayDone,
   resetSelectedCards,
@@ -70,6 +72,7 @@ const PlayerHand = ({
             }
             card={card}
             isLast={index === hand.length - 1}
+            isNew={!!newCard && card.suit === newCard.suit && card.value === newCard.value}
             quickPlay={quickPlay}
             selectCard={selectCard}
             selectedCards={selectedCards}

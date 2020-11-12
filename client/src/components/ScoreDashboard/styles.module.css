@@ -8,7 +8,7 @@
   color: #2c5282;
   max-height: 400px;
   display: block;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .tableHeader {

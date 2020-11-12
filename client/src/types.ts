@@ -27,6 +27,7 @@ export type PlayerScore = {
 export interface ReceivedMessage {
   error: CustomError;
   hand: Card[];
+  newCardInHand?: Card;
   player: Player;
   players: Player[];
   playersCard: Record<string, Card[]>;
