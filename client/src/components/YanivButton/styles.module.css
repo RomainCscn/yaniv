@@ -1,13 +1,20 @@
 .button {
   padding: 12px;
   font-size: 2rem;
+  height: 60px;
   font-weight: bold;
   border: none;
   border-radius: 12px;
   background-color: #81c784;
+  border-bottom: 4px solid #064709;
   color: #064709;
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.button:active {
+  transform: translateY(2px);
+  border-bottom: 2px solid #81c784;
 }
 
 .pointer {
