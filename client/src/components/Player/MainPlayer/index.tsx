@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import CardComponent from './HandCard';
 import ActualScore from '../Score/ActualScore';
@@ -40,16 +40,35 @@ const PlayerHand = ({
   selectedCards,
   thrownCards,
 }: PlayerHandProps) => {
-  let sameValueCard: Card[] = [];
   const handScore = hand.reduce((sum, card) => (sum += getCardValue(card)), 0);
 
-  const isPair = thrownCards.length === 2;
-  const uniqueValues = [...new Set(thrownCards.map((c) => c.value))].length === 1;
-  const isThreeCardsOfSameValue = thrownCards.length === 3 && uniqueValues;
+  const canQuickPlay = useCallback(
+    (card: Card) => {
+      let sameValueCards: Card[] = [];
+      const uniqueValues = [...new Set(thrownCards.map((c) => c.value))].length === 1;
 
-  if (!quickPlayDone && hand.length > 1 && (isPair || isThreeCardsOfSameValue)) {
-    sameValueCard = hand.filter((card) => card.value === thrownCards[0].value);
-  }
+      const isSingleCard = thrownCards.length === 1;
+      const isPair = thrownCards.length === 2;
+      const isThreeCardsOfSameValue = thrownCards.length === 3 && uniqueValues;
+
+      if (!quickPlayDone && hand.length > 1 && (isPair || isThreeCardsOfSameValue)) {
+        sameValueCards = hand.filter((card) => card.value === thrownCards[0].value);
+      }
+
+      const isNewCard = !!newCard && card.suit === newCard.suit && card.value === newCard.value;
+
+      const canDropNewCard =
+        isNewCard &&
+        (isSingleCard || isPair || isThreeCardsOfSameValue) &&
+        card.value === thrownCards[0].value;
+
+      const cardIsSameValueAsThrownsOne =
+        sameValueCards.findIndex((c) => card.suit === c.suit && card.value === c.value) !== -1;
+
+      return canDropNewCard || cardIsSameValueAsThrownsOne;
+    },
+    [hand, newCard, quickPlayDone, thrownCards],
+  );
 
   const quickPlay = (card: Card) => {
     resetSelectedCards();
@@ -65,11 +84,9 @@ const PlayerHand = ({
       <div className={styles.handContainer}>
         {hand.map((card, index) => (
           <CardComponent
-            key={getCardUniqueIndex(card)}
+            key={getCardUniqueIndex(card) + index}
             canPlay={canPlay}
-            canQuickPlay={
-              sameValueCard.findIndex((c) => card.suit === c.suit && card.value === c.value) !== -1
-            }
+            canQuickPlay={canQuickPlay(card)}
             card={card}
             isLast={index === hand.length - 1}
             isNew={!!newCard && card.suit === newCard.suit && card.value === newCard.value}
