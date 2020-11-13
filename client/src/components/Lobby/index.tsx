@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
+import HowToPlay from './HowToPlay';
 import Players from './Players';
 import Profile from './Profile';
 import ShareLink from './ShareLink';
@@ -63,6 +64,7 @@ const Lobby = () => {
             <Players players={players} roomId={roomId} username={player.username} />
             <Profile player={player} roomId={roomId} setPlayer={setPlayer} />
           </div>
+          <HowToPlay />
         </div>
       )}
     </div>

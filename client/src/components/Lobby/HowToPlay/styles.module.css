@@ -1,0 +1,16 @@
+.container {
+  max-width: 600px;
+  padding: 6px 16px;
+}
+
+.link,
+.link:visited {
+  text-align: center;
+  font-weight: bold;
+  color: #2b6cb0;
+  margin-right: 24px;
+}
+
+.container li {
+  margin-bottom: 12px;
+}
