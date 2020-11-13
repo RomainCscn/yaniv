@@ -36,6 +36,16 @@ const HowToPlay = () => {
           <li>
             Si vous avez <b>7 ou moins</b> dans votre main, appuyez sur le bouton Yaniv pour
             terminer la manche
+            <ul>
+              <li>
+                Vous gagnez si aucun autre joueur n'a un score inférieur ou égal au vôtre et marquez{' '}
+                <b>0 point</b>.
+              </li>
+              <li>
+                Vous perdez si au moins un autre joueur a un score inférieur ou égal au vôtre et
+                vous marquez <b>30 points + la valeur de votre main</b>.
+              </li>
+            </ul>
           </li>
           <li>Les valeurs des cartes sont :</li>
           <ul>
@@ -52,6 +62,10 @@ const HowToPlay = () => {
               Les Jokers valent <b>0</b>.
             </li>
           </ul>
+          <li>
+            La partie se termine lorsqu'un joueur atteint <b>200 points</b>. Le <b>gagnant</b> est
+            le joueur avec le moins de points.
+          </li>
         </ul>
       </p>
       <p>
