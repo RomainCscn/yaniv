@@ -3,6 +3,7 @@ import React, { useEffect, useState, useReducer, useMemo } from 'react';
 import EndRound from '../EndRound';
 import MainPlayer from '../Player/MainPlayer';
 import OtherPlayers from '../Player/OtherPlayers';
+import PickedCardAnnouncement from '../PickedCardAnnouncement';
 import ThrownCards from '../ThrownCards';
 import Stack from '../Stack';
 import client, { send } from '../../core/client';
@@ -30,6 +31,8 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
   const [canPlay, setCanPlay] = useState(false);
   const [hand, setHand] = useState<Card[]>([]);
   const [newCard, setNewCard] = useState<Card>();
+  const [pickedCard, setPickedCard] = useState<Card>();
+  const [previousPlayer, setPreviousPlayer] = useState<Player>();
   const [scores, setScores] = useState<PlayerScore[]>([]);
   const [roundWinner, setRoundWinner] = useState<Player>();
   const [gameWinner, setGameWinner] = useState<Player>();
@@ -46,9 +49,11 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
       const {
         hand: userHand,
         newCardInHand,
+        pickedCard,
         players,
         playersCard,
         playersScore,
+        previousPlayer,
         thrownCards,
         roundWinner,
         type,
@@ -62,6 +67,9 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
       } else if (type === 'SET_THROWN_CARDS') {
         setQuickPlayDone(false);
         dispatch({ type: 'setThrownCards', payload: thrownCards });
+      } else if (type === 'SET_PICKED_CARD') {
+        setPreviousPlayer(previousPlayer);
+        setPickedCard(pickedCard);
       } else if (type === 'SET_OTHER_PLAYERS_CARDS') {
         const otherPlayers = players.filter((player) => player.uuid !== userUuid);
         dispatch({ type: 'setOtherPlayers', payload: otherPlayers });
@@ -113,13 +121,18 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
         scores={scores}
       />
       {!roundWinner && (
-        <div className={styles.cardsArea}>
-          <ThrownCards
-            canPlay={canPlay && state.selectedCards.length > 0}
-            pickCard={pickCard}
-            thrownCards={state.thrownCards}
-          />
-          <Stack canPlay={canPlay && state.selectedCards.length > 0} pickCard={pickCard} />
+        <div>
+          <div className={styles.cardsArea}>
+            <ThrownCards
+              canPlay={canPlay && state.selectedCards.length > 0}
+              pickCard={pickCard}
+              thrownCards={state.thrownCards}
+            />
+            <Stack canPlay={canPlay && state.selectedCards.length > 0} pickCard={pickCard} />
+          </div>
+          {previousPlayer && previousPlayer.uuid !== userUuid && (
+            <PickedCardAnnouncement previousPlayer={previousPlayer} pickedCard={pickedCard} />
+          )}
         </div>
       )}
       {(gameWinner || roundWinner) && (

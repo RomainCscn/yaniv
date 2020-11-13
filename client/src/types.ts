@@ -28,10 +28,12 @@ export interface ReceivedMessage {
   error: CustomError;
   hand: Card[];
   newCardInHand?: Card;
+  pickedCard?: Card;
   player: Player;
   players: Player[];
   playersCard: Record<string, Card[]>;
   playersScore: PlayerScore[];
+  previousPlayer: Player;
   thrownCards: Card[];
   roundWinner: Player;
   type: ReceivedMessageType;
@@ -47,6 +49,7 @@ export type ReceivedMessageType =
   | 'SET_ACTIVE_PLAYER'
   | 'SET_INTIAL_SCORES'
   | 'SET_PLAYER_HAND'
+  | 'SET_PICKED_CARD'
   | 'SET_OTHER_PLAYERS_CARDS'
   | 'SET_THROWN_CARDS'
   | 'START_GAME';

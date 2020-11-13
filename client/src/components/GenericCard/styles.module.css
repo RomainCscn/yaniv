@@ -29,6 +29,7 @@
 .stackCard {
   width: 126px;
   height: 175px;
+  margin-right: 0px;
   position: relative;
   transition: all 0.1s ease-in;
 }
