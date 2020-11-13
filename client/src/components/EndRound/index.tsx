@@ -38,11 +38,11 @@ const EndRound = ({ gameWinner, roomId, roundWinner, userUuid }: Props) => {
         roundWinner && (
           <div className={styles.roundWinnerContainer}>
             <div style={{ marginBottom: '24px' }} className={styles.winnerText}>
-              {roundWinner.uuid === userUuid ? 'GAGNÉ 🥳' : 'PERDU 😕'}
+              {roundWinner.uuid === userUuid ? 'GAGNÉ 🥳' : 'PERDU !'}
             </div>
             {roundWinner.uuid !== userUuid && (
               <div className={styles.winnerAvatarContainer}>
-                Gagnant de la manche
+                <div>Gagnant de la manche</div>
                 <Avatar id={roundWinner.avatar} />
                 <span className={styles.winnerUsername}>{roundWinner.username}</span>
               </div>

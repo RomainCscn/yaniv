@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import { MIN_VALUE_TO_SUBMIT } from '../../constants';
+import { MAX_VALUE_TO_SUBMIT } from '../../constants';
 import { send } from '../../core/client';
 import { Card } from '../../types';
 
@@ -20,7 +20,7 @@ const canSubmitYaniv = (hand: Card[], canClick: boolean): boolean => {
     return sum + getCardValue(card);
   }, 0);
 
-  return canClick && handSum <= MIN_VALUE_TO_SUBMIT;
+  return canClick && handSum <= MAX_VALUE_TO_SUBMIT;
 };
 
 const YanivButton = ({ hand, canClick, roomId }: YanivButtonProps) => {
