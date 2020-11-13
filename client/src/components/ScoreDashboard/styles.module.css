@@ -27,7 +27,7 @@
 }
 
 .button {
-  padding: 12px;
+  padding: 0 12px;
   font-size: 1rem;
   font-weight: bold;
   border: 1px solid #2c5282;
