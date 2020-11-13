@@ -1,7 +1,7 @@
 import { sendPlayersUpdate } from '../core/dispatcher';
-import initRoom, { addUser, getFormattedPlayers } from '../core/room';
+import initRoom, { addUser } from '../core/room';
 import rooms from '../core/rooms';
-import { CustomWebSocket, User } from '../types';
+import { CustomWebSocket } from '../types';
 
 const isExistingUser = (roomId: string, userUuid: string) =>
   typeof rooms[roomId].users[userUuid] === 'object';

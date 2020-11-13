@@ -11,6 +11,7 @@ import {
   handleUpdate,
 } from './controllers';
 import { handleWebSocketClosed } from './core/network';
+import logger from './logger';
 import { CustomWebSocket } from './types';
 
 const app = express();
@@ -20,6 +21,8 @@ const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws: CustomWebSocket) => {
   const userUuid = uuidv4();
+  logger.info({ userUuid }, 'User connected');
+
   ws.isAlive = true;
 
   ws.on('pong', () => {
@@ -52,6 +55,8 @@ wss.on('connection', (ws: CustomWebSocket) => {
   });
 
   ws.onclose = () => {
+    logger.info({ userUuid }, 'WebSocket closed');
+
     handleWebSocketClosed(userUuid);
   };
 });
@@ -60,7 +65,11 @@ const interval = setInterval(() => {
   wss.clients.forEach((ws: WebSocket) => {
     const customWs = ws as CustomWebSocket;
 
-    if (!customWs.isAlive) return customWs.terminate();
+    if (!customWs.isAlive) {
+      logger.warn('User disconnected due to inactive WebSocket');
+
+      return customWs.terminate();
+    }
 
     customWs.isAlive = false;
     customWs.ping(null, undefined);

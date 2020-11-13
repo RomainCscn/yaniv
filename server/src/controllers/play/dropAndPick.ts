@@ -41,6 +41,7 @@ export const handleDropAndPick = (
 
   const playersUuid = Object.entries(room.users).map(([uuid]) => uuid);
   const activePlayerIndex = playersUuid.indexOf(room.activePlayer as string);
+
   const nextPlayerUuid =
     activePlayerIndex === playersUuid.length - 1
       ? playersUuid[0]
