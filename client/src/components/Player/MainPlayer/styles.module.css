@@ -19,6 +19,17 @@
   min-height: 246px;
 }
 
+@media screen and (max-height: 900px) {
+  .handContainer {
+    min-height: 170px;
+  }
+
+  .button {
+    position: absolute;
+    top: 76px;
+  }
+}
+
 .avatarContainer {
   display: flex;
   align-items: center;

@@ -17,3 +17,9 @@
   display: flex;
   justify-content: center;
 }
+
+@media screen and (max-height: 900px) {
+  .cardsArea {
+    margin-top: 0;
+  }
+}
