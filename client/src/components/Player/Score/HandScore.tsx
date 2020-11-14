@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import { ReactComponent as CardsIcons } from '../../../assets/cards-diamonds.svg';
+import { ReactComponent as CardsIcons } from '../../../assets/playing-cards.svg';
 
 import styles from './styles.module.css';
 

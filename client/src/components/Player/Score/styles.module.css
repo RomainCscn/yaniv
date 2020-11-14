@@ -3,7 +3,6 @@
   color: #2c7a7b;
   padding: 6px;
   font-weight: bold;
-  width: 56px;
   height: 36px;
   display: flex;
   justify-content: center;
@@ -12,6 +11,7 @@
 
 .handScore {
   color: #4c51bf;
+  width: 46px;
 }
 
 .noBorder {

@@ -19,7 +19,7 @@
   min-height: 246px;
 }
 
-@media screen and (max-height: 900px) {
+@media screen and (max-height: 850px) {
   .handContainer {
     min-height: 170px;
   }

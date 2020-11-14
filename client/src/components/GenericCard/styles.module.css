@@ -40,7 +40,7 @@
   height: 75px;
 }
 
-@media screen and (max-height: 900px) {
+@media screen and (max-height: 850px) {
   .baseCard {
     width: 90px;
     height: 125px;
