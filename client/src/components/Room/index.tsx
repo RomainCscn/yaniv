@@ -30,7 +30,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
   const [activePlayer, setActivePlayer] = useState<string>('');
   const [canPlay, setCanPlay] = useState(false);
   const [hand, setHand] = useState<Card[]>([]);
-  const [newCard, setNewCard] = useState<Card>();
+  const [newCard, setNewCard] = useState<{ card: Card; isFromStack: boolean }>();
   const [pickedCard, setPickedCard] = useState<Card>();
   const [previousPlayer, setPreviousPlayer] = useState<Player>();
   const [scores, setScores] = useState<PlayerScore[]>([]);
@@ -70,6 +70,9 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
       } else if (type === 'SET_PICKED_CARD') {
         setPreviousPlayer(previousPlayer);
         setPickedCard(pickedCard);
+        if (previousPlayer.uuid !== userUuid) {
+          setNewCard(undefined); // reset new card if a card is picked by another player
+        }
       } else if (type === 'SET_OTHER_PLAYERS_CARDS') {
         const otherPlayers = players.filter((player) => player.uuid !== userUuid);
         dispatch({ type: 'setOtherPlayers', payload: otherPlayers });

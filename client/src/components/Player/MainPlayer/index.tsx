@@ -14,7 +14,7 @@ import styles from './styles.module.css';
 interface PlayerHandProps {
   canPlay: boolean;
   hand: Card[];
-  newCard?: Card;
+  newCard?: { card: Card; isFromStack: boolean };
   player: Player;
   quickPlayDone: boolean;
   resetSelectedCards: () => void;
@@ -41,7 +41,7 @@ const PlayerHand = ({
   thrownCards,
 }: PlayerHandProps) => {
   const handScore = hand.reduce((sum, card) => (sum += getCardValue(card)), 0);
-
+  console.log({ newCard });
   const canQuickPlay = useCallback(
     (card: Card) => {
       let sameValueCards: Card[] = [];
@@ -55,10 +55,14 @@ const PlayerHand = ({
         sameValueCards = hand.filter((card) => card.value === thrownCards[0].value);
       }
 
-      const isNewCard = !!newCard && card.suit === newCard.suit && card.value === newCard.value;
+      const isNewCardFromStack =
+        !!newCard &&
+        newCard.isFromStack &&
+        card.suit === newCard.card.suit &&
+        card.value === newCard.card.value;
 
       const canDropNewCard =
-        isNewCard &&
+        isNewCardFromStack &&
         (isSingleCard || isPair || isThreeCardsOfSameValue) &&
         card.value === thrownCards[0].value;
 
@@ -89,7 +93,9 @@ const PlayerHand = ({
             canQuickPlay={canQuickPlay(card)}
             card={card}
             isLast={index === hand.length - 1}
-            isNew={!!newCard && card.suit === newCard.suit && card.value === newCard.value}
+            isNew={
+              !!newCard && card.suit === newCard.card.suit && card.value === newCard.card.value
+            }
             quickPlay={quickPlay}
             selectCard={selectCard}
             selectedCards={selectedCards}

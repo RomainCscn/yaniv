@@ -1,4 +1,4 @@
-import { getPlayerByUuid } from '../core/room';
+import { getPlayerByUuid, getPlayersScore } from '../core/room';
 import rooms from '../core/rooms';
 import { User } from '../types';
 
@@ -14,12 +14,7 @@ const handleReadyToPlay = (roomId: string, userUuid: string): void => {
     rooms[roomId].activePlayer = firstPlayerUuid;
   }
 
-  const playersScore = Object.entries(rooms[roomId].users).map(([uuid, user]: [string, User]) => ({
-    score: user.score,
-    scoreHistory: user.scoreHistory,
-    uuid,
-    username: user.username,
-  }));
+  const playersScore = getPlayersScore(rooms[roomId]);
 
   player.ws.send(JSON.stringify({ type: 'SET_ACTIVE_PLAYER', uuid: rooms[roomId].activePlayer }));
   player.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: player.hand }));

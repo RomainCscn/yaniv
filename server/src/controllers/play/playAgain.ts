@@ -1,5 +1,10 @@
 import { Room, User } from '../../types';
-import { assignHandToPlayer, getFormattedPlayers, resetDeck } from '../../core/room';
+import {
+  assignHandToPlayer,
+  getFormattedPlayers,
+  getPlayersScore,
+  resetDeck,
+} from '../../core/room';
 
 export const handlePlayAgain = (room: Room): void => {
   resetDeck(room, { resetScore: true });
@@ -7,6 +12,9 @@ export const handlePlayAgain = (room: Room): void => {
   Object.entries(room.users).forEach(([, user]: [string, User]) => {
     assignHandToPlayer(room, user);
     user.ws.send(JSON.stringify({ type: 'NEW_ROUND' }));
+    user.ws.send(
+      JSON.stringify({ type: 'SET_INTIAL_SCORES', playersScore: getPlayersScore(room) }),
+    );
     user.ws.send(
       JSON.stringify({ type: 'SET_OTHER_PLAYERS_CARDS', players: getFormattedPlayers(room) }),
     );

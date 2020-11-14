@@ -64,11 +64,7 @@ export const handleEndRound = (room: Room, userUuid: string): void => {
 
     Object.entries(room.users).forEach(([, user]: [string, User]) => {
       user.ws.send(
-        JSON.stringify({
-          type: 'GAME_OVER',
-          playersScore,
-          winner: getFormattedPlayer(room, winner.uuid),
-        }),
+        JSON.stringify({ type: 'GAME_OVER', winner: getFormattedPlayer(room, winner.uuid) }),
       );
     });
   }

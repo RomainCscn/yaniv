@@ -62,6 +62,14 @@ export const getFormattedPlayer = (
   };
 };
 
+export const getPlayersScore = (room: Room): Pick<User, 'score' | 'scoreHistory' | 'username'>[] =>
+  Object.entries(room.users).map(([uuid, user]: [string, User]) => ({
+    score: user.score,
+    scoreHistory: user.scoreHistory,
+    uuid,
+    username: user.username,
+  }));
+
 export const resetDeck = (room: Room, { resetScore = false } = {}): void => {
   room.deck = getSuffledDeck();
   room.thrownCards = [];
