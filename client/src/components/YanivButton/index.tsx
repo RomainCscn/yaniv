@@ -3,6 +3,7 @@ import classnames from 'classnames';
 
 import { MAX_VALUE_TO_SUBMIT } from '../../constants';
 import { send } from '../../core/client';
+import { getCardValue } from '../../core/game';
 import { Card } from '../../types';
 
 import styles from './styles.module.css';
@@ -12,8 +13,6 @@ interface YanivButtonProps {
   hand: Card[];
   roomId: string;
 }
-
-const getCardValue = (card: Card) => (card.value <= 10 ? card.value : 10);
 
 const canSubmitYaniv = (hand: Card[], canClick: boolean): boolean => {
   const handSum = hand.reduce((sum: number, card) => {

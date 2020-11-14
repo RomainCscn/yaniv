@@ -10,6 +10,8 @@ const isAdjacent = (cardA: Card, cardB: Card) =>
 const isAdjacentWithJoker = (cardA: Card, cardB: Card) =>
   cardA.suit === cardB.suit && (cardA.value === cardB.value - 2 || cardA.value === cardB.value + 2);
 
+const getCardValue = (card: Card): number => (card.value <= 10 ? card.value : 10);
+
 const canSelectCard = (card: Card, selectedCards: Card[]) => {
   if (selectedCards.length <= 0) {
     return true;
@@ -75,4 +77,4 @@ const getCardsAfterPick = (card: undefined | Card, selectedCards: Card[], thrown
   }
 };
 
-export { canDropCards, canSelectCard, getCardsAfterPick, isAdjacent, isSameValue };
+export { canDropCards, canSelectCard, getCardValue, getCardsAfterPick, isAdjacent, isSameValue };

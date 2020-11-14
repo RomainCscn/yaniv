@@ -6,6 +6,7 @@ import HandScore from '../Score/HandScore';
 import Avatar from '../../Avatar/AvatarImage';
 import YanivButton from '../../YanivButton';
 import { send } from '../../../core/client';
+import { getCardValue } from '../../../core/game';
 import { getCardUniqueIndex } from '../../../core/utils';
 import { Card, Player } from '../../../types';
 
@@ -25,8 +26,6 @@ interface PlayerHandProps {
   thrownCards: Card[];
 }
 
-const getCardValue = (card: Card): number => (card.value <= 10 ? card.value : 10);
-
 const PlayerHand = ({
   canPlay,
   hand,
@@ -41,7 +40,7 @@ const PlayerHand = ({
   thrownCards,
 }: PlayerHandProps) => {
   const handScore = hand.reduce((sum, card) => (sum += getCardValue(card)), 0);
-  console.log({ newCard });
+
   const canQuickPlay = useCallback(
     (card: Card) => {
       let sameValueCards: Card[] = [];
