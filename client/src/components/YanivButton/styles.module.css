@@ -21,3 +21,10 @@
   cursor: pointer;
   opacity: 1;
 }
+
+@media screen and (max-height: 850px) {
+  .button {
+    font-size: 16px;
+    height: 42px;
+  }
+}

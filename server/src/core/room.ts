@@ -1,10 +1,18 @@
 import { getHand, getSuffledDeck } from './game';
 import rooms from './rooms';
 import { HAND_CARDS_NUMBER } from '../constants';
-import { CustomWebSocket, Room, User } from '../types';
+import { CustomWebSocket, Room, SortOrder, User } from '../types';
+
+interface FormattedPlayer {
+  avatar: string;
+  numberOfCards: number;
+  sortOrder: SortOrder;
+  username: string;
+  uuid: string;
+}
 
 export const assignHandToPlayer = (room: Room, user: User): void => {
-  const userHand = getHand(room.deck);
+  const userHand = getHand(room.deck, user.sortOrder);
 
   user.hand = userHand;
   room.deck = room.deck.slice(HAND_CARDS_NUMBER);
@@ -21,6 +29,7 @@ export const addUser = (
     hand: [],
     score: 0,
     scoreHistory: [],
+    sortOrder: 'asc',
     username,
     ws: userWs,
   };
@@ -38,25 +47,22 @@ export const findRoom = (userUuid: string): [string, Room] | [] => {
 
 export const getPlayerByUuid = (room: Room, userUuid: string): User => room.users[userUuid];
 
-export const getFormattedPlayers = (
-  room: Room,
-): { avatar: string; uuid: string; username: string; numberOfCards: number }[] =>
+export const getFormattedPlayers = (room: Room): FormattedPlayer[] =>
   Object.entries(room.users).map(([uuid, user]: [string, User]) => ({
     avatar: user.avatarId,
+    numberOfCards: user.hand.length,
+    sortOrder: user.sortOrder,
     uuid,
     username: user.username,
-    numberOfCards: user.hand.length,
   }));
 
-export const getFormattedPlayer = (
-  room: Room,
-  uuid: string,
-): { avatar: string; uuid: string; username: string; numberOfCards: number } => {
-  const { avatarId, hand, username } = room.users[uuid];
+export const getFormattedPlayer = (room: Room, uuid: string): FormattedPlayer => {
+  const { avatarId: avatar, hand, sortOrder, username } = room.users[uuid];
 
   return {
-    avatar: avatarId,
+    avatar,
     numberOfCards: hand.length,
+    sortOrder,
     username,
     uuid,
   };

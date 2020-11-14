@@ -26,11 +26,14 @@ export interface Room {
   users: Users;
 }
 
+export type SortOrder = 'asc' | 'desc';
+
 export interface User {
   avatarId: string;
   hand: Card[];
   score: number;
   scoreHistory: number[];
+  sortOrder: SortOrder;
   username: string;
   ws: CustomWebSocket;
 }

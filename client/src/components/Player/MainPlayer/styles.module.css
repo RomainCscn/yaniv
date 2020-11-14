@@ -5,10 +5,12 @@
   justify-content: center;
 }
 
-.button {
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
   position: absolute;
-  top: 126px;
-  right: -150px;
+  top: 92px;
+  right: -192px;
 }
 
 .handContainer {
@@ -24,9 +26,8 @@
     min-height: 170px;
   }
 
-  .button {
-    position: absolute;
-    top: 76px;
+  .buttonContainer {
+    top: 56px;
   }
 }
 

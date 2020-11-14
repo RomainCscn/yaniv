@@ -37,6 +37,7 @@ wss.on('connection', (ws: CustomWebSocket) => {
       notPickedCards,
       pickedCard,
       room: roomId,
+      sortOrder,
       thrownCards,
       username,
     } = JSON.parse(data);
@@ -44,7 +45,7 @@ wss.on('connection', (ws: CustomWebSocket) => {
     if (action === 'JOIN') {
       handleJoin(actionType, avatar, roomId, username, userUuid, ws);
     } else if (action === 'UPDATE') {
-      handleUpdate(roomId, userUuid, { avatar, username });
+      handleUpdate(roomId, userUuid, { avatar, sortOrder, username });
     } else if (action === 'START') {
       handleStart(roomId);
     } else if (action === 'READY_TO_PLAY') {

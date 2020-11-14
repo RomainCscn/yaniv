@@ -9,7 +9,7 @@ import Stack from '../Stack';
 import client, { send } from '../../core/client';
 import { canDropCards, getCardsAfterPick } from '../../core/game';
 import reducer from '../../reducers';
-import { Card, Player, PlayerScore, ReceivedMessage } from '../../types';
+import { Card, Player, PlayerScore, ReceivedMessage, SortOrder } from '../../types';
 import ScoreDashboard from '../ScoreDashboard';
 
 import styles from './styles.module.css';
@@ -32,6 +32,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
   const [hand, setHand] = useState<Card[]>([]);
   const [newCard, setNewCard] = useState<{ card: Card; isFromStack: boolean }>();
   const [pickedCard, setPickedCard] = useState<Card>();
+  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
   const [previousPlayer, setPreviousPlayer] = useState<Player>();
   const [scores, setScores] = useState<PlayerScore[]>([]);
   const [roundWinner, setRoundWinner] = useState<Player>();
@@ -54,6 +55,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
         playersCard,
         playersScore,
         previousPlayer,
+        sortOrder,
         thrownCards,
         roundWinner,
         type,
@@ -64,6 +66,8 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
       if (type === 'SET_PLAYER_HAND') {
         setHand(userHand);
         setNewCard(newCardInHand);
+      } else if (type === 'PLAYER_UPDATE') {
+        setSortOrder(sortOrder);
       } else if (type === 'SET_THROWN_CARDS') {
         setQuickPlayDone(false);
         dispatch({ type: 'setThrownCards', payload: thrownCards });
@@ -157,6 +161,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
         resetSelectedCards={resetSelectedCards}
         roomId={roomId}
         score={scores.find((score) => score.uuid === userUuid)?.score || 0}
+        sortOrder={sortOrder}
         selectCard={selectCard}
         selectedCards={state.selectedCards}
         thrownCards={state.thrownCards}

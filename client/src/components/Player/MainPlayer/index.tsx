@@ -4,11 +4,12 @@ import CardComponent from './HandCard';
 import ActualScore from '../Score/ActualScore';
 import HandScore from '../Score/HandScore';
 import Avatar from '../../Avatar/AvatarImage';
+import SortButton from '../../SortButton';
 import YanivButton from '../../YanivButton';
 import { send } from '../../../core/client';
 import { getCardValue } from '../../../core/game';
 import { getCardUniqueIndex } from '../../../core/utils';
-import { Card, Player } from '../../../types';
+import { Card, Player, SortOrder } from '../../../types';
 
 import styles from './styles.module.css';
 
@@ -23,6 +24,7 @@ interface PlayerHandProps {
   score: number;
   selectCard: any;
   selectedCards: Card[];
+  sortOrder?: SortOrder;
   thrownCards: Card[];
 }
 
@@ -37,6 +39,7 @@ const PlayerHand = ({
   score,
   selectCard,
   selectedCards,
+  sortOrder,
   thrownCards,
 }: PlayerHandProps) => {
   const handScore = hand.reduce((sum, card) => (sum += getCardValue(card)), 0);
@@ -100,8 +103,9 @@ const PlayerHand = ({
             selectedCards={selectedCards}
           />
         ))}
-        <div className={styles.button}>
+        <div className={styles.buttonContainer}>
           <YanivButton hand={hand} canClick={canPlay} roomId={roomId} />
+          <SortButton roomId={roomId} sortOrder={sortOrder} />
         </div>
       </div>
       <div className={styles.scoreContainer}>

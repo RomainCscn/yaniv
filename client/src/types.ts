@@ -34,6 +34,7 @@ export interface ReceivedMessage {
   playersCard: Record<string, Card[]>;
   playersScore: PlayerScore[];
   previousPlayer: Player;
+  sortOrder: SortOrder;
   thrownCards: Card[];
   roundWinner: Player;
   type: ReceivedMessageType;
@@ -44,6 +45,7 @@ export interface ReceivedMessage {
 export type ReceivedMessageType =
   | 'END_OF_ROUND_UPDATE'
   | 'NEW_ROUND'
+  | 'PLAYER_UPDATE'
   | 'PLAYERS_UPDATE'
   | 'QUICK_PLAY_DONE'
   | 'SET_ACTIVE_PLAYER'
@@ -53,6 +55,8 @@ export type ReceivedMessageType =
   | 'SET_OTHER_PLAYERS_CARDS'
   | 'SET_THROWN_CARDS'
   | 'START_GAME';
+
+export type SortOrder = 'asc' | 'desc';
 
 export type MessageAction = 'JOIN' | 'PLAY' | 'READY_TO_PLAY' | 'START' | 'UPDATE';
 
