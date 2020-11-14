@@ -9,7 +9,7 @@ export type ActionType = 'DROP' | 'PICK' | 'YANIV';
 
 export interface Card {
   suit: typeof SUITS[number] | typeof JOKER;
-  value: typeof VALUES[number] | 0;
+  value: typeof VALUES[number] | 98 | 99;
 }
 
 export interface PlayedCards {

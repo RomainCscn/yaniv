@@ -6,6 +6,8 @@ const findCardIndex = (card: Card, cards: Card[]) =>
 const getCardUniqueIndex = (card: Card) => `${card.value}-${card.suit}`;
 
 const getCardImagePath = (card: Card) =>
-  `${process.env.PUBLIC_URL}cards/${card.suit.toUpperCase()}-${card.value}.svg`;
+  `${process.env.PUBLIC_URL}cards/${card.suit.toUpperCase()}-${
+    card.suit === 'joker' ? 0 : card.value
+  }.svg`;
 
 export { findCardIndex, getCardUniqueIndex, getCardImagePath };

@@ -10,7 +10,8 @@ const isAdjacent = (cardA: Card, cardB: Card) =>
 const isAdjacentWithJoker = (cardA: Card, cardB: Card) =>
   cardA.suit === cardB.suit && (cardA.value === cardB.value - 2 || cardA.value === cardB.value + 2);
 
-const getCardValue = (card: Card): number => (card.value <= 10 ? card.value : 10);
+const getCardValue = (card: Card): number =>
+  card.suit === 'joker' ? 0 : card.value <= 10 ? card.value : 10;
 
 const canSelectCard = (card: Card, selectedCards: Card[]) => {
   if (selectedCards.length <= 0) {
@@ -36,7 +37,7 @@ const canDropCards = (selectedCards: Card[]) => {
   const isUniqueValue = Array.from(uniqueCardsValue).length === 1;
 
   const consecutiveCards = selectedCards
-    .map((c) => c.value)
+    .map((c) => (c.suit === 'joker' ? 0 : c.value))
     .sort((a, b) => a - b)
     .join('');
 

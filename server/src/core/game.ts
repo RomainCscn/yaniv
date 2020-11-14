@@ -1,7 +1,8 @@
 import { HAND_CARDS_NUMBER, SUITS, VALUES } from '../constants';
 import { Card } from '../types';
 
-const getCardValue = (card: Card): number => (card.value <= 10 ? card.value : 10);
+const getCardValue = (card: Card): number =>
+  card.suit === 'joker' ? 0 : card.value <= 10 ? card.value : 10;
 
 const getDeck = () => {
   const deck: Card[] = [];
@@ -13,8 +14,8 @@ const getDeck = () => {
     }
   }
 
-  deck.push({ suit: 'joker', value: 0 });
-  deck.push({ suit: 'joker', value: 0 });
+  deck.push({ suit: 'joker', value: 98 });
+  deck.push({ suit: 'joker', value: 99 });
 
   return deck;
 };
