@@ -1,4 +1,3 @@
-import { SCORE_LIMIT } from '../../constants';
 import { getFormattedPlayer } from '../../core/room';
 import { getCardValue, getSmallestScore } from '../../core/game';
 import { Room, User } from '../../types';
@@ -55,7 +54,9 @@ export const handleEndRound = (room: Room, userUuid: string): void => {
     username: user.username,
   }));
 
-  const playerAboveScoreLimit = playersScore.find((userScore) => userScore.score >= SCORE_LIMIT);
+  const playerAboveScoreLimit = playersScore.find(
+    (userScore) => userScore.score >= room.configuration.scoreLimit,
+  );
 
   if (playerAboveScoreLimit) {
     const winner = playersScore.reduce((previous, current) =>

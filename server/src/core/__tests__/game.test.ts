@@ -1,5 +1,5 @@
 import { getCardValue, getHand, getSmallestScore, getSuffledDeck, sortHand } from '../game';
-import { Card } from '../../types';
+import { Card, Room } from '../../types';
 
 const scores = [
   { uuid: 'ghi', score: 3 },
@@ -15,14 +15,20 @@ const deck: Card[] = [
   { suit: 'club', value: 10 },
 ];
 
+const room: Room = {
+  activePlayer: null,
+  configuration: { handCardsNumber: 7, scoreLimit: 200 },
+  deck,
+  roundWinner: null,
+  thrownCards: [],
+  users: {},
+};
+
 const mockHandCardsNumber = jest.fn();
 const mockSuits = jest.fn();
 const mockValues = jest.fn();
 
 jest.mock('../../constants.ts', () => ({
-  get HAND_CARDS_NUMBER() {
-    return mockHandCardsNumber();
-  },
   get SUITS() {
     return mockSuits();
   },
@@ -44,7 +50,7 @@ describe('game', () => {
 
   it('should return a player hand', () => {
     mockHandCardsNumber.mockReturnValue(1);
-    expect(getHand(deck)).toEqual([{ suit: 'club', value: 1 }]);
+    expect(getHand(room)).toEqual([{ suit: 'club', value: 1 }]);
   });
 
   it('should return the smallest score', () => {

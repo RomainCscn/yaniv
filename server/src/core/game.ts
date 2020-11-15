@@ -1,5 +1,5 @@
-import { HAND_CARDS_NUMBER, SUITS, VALUES } from '../constants';
-import { Card, SortOrder } from '../types';
+import { SUITS, VALUES } from '../constants';
+import { Card, Room, SortOrder } from '../types';
 
 const getCardValue = (card: Card): number =>
   card.suit === 'joker' ? 0 : card.value <= 10 ? card.value : 10;
@@ -50,8 +50,8 @@ const sortHand = (hand: Card[], sortOrder: SortOrder = 'asc'): Card[] =>
       return 0;
     });
 
-const getHand = (deck: Card[], sortOrder: SortOrder = 'asc'): Card[] =>
-  sortHand(deck.slice(0, HAND_CARDS_NUMBER), sortOrder);
+const getHand = (room: Room, sortOrder: SortOrder = 'asc'): Card[] =>
+  sortHand(room.deck.slice(0, room.configuration.handCardsNumber), sortOrder);
 
 const getSmallestScore = (scores: { uuid: string; score: number }[]): number =>
   scores.reduce((prev, curr) => (prev.score <= curr.score ? prev : curr)).score;

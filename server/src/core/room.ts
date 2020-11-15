@@ -1,6 +1,5 @@
 import { getHand, getSuffledDeck } from './game';
 import rooms from './rooms';
-import { HAND_CARDS_NUMBER } from '../constants';
 import { CustomWebSocket, Room, SortOrder, User } from '../types';
 
 interface FormattedPlayer {
@@ -12,10 +11,10 @@ interface FormattedPlayer {
 }
 
 export const assignHandToPlayer = (room: Room, user: User): void => {
-  const userHand = getHand(room.deck, user.sortOrder);
+  const userHand = getHand(room, user.sortOrder);
 
   user.hand = userHand;
-  room.deck = room.deck.slice(HAND_CARDS_NUMBER);
+  room.deck = room.deck.slice(room.configuration.handCardsNumber);
 };
 
 export const addUser = (
@@ -92,10 +91,11 @@ export const resetDeck = (room: Room, { resetScore = false } = {}): void => {
 
 export default function initRoom(): Room {
   return {
-    thrownCards: [],
     activePlayer: null,
+    configuration: { handCardsNumber: 7, scoreLimit: 200 },
     deck: getSuffledDeck(),
     roundWinner: null,
+    thrownCards: [],
     users: {},
   };
 }

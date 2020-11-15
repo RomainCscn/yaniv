@@ -18,11 +18,17 @@ export interface PlayedCards {
   thrownCards: Card[];
 }
 
+type RoomConfiguration = {
+  handCardsNumber: 5 | 7;
+  scoreLimit: 100 | 200;
+};
+
 export interface Room {
-  thrownCards: Card[];
   activePlayer: null | string;
+  configuration: RoomConfiguration;
   deck: Card[];
   roundWinner: null | string;
+  thrownCards: Card[];
   users: Users;
 }
 
