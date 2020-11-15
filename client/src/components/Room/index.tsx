@@ -96,6 +96,8 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
       } else if (type === 'NEW_ROUND') {
         dispatch({ type: 'newRound' });
         setGameWinner(undefined);
+        setPreviousPlayer(undefined);
+        setPickedCard(undefined);
         setRoundWinner(undefined);
       } else if ('GAME_OVER') {
         setGameWinner(winner);
