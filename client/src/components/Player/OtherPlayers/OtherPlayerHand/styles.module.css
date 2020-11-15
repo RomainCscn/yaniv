@@ -8,6 +8,34 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  min-width: 200px;
+}
+
+.avatarContainer {
+  display: flex;
+  align-items: center;
+}
+
+.dots {
+  position: absolute;
+  font-size: 32px;
+  width: 50px;
+  text-align: center;
+  top: 42px;
+  padding: 6px;
+}
+
+@media screen and (max-height: 850px) {
+  .scoreContainer {
+    min-width: 175px;
+  }
+
+  .dots {
+    top: 24px;
+    font-size: 24px;
+    width: 30px;
+  }
 }
 
 .activePlayer {

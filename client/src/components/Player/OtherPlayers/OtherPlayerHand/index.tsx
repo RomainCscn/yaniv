@@ -1,6 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
+import Dot from '../Dot';
 import ActualScore from '../../Score/ActualScore';
 import AvatarImage from '../../../Avatar/AvatarImage';
 import GenericCard from '../../../GenericCard';
@@ -16,6 +17,14 @@ interface OtherPlayerHandProps {
   score: number;
   username: string;
 }
+
+const Dots = () => (
+  <div className={styles.dots}>
+    <Dot>.</Dot>
+    <Dot>.</Dot>
+    <Dot>.</Dot>
+  </div>
+);
 
 const OtherPlayerHand = ({
   avatar,
@@ -48,8 +57,11 @@ const OtherPlayerHand = ({
             ))}
       </div>
       <div className={styles.scoreContainer}>
-        <AvatarImage id={avatar} />
-        <div className={classnames({ [styles.activePlayer]: isActivePlayer })}>{username}</div>
+        <div className={styles.avatarContainer}>
+          <AvatarImage id={avatar} />
+          <div className={classnames({ [styles.activePlayer]: isActivePlayer })}>{username}</div>
+        </div>
+        {isActivePlayer && <Dots />}
         <ActualScore isOtherPlayer score={score} />
       </div>
     </div>
