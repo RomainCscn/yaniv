@@ -53,7 +53,7 @@ const Lobby = () => {
   }, [player, roomId]);
 
   return (
-    <div>
+    <>
       {play ? (
         <Room players={players} roomId={roomId} username={player.username} userUuid={player.uuid} />
       ) : (
@@ -67,7 +67,7 @@ const Lobby = () => {
           <HowToPlay />
         </div>
       )}
-    </div>
+    </>
   );
 };
 

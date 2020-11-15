@@ -6,7 +6,7 @@ const HowToPlay = () => {
   return (
     <div className={styles.container}>
       <h2>Comment jouer</h2>
-      <p>
+      <div>
         <ul>
           <li>
             Cliquez sur une ou plusieurs cartes de votre main pour la/les sélectionner (voir{' '}
@@ -67,7 +67,7 @@ const HowToPlay = () => {
             le joueur avec le moins de points.
           </li>
         </ul>
-      </p>
+      </div>
       <p>
         La variante du Yaniv utilisée ici se base sur <b>7 cartes</b> et un total de
         <b> 7 ou moins</b> pour annoncer <b>Yaniv</b>. Le score maximal est de <b>200 points</b>.
