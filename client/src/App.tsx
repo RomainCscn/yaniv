@@ -1,25 +1,11 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route, useLocation } from 'react-router-dom';
-import useAckee from 'use-ackee';
+import { BrowserRouter as Router } from 'react-router-dom';
 
+import Routes from './components/Routes';
 import { SUITS, VALUES } from './constants';
-import Lobby from './components/Lobby';
 import { getCardImagePath } from './core/utils';
 
 const App = () => {
-  const location = useLocation();
-  useAckee(
-    location.pathname,
-    {
-      server: 'https://gifinder-analytics.tk',
-      domainId: '963ced5d-f56e-43eb-9fdb-7dc661aa1e2f',
-    },
-    {
-      ignoreLocalhost: true,
-      detailed: true,
-    },
-  );
-
   const cacheImages = async (imageArray: string[]) => {
     const promises = await imageArray.map((src) => {
       return new Promise((resolve, reject) => {
@@ -52,11 +38,7 @@ const App = () => {
 
   return (
     <Router>
-      <Switch>
-        <Route path='/:roomId?'>
-          <Lobby />
-        </Route>
-      </Switch>
+      <Routes />
     </Router>
   );
 };
