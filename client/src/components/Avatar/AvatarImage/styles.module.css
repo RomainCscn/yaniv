@@ -1,6 +1,13 @@
 .avatar {
   cursor: pointer;
   padding: 6px;
+  width: 50px;
+}
+
+@media screen and (max-height: 850px) {
+  .avatar {
+    width: 30px;
+  }
 }
 
 .selected {

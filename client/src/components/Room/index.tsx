@@ -128,7 +128,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
         scores={scores}
       />
       {!roundWinner && (
-        <>
+        <div>
           <div className={styles.cardsArea}>
             <ThrownCards
               canPlay={canPlay && state.selectedCards.length > 0}
@@ -140,7 +140,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
           {previousPlayer && previousPlayer.uuid !== userUuid && (
             <PickedCardAnnouncement previousPlayer={previousPlayer} pickedCard={pickedCard} />
           )}
-        </>
+        </div>
       )}
       {(gameWinner || roundWinner) && (
         <div className={styles.endRoundContainer}>

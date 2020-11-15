@@ -28,6 +28,7 @@
 
   .buttonContainer {
     top: 56px;
+    right: -168px;
   }
 }
 
@@ -45,9 +46,19 @@
 }
 
 .activePlayer {
-  width: 400px;
-  height: 3px;
+  width: 100%;
+  height: 12px;
   background-color: #4fd1c5;
   position: absolute;
-  bottom: 24px;
+  bottom: 0;
+}
+
+@media screen and (max-height: 850px) {
+  .scoreContainer {
+    width: 300px;
+  }
+
+  .activePlayer {
+    height: 9px;
+  }
 }

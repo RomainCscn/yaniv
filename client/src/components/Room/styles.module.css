@@ -8,19 +8,19 @@
   max-width: 1200px;
 }
 
+@media screen and (max-height: 850px) {
+  .mainContainer {
+    padding: 12px;
+    height: calc(100vh - 24px);
+  }
+}
+
 .endRoundContainer {
   display: flex;
   justify-content: center;
 }
 
 .cardsArea {
-  margin-top: 68px;
   display: flex;
   justify-content: center;
-}
-
-@media screen and (max-height: 850px) {
-  .cardsArea {
-    margin-top: 0;
-  }
 }
