@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import HowToPlay from './HowToPlay';
@@ -8,7 +8,7 @@ import ShareLink from './ShareLink';
 import AVATARS from '../Avatar';
 import Room from '../Room';
 import client, { send } from '../../core/client';
-import { Player, ReceivedMessage } from '../../types';
+import { CustomError, Player, ReceivedMessage } from '../../types';
 
 import styles from './styles.module.css';
 
@@ -21,6 +21,7 @@ const Lobby = () => {
   let { roomId } = useParams() as any;
   const history = useHistory();
 
+  const [error, setError] = useState<CustomError>();
   const [play, setPlay] = useState(false);
   const [player, setPlayer] = useState<Player>(initialPlayer);
   const [players, setPlayers] = useState<Player[]>([]);
@@ -30,27 +31,41 @@ const Lobby = () => {
     history.replace('/' + roomId);
   }
 
-  useEffect(() => {
-    client.addEventListener('open', () => {
-      send(
-        roomId,
-        { action: 'JOIN', actionType: 'JOINED_LOBBY' },
-        { avatar: player.avatar, username: player.username },
-      );
+  const handleMessage = (message: any) => {
+    const { error, players, type, uuid }: ReceivedMessage = JSON.parse(message.data);
 
-      client.onmessage = (message) => {
-        const { players, type, uuid }: ReceivedMessage = JSON.parse(message.data);
+    if (error === 'GAME_ALREADY_STARTED') {
+      return setError(error);
+    }
 
-        if (type === 'PLAYERS_UPDATE') {
-          setPlayers(players);
-        } else if (type === 'START_GAME') {
-          setPlayer((prevPlayer) => ({ ...prevPlayer, uuid }));
-          setPlayers(players);
-          setPlay(true);
-        }
-      };
-    });
+    if (type === 'PLAYERS_UPDATE') {
+      setPlayers(players);
+    } else if (type === 'START_GAME') {
+      setPlayer((prevPlayer) => ({ ...prevPlayer, uuid }));
+      setPlayers(players);
+      setPlay(true);
+    }
+  };
+
+  const sendJoin = useCallback(() => {
+    send(
+      roomId,
+      { action: 'JOIN', actionType: 'JOINED_LOBBY' },
+      { avatar: player.avatar, username: player.username },
+    );
   }, [player, roomId]);
+
+  useEffect(() => {
+    if (client.readyState !== client.OPEN) {
+      client.addEventListener('open', () => {
+        sendJoin();
+        client.onmessage = handleMessage;
+      });
+    } else if (client.onmessage === null) {
+      sendJoin();
+      client.onmessage = handleMessage;
+    }
+  }, [sendJoin, roomId]);
 
   return (
     <>
@@ -61,7 +76,7 @@ const Lobby = () => {
           <h1 className={styles.title}>Yaniv</h1>
           <ShareLink />
           <div className={styles.sectionContainer}>
-            <Players players={players} roomId={roomId} username={player.username} />
+            <Players error={error} players={players} roomId={roomId} username={player.username} />
             <Profile player={player} roomId={roomId} setPlayer={setPlayer} />
           </div>
           <HowToPlay />

@@ -5,9 +5,7 @@ export interface Card {
   value: typeof VALUES[number] | 98 | 99;
 }
 
-interface CustomError {
-  code: 'GAME_ALREADY_STARTED' | 'TOO_MANY_PLAYERS';
-}
+export type CustomError = 'GAME_ALREADY_STARTED' | 'TOO_MANY_PLAYERS';
 
 export interface Player {
   avatar: string;
