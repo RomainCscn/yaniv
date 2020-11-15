@@ -22,7 +22,7 @@ const ScoreDashboard = ({ scores }: { scores: PlayerScore[] }) => {
     });
 
   return (
-    <div style={{ position: 'absolute' }}>
+    <div className={styles.container}>
       <button className={styles.button} onClick={() => setShowScores(!showScores)}>
         SCORES
       </button>

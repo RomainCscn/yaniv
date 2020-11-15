@@ -1,3 +1,8 @@
+.container {
+  position: absolute;
+  z-index: 10;
+}
+
 .table {
   margin-top: 12px;
   border-collapse: separate;
