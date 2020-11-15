@@ -81,6 +81,7 @@ export const handleEndRound = (room: Room, userUuid: string): void => {
         playersCard,
         playersScore,
         roundWinner: getFormattedPlayer(room, room.roundWinner ?? ''),
+        yanivCaller: getFormattedPlayer(room, userUuid),
       }),
     );
   });

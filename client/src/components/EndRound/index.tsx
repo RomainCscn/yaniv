@@ -14,9 +14,10 @@ interface Props {
   roomId: string;
   roundWinner?: Player;
   userUuid: string;
+  yanivCaller?: Player;
 }
 
-const EndRound = ({ gameWinner, roomId, roundWinner, userUuid }: Props) => {
+const EndRound = ({ gameWinner, roomId, roundWinner, userUuid, yanivCaller }: Props) => {
   return (
     <>
       {gameWinner ? (
@@ -40,6 +41,12 @@ const EndRound = ({ gameWinner, roomId, roundWinner, userUuid }: Props) => {
             <div style={{ marginBottom: '24px' }} className={styles.winnerText}>
               {roundWinner.uuid === userUuid ? 'GAGNÉ 🥳' : 'PERDU !'}
             </div>
+            {yanivCaller && yanivCaller?.uuid !== userUuid && (
+              <div className={styles.yanivCallerContainer}>
+                <Avatar id={yanivCaller.avatar} />
+                {yanivCaller?.username} a annoncé Yaniv !
+              </div>
+            )}
             {roundWinner.uuid !== userUuid && (
               <div className={styles.winnerAvatarContainer}>
                 <div>Gagnant de la manche</div>

@@ -22,6 +22,11 @@
   text-align: center;
 }
 
+.yanivCallerContainer {
+  display: flex;
+  align-items: center;
+}
+
 .endGameText {
   margin-bottom: 24px;
   font-size: 32px;

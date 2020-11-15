@@ -36,6 +36,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
   const [previousPlayer, setPreviousPlayer] = useState<Player>();
   const [scores, setScores] = useState<PlayerScore[]>([]);
   const [roundWinner, setRoundWinner] = useState<Player>();
+  const [yanivCaller, setYanivCaller] = useState<Player>();
   const [gameWinner, setGameWinner] = useState<Player>();
   const [quickPlayDone, setQuickPlayDone] = useState(false);
 
@@ -61,6 +62,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
         type,
         uuid,
         winner,
+        yanivCaller,
       }: ReceivedMessage = JSON.parse(message.data);
 
       if (type === 'SET_PLAYER_HAND') {
@@ -87,6 +89,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
         setCanPlay(false);
         setScores(playersScore);
         setRoundWinner(roundWinner);
+        setYanivCaller(yanivCaller);
         dispatch({ type: 'setOtherPlayersCards', payload: playersCard });
       } else if (type === 'SET_INTIAL_SCORES') {
         setScores(playersScore);
@@ -151,6 +154,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
             roomId={roomId}
             roundWinner={roundWinner}
             userUuid={userUuid}
+            yanivCaller={yanivCaller}
           />
         </div>
       )}

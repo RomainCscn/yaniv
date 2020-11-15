@@ -52,7 +52,7 @@ const Players = ({ error, players, roomId, username }: Props) => {
         <button className={styles.playButton} onClick={startGame}>
           Commencer la partie
         </button>
-        {error && players.length < 2 && <div className={styles.error}>{errorMessage}</div>}
+        {errorMessage && players.length < 2 && <div className={styles.error}>{errorMessage}</div>}
       </div>
     </div>
   );

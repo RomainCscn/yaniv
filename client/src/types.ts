@@ -44,6 +44,7 @@ export interface ReceivedMessage {
   type: ReceivedMessageType;
   uuid: string;
   winner: Player;
+  yanivCaller?: Player;
 }
 
 export type ReceivedMessageType =
