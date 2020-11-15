@@ -1,6 +1,7 @@
 .container {
-  max-width: 600px;
+  width: 600px;
   padding: 6px 16px;
+  margin: 18px;
 }
 
 .link,

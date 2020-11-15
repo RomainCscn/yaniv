@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import classnames from 'classnames';
 import { useHistory, useParams } from 'react-router-dom';
 
 import HowToPlay from './HowToPlay';
 import Players from './Players';
 import Profile from './Profile';
+import RoomConfiguration from './RoomConfiguration';
 import ShareLink from './ShareLink';
 import AVATARS from '../Avatar';
 import Room from '../Room';
@@ -22,6 +24,8 @@ const Lobby = () => {
   const history = useHistory();
 
   const [error, setError] = useState<CustomError>();
+  const [handCardsNumber, setHandCardsNumber] = useState(7);
+  const [scoreLimit, setScoreLimit] = useState(200);
   const [play, setPlay] = useState(false);
   const [player, setPlayer] = useState<Player>(initialPlayer);
   const [players, setPlayers] = useState<Player[]>([]);
@@ -32,13 +36,16 @@ const Lobby = () => {
   }
 
   const handleMessage = (message: any) => {
-    const { error, players, type, uuid }: ReceivedMessage = JSON.parse(message.data);
+    const { configuration, error, players, type, uuid }: ReceivedMessage = JSON.parse(message.data);
 
     if (error === 'GAME_ALREADY_STARTED') {
       return setError(error);
     }
 
-    if (type === 'PLAYERS_UPDATE') {
+    if (type === 'CONFIGURATION_UPDATE') {
+      setHandCardsNumber(configuration.handCardsNumber);
+      setScoreLimit(configuration.scoreLimit);
+    } else if (type === 'PLAYERS_UPDATE') {
       setPlayers(players);
     } else if (type === 'START_GAME') {
       setPlayer((prevPlayer) => ({ ...prevPlayer, uuid }));
@@ -79,7 +86,16 @@ const Lobby = () => {
             <Players error={error} players={players} roomId={roomId} username={player.username} />
             <Profile player={player} roomId={roomId} setPlayer={setPlayer} />
           </div>
-          <HowToPlay />
+          <div className={classnames(styles.sectionContainer, styles.alignStart)}>
+            <RoomConfiguration
+              roomId={roomId}
+              handCardsNumber={handCardsNumber}
+              setHandCardsNumber={setHandCardsNumber}
+              scoreLimit={scoreLimit}
+              setScoreLimit={setScoreLimit}
+            />
+            <HowToPlay />
+          </div>
         </div>
       )}
     </>

@@ -13,6 +13,14 @@ export const sendPlayersUpdate = (room: Room): void => {
   });
 };
 
+export const sendConfiguration = (room: Room): void => {
+  Object.entries(room.users).forEach(([, user]: [string, User]) => {
+    user.ws.send(
+      JSON.stringify({ type: 'CONFIGURATION_UPDATE', configuration: room.configuration }),
+    );
+  });
+};
+
 export const sendThrownCards = (users: Users, cards: Card[]): void => {
   let sortedCards: Card[] = [];
   const jokerCard = cards.find((c: Card) => c.suit === 'joker');

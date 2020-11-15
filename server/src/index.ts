@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import * as WebSocket from 'ws';
 
 import {
+  handleConfiguration,
   handleJoin,
   handlePlay,
   handleReadyToPlay,
@@ -34,9 +35,11 @@ wss.on('connection', (ws: CustomWebSocket) => {
       action,
       actionType,
       avatar,
+      handCardsNumber,
       notPickedCards,
       pickedCard,
       room: roomId,
+      scoreLimit,
       sortOrder,
       thrownCards,
       username,
@@ -44,6 +47,8 @@ wss.on('connection', (ws: CustomWebSocket) => {
 
     if (action === 'JOIN') {
       handleJoin(actionType, avatar, roomId, username, userUuid, ws);
+    } else if (action === 'CONFIGURATION') {
+      handleConfiguration(roomId, { handCardsNumber, scoreLimit });
     } else if (action === 'UPDATE') {
       handleUpdate(roomId, userUuid, { avatar, sortOrder, username });
     } else if (action === 'START') {

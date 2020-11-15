@@ -22,7 +22,13 @@ export type PlayerScore = {
   username: string;
 };
 
+export type RoomConfiguration = {
+  handCardsNumber: 5 | 7;
+  scoreLimit: 100 | 200;
+};
+
 export interface ReceivedMessage {
+  configuration: RoomConfiguration;
   error: CustomError;
   hand: Card[];
   newCardInHand?: { card: Card; isFromStack: boolean };
@@ -41,6 +47,7 @@ export interface ReceivedMessage {
 }
 
 export type ReceivedMessageType =
+  | 'CONFIGURATION_UPDATE'
   | 'END_OF_ROUND_UPDATE'
   | 'NEW_ROUND'
   | 'PLAYER_UPDATE'
@@ -56,7 +63,13 @@ export type ReceivedMessageType =
 
 export type SortOrder = 'asc' | 'desc';
 
-export type MessageAction = 'JOIN' | 'PLAY' | 'READY_TO_PLAY' | 'START' | 'UPDATE';
+export type MessageAction =
+  | 'CONFIGURATION'
+  | 'JOIN'
+  | 'PLAY'
+  | 'READY_TO_PLAY'
+  | 'START'
+  | 'UPDATE';
 
 export type MessageActionType =
   | 'DROP_AND_PICK'

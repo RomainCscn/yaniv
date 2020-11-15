@@ -17,6 +17,10 @@
   flex-wrap: wrap;
 }
 
+.alignStart {
+  align-items: flex-start;
+}
+
 .sectionTitle {
   letter-spacing: 1px;
   font-family: 'Simplicity';
@@ -26,6 +30,10 @@
 
 .green {
   color: #2f855a;
+}
+
+.gray {
+  color: #4a5568;
 }
 
 .indigo {
@@ -102,7 +110,7 @@
 }
 
 .label {
-  font-size: 16px;
+  font-size: 20px;
   margin-right: 12px;
 }
 

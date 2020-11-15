@@ -18,7 +18,7 @@ export interface PlayedCards {
   thrownCards: Card[];
 }
 
-type RoomConfiguration = {
+export type RoomConfiguration = {
   handCardsNumber: 5 | 7;
   scoreLimit: 100 | 200;
 };

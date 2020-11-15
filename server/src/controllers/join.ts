@@ -1,4 +1,4 @@
-import { sendPlayersUpdate } from '../core/dispatcher';
+import { sendConfiguration, sendPlayersUpdate } from '../core/dispatcher';
 import initRoom, { addUser } from '../core/room';
 import rooms from '../core/rooms';
 import { CustomWebSocket } from '../types';
@@ -33,6 +33,7 @@ const handleJoin = (
 
     ws.send(JSON.stringify({ type: 'PLAYER_JOINED' }));
 
+    sendConfiguration(rooms[roomId]);
     sendPlayersUpdate(rooms[roomId]);
   }
 };
