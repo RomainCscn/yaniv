@@ -49,6 +49,7 @@
   .handCard {
     width: 90px;
     height: 125px;
+    margin-right: -46px;
   }
 
   .falseCard {
