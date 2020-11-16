@@ -78,7 +78,7 @@ export const getPlayersScore = (room: Room): Pick<User, 'score' | 'scoreHistory'
 export const resetDeck = (room: Room, { resetScore = false } = {}): void => {
   room.deck = getSuffledDeck();
   room.thrownCards = [];
-  room.activePlayer = room.roundWinner;
+  room.activePlayer = room.roundWinner || Object.keys(room.users)[0];
   room.roundWinner = null;
 
   if (resetScore) {
