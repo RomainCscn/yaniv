@@ -28,7 +28,7 @@ const Table = styled.table`
   border: 2px solid #2c5282;
   border-radius: 6px;
   color: #2c5282;
-  max-height: 400px;
+  max-height: 500px;
   display: block;
   overflow: auto;
 `;
