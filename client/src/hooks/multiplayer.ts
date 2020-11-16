@@ -2,7 +2,7 @@ import { useEffect, useReducer, useState } from 'react';
 
 import client from '../core/client';
 import reducer from '../reducers';
-import { Card, Player, PlayerScore, ReceivedMessage, SortOrder } from '../types';
+import { Card, NewCard, Player, PlayerScore, ReceivedMessage, SortOrder } from '../types';
 
 interface Props {
   initialPlayers: Player[];
@@ -19,7 +19,7 @@ export default function useMultiplayer({ initialPlayers, userUuid }: Props) {
   const [canPlay, setCanPlay] = useState(false);
   const [gameWinner, setGameWinner] = useState<Player>();
   const [hand, setHand] = useState<Card[]>([]);
-  const [newCard, setNewCard] = useState<{ card: Card; isFromStack: boolean }>();
+  const [newCard, setNewCard] = useState<NewCard>();
   const [pickedCard, setPickedCard] = useState<Card>();
   const [previousPlayer, setPreviousPlayer] = useState<Player>();
   const [quickPlayDone, setQuickPlayDone] = useState(false);

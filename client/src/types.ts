@@ -7,6 +7,11 @@ export interface Card {
 
 export type CustomError = 'GAME_ALREADY_STARTED' | 'TOO_MANY_PLAYERS';
 
+export interface NewCard {
+  card: Card;
+  isFromStack: boolean;
+}
+
 export interface Player {
   avatar: string;
   username: string;

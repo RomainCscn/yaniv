@@ -9,14 +9,14 @@ import YanivButton from '../../YanivButton';
 import { send } from '../../../core/client';
 import { getCardValue } from '../../../core/game';
 import { getCardUniqueIndex } from '../../../core/utils';
-import { Card, Player, SortOrder } from '../../../types';
+import { Card, NewCard, Player, SortOrder } from '../../../types';
 
 import styles from './styles.module.css';
 
 interface PlayerHandProps {
   canPlay: boolean;
   hand: Card[];
-  newCard?: { card: Card; isFromStack: boolean };
+  newCard?: NewCard;
   player: Player;
   quickPlayDone: boolean;
   resetSelectedCards: () => void;
