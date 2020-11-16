@@ -2,6 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 
 import AvatarList from '../../Avatar/AvatarList';
+import Button from '../../shared/Button';
 import { send } from '../../../core/client';
 import { Player } from '../../../types';
 
@@ -32,9 +33,9 @@ const Profile = ({ roomId, player, setPlayer }: Props) => {
         <AvatarList selectedAvatar={player.avatar} setAvatar={setAvatar} />
       </div>
       <div className={styles.buttonContainer}>
-        <button className={styles.updateButton} onClick={updatePlayerInformation}>
+        <Button color={'purple'} onClick={updatePlayerInformation}>
           Mettre à jour
-        </button>
+        </Button>
       </div>
     </div>
   );

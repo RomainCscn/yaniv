@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import classnames from 'classnames';
 
 import AVATARS from '../../Avatar';
+import Button from '../../shared/Button';
 import { send } from '../../../core/client';
 import { CustomError, Player } from '../../../types';
 
@@ -49,9 +50,9 @@ const Players = ({ error, players, roomId, username }: Props) => {
         </p>
       )}
       <div className={styles.buttonContainer}>
-        <button className={styles.playButton} onClick={startGame}>
+        <Button color={'green'} onClick={startGame}>
           Commencer la partie
-        </button>
+        </Button>
         {errorMessage && players.length < 2 && <div className={styles.error}>{errorMessage}</div>}
       </div>
     </div>

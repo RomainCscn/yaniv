@@ -1,6 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
+import Button from '../../shared/Button';
 import { send } from '../../../core/client';
 
 import styles from './styles.module.css';
@@ -58,9 +59,9 @@ const RoomConfiguration = ({
         <ScoreButton currentValue={scoreLimit} setValue={setScoreLimit} value={200} />
       </div>
       <div className={commonStyles.buttonContainer}>
-        <button className={styles.updateButton} onClick={updateRoomConfiguration}>
+        <Button color={'gray'} onClick={updateRoomConfiguration}>
           Mettre à jour
-        </button>
+        </Button>
       </div>
     </div>
   );
