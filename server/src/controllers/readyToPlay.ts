@@ -1,6 +1,5 @@
 import { getPlayerByUuid, getPlayersScore } from '../core/room';
 import rooms from '../core/rooms';
-import { User } from '../types';
 
 const handleReadyToPlay = (roomId: string, userUuid: string): void => {
   const player = getPlayerByUuid(rooms[roomId], userUuid);
