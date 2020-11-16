@@ -1,13 +1,10 @@
 import React from 'react';
+import styled from 'styled-components';
 
-import Avatar from '../Avatar/AvatarImage';
-import NextRoundButton from '../NextRoundButton';
-import PlayAgainButton from '../PlayAgainButton';
+import GameOver from './GameOver';
+import RoundOver from './RoundOver';
+
 import { Player } from '../../types';
-
-import trophy from '../../assets/winner-trophy.png';
-
-import styles from './styles.module.css';
 
 interface Props {
   gameWinner?: Player;
@@ -17,49 +14,26 @@ interface Props {
   yanivCaller?: Player;
 }
 
-const EndRound = ({ gameWinner, roomId, roundWinner, userUuid, yanivCaller }: Props) => {
-  return (
-    <>
-      {gameWinner ? (
-        <>
-          <div className={styles.gameWinnerContainer}>
-            <div className={styles.endGameText}>Fin de la partie</div>
-            {gameWinner.uuid === userUuid && (
-              <img style={{ marginBottom: '24px' }} src={trophy} alt='trophy' />
-            )}
-            <div className={styles.winnerAvatarContainer}>
-              <div className={styles.winnerText}>Bravo</div>
-              <Avatar id={gameWinner.avatar} />
-              <span className={styles.winnerUsername}>{gameWinner.username}</span>
-            </div>
-            <PlayAgainButton roomId={roomId} />
-          </div>
-        </>
-      ) : (
-        roundWinner && (
-          <div className={styles.roundWinnerContainer}>
-            <div style={{ marginBottom: '24px' }} className={styles.winnerText}>
-              {roundWinner.uuid === userUuid ? 'GAGNÉ 🥳' : 'PERDU !'}
-            </div>
-            {yanivCaller && yanivCaller?.uuid !== userUuid && (
-              <div className={styles.yanivCallerContainer}>
-                <Avatar id={yanivCaller.avatar} />
-                {yanivCaller?.username} a annoncé Yaniv !
-              </div>
-            )}
-            {roundWinner.uuid !== userUuid && (
-              <div className={styles.winnerAvatarContainer}>
-                <div>Gagnant de la manche</div>
-                <Avatar id={roundWinner.avatar} />
-                <span className={styles.winnerUsername}>{roundWinner.username}</span>
-              </div>
-            )}
-            <NextRoundButton roomId={roomId} />
-          </div>
-        )
-      )}
-    </>
-  );
-};
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const EndRound = ({ gameWinner, roomId, roundWinner, userUuid, yanivCaller }: Props) => (
+  <Container>
+    {gameWinner ? (
+      <GameOver roomId={roomId} gameWinner={gameWinner} userUuid={userUuid} />
+    ) : (
+      roundWinner && (
+        <RoundOver
+          roomId={roomId}
+          roundWinner={roundWinner}
+          userUuid={userUuid}
+          yanivCaller={yanivCaller}
+        />
+      )
+    )}
+  </Container>
+);
 
 export default EndRound;

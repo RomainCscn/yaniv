@@ -1,16 +1,22 @@
 import React from 'react';
+import styled from 'styled-components';
 
 import GenericCard from '../GenericCard';
 import { getCardUniqueIndex } from '../../core/utils';
 import { Card } from '../../types';
-
-import styles from './styles.module.css';
 
 interface ThrownCardsProps {
   canPlay: boolean;
   thrownCards: Card[];
   pickCard: (card?: Card) => void;
 }
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 64px;
+`;
 
 const ThrownCards = ({ canPlay, pickCard, thrownCards }: ThrownCardsProps) => {
   const onCardClick = (card: Card, isFirstOrLast: boolean) => {
@@ -20,7 +26,7 @@ const ThrownCards = ({ canPlay, pickCard, thrownCards }: ThrownCardsProps) => {
   };
 
   return (
-    <div className={styles.thrownCardsBoard}>
+    <Container>
       {thrownCards.map((card: Card, index) => {
         const isFirstOrLast = index === 0 || index === thrownCards.length - 1;
 
@@ -34,7 +40,7 @@ const ThrownCards = ({ canPlay, pickCard, thrownCards }: ThrownCardsProps) => {
           />
         );
       })}
-    </div>
+    </Container>
   );
 };
 

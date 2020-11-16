@@ -1,8 +1,7 @@
 import React from 'react';
 
+import Button from '../shared/Button';
 import { send } from '../../core/client';
-
-import styles from './styles.module.css';
 
 const NextRoundButton = ({ roomId }: { roomId: string }) => {
   const nextRound = () => {
@@ -10,9 +9,9 @@ const NextRoundButton = ({ roomId }: { roomId: string }) => {
   };
 
   return (
-    <button className={styles.button} onClick={nextRound}>
+    <Button color='green' onClick={nextRound}>
       MANCHE SUIVANTE
-    </button>
+    </Button>
   );
 };
 

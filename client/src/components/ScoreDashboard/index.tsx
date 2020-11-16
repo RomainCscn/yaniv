@@ -1,9 +1,53 @@
 import React, { useState } from 'react';
-import classnames from 'classnames';
+import styled, { css } from 'styled-components';
 
 import { PlayerScore } from '../../types';
 
-import styles from './styles.module.css';
+const Button = styled.div`
+  display: inline-block;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: 1px solid #2c5282;
+  border-radius: 12px;
+  background-color: white;
+  color: #2c5282;
+  cursor: pointer;
+`;
+
+const Container = styled.div`
+  position: absolute;
+  z-index: 10;
+`;
+
+const Table = styled.table`
+  margin-top: 12px;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: white;
+  border: 2px solid #2c5282;
+  border-radius: 6px;
+  color: #2c5282;
+  max-height: 400px;
+  display: block;
+  overflow: auto;
+`;
+
+const TableCell = styled.td<{ isWinningCell: boolean }>`
+  padding: 3px 12px;
+  ${({ isWinningCell }) =>
+    isWinningCell &&
+    css`
+      font-weight: bold;
+      background: #ebf8ff;
+    `}
+`;
+
+const TableHeader = styled.th`
+  background-color: #2c5282;
+  color: #ebf8ff;
+  padding: 6px 12px;
+`;
 
 const ScoreDashboard = ({ scores }: { scores: PlayerScore[] }) => {
   const [showScores, setShowScores] = useState(false);
@@ -14,33 +58,27 @@ const ScoreDashboard = ({ scores }: { scores: PlayerScore[] }) => {
         score.scoreHistory[index] === 0 ||
         score.scoreHistory[index - 1] === score.scoreHistory[index];
 
-      return (
-        <td className={classnames(styles.tableCell, { [styles.winningTableCell]: isWinningCell })}>
-          {score.scoreHistory[index]}
-        </td>
-      );
+      return <TableCell isWinningCell={isWinningCell}>{score.scoreHistory[index]}</TableCell>;
     });
 
   return (
-    <div className={styles.container}>
-      <button className={styles.button} onClick={() => setShowScores(!showScores)}>
-        SCORES
-      </button>
+    <Container>
+      <Button onClick={() => setShowScores(!showScores)}>SCORES</Button>
       {showScores && (
-        <table className={styles.table}>
+        <Table>
           <thead>
             <tr>
               {scores.map((score) => (
-                <th className={styles.tableHeader}>{score.username}</th>
+                <TableHeader>{score.username}</TableHeader>
               ))}
             </tr>
           </thead>
           {scores[0]?.scoreHistory.map((value, index) => (
             <tr>{getRowScores(index)}</tr>
           ))}
-        </table>
+        </Table>
       )}
-    </div>
+    </Container>
   );
 };
 

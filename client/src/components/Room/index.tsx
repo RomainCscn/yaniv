@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useReducer, useMemo } from 'react';
+import styled from 'styled-components';
 
 import EndRound from '../EndRound';
 import MainPlayer from '../Player/MainPlayer';
@@ -12,14 +13,32 @@ import reducer from '../../reducers';
 import { Card, Player, PlayerScore, ReceivedMessage, SortOrder } from '../../types';
 import ScoreDashboard from '../ScoreDashboard';
 
-import styles from './styles.module.css';
-
 interface RoomProps {
   players: Player[];
   roomId: string;
   username: string;
   userUuid: string;
 }
+
+const Container = styled.div`
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100vh - 48px);
+  max-width: 1200px;
+
+  @media screen and (max-height: 850px) {
+    padding: 12px;
+    height: calc(100vh - 24px);
+  }
+`;
+
+const CardsContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 const Room = ({ players, roomId, userUuid }: RoomProps) => {
   const [state, dispatch] = useReducer(reducer, {
@@ -124,7 +143,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
   };
 
   return (
-    <div className={styles.mainContainer}>
+    <Container>
       <ScoreDashboard scores={scores} />
       <OtherPlayers
         activePlayer={activePlayer}
@@ -134,29 +153,27 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
       />
       {!roundWinner && (
         <div>
-          <div className={styles.cardsArea}>
+          <CardsContainer>
             <ThrownCards
               canPlay={canPlay && state.selectedCards.length > 0}
               pickCard={pickCard}
               thrownCards={state.thrownCards}
             />
             <Stack canPlay={canPlay && state.selectedCards.length > 0} pickCard={pickCard} />
-          </div>
+          </CardsContainer>
           {previousPlayer && previousPlayer.uuid !== userUuid && (
             <PickedCardAnnouncement previousPlayer={previousPlayer} pickedCard={pickedCard} />
           )}
         </div>
       )}
       {(gameWinner || roundWinner) && (
-        <div className={styles.endRoundContainer}>
-          <EndRound
-            gameWinner={gameWinner}
-            roomId={roomId}
-            roundWinner={roundWinner}
-            userUuid={userUuid}
-            yanivCaller={yanivCaller}
-          />
-        </div>
+        <EndRound
+          gameWinner={gameWinner}
+          roomId={roomId}
+          roundWinner={roundWinner}
+          userUuid={userUuid}
+          yanivCaller={yanivCaller}
+        />
       )}
       <MainPlayer
         canPlay={canPlay}
@@ -172,7 +189,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
         selectedCards={state.selectedCards}
         thrownCards={state.thrownCards}
       />
-    </div>
+    </Container>
   );
 };
 

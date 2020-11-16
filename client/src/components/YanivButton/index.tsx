@@ -1,18 +1,35 @@
 import React from 'react';
-import classnames from 'classnames';
+import styled, { css } from 'styled-components';
 
+import DefaultButton from '../shared/Button';
 import { MAX_VALUE_TO_SUBMIT } from '../../constants';
 import { send } from '../../core/client';
 import { getCardValue } from '../../core/game';
 import { Card } from '../../types';
-
-import styles from './styles.module.css';
 
 interface YanivButtonProps {
   canClick: boolean;
   hand: Card[];
   roomId: string;
 }
+
+const Button = styled(DefaultButton)<{ canClick: boolean }>`
+  @media screen and (max-height: 850px) {
+    font-size: 16px;
+    height: 42px;
+  }
+
+  ${({ canClick }) =>
+    canClick
+      ? css`
+          cursor: pointer;
+          opacity: 1;
+        `
+      : css`
+          opacity: 0.6;
+          cursor: not-allowed;
+        `}
+`;
 
 const canSubmitYaniv = (hand: Card[], canClick: boolean): boolean => {
   const handSum = hand.reduce((sum: number, card) => {
@@ -28,12 +45,9 @@ const YanivButton = ({ hand, canClick, roomId }: YanivButtonProps) => {
   const submit = () => send(roomId, { action: 'PLAY', actionType: 'YANIV' });
 
   return (
-    <button
-      className={classnames(styles.button, { [styles.pointer]: canSubmit })}
-      onClick={canSubmit ? submit : undefined}
-    >
+    <Button color='green' canClick={canSubmit} onClick={canSubmit ? submit : undefined}>
       YANIV
-    </button>
+    </Button>
   );
 };
 

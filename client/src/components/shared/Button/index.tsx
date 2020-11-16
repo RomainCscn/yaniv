@@ -1,12 +1,12 @@
 import styled, { css } from 'styled-components';
 
-type color = undefined | 'green' | 'gray' | 'purple';
+type Color = 'green' | 'gray' | 'purple';
 
-const handleColor = (color: color) => {
+const handleColor = (color: Color) => {
   switch (color) {
     case 'green':
       return css`
-        color: #f0fff4;
+        color: #0d502e;
         background: #48bb78;
         border-bottom: 4px solid #2f855a;
       `;
@@ -18,14 +18,14 @@ const handleColor = (color: color) => {
       `;
     case 'purple':
       return css`
-        color: #f0fff4;
+        color: #2d156d;
         background: #667eea;
         border-bottom: 4px solid #4c51bf;
       `;
   }
 };
 
-const handleActiveBorderColor = (color: color) => {
+const handleActiveBorderColor = (color: Color) => {
   switch (color) {
     case 'green':
       return css`
@@ -42,7 +42,7 @@ const handleActiveBorderColor = (color: color) => {
   }
 };
 
-const Button = styled.button`
+const Button = styled.button<{ color?: Color }>`
   padding: 0 12px;
   font-size: 2rem;
   height: 60px;
@@ -50,11 +50,11 @@ const Button = styled.button`
   border: none;
   border-radius: 12px;
   cursor: pointer;
-  ${({ color }) => handleColor(color as color)};
+  ${({ color }) => color && handleColor(color)};
 
   &:active {
     transform: translateY(2px);
-    ${({ color }) => handleActiveBorderColor(color as color)};
+    ${({ color }) => color && handleActiveBorderColor(color)};
   }
 `;
 
