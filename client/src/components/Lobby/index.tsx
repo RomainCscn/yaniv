@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import classnames from 'classnames';
 import { useHistory, useParams } from 'react-router-dom';
 
 import HowToPlay from './HowToPlay';
@@ -7,12 +6,11 @@ import Players from './Players';
 import Profile from './Profile';
 import RoomConfiguration from './RoomConfiguration';
 import ShareLink from './ShareLink';
+import { SectionContainer, Title } from './styles';
 import AVATARS from '../Avatar';
 import Room from '../Room';
 import client, { send } from '../../core/client';
 import { CustomError, Player, ReceivedMessage } from '../../types';
-
-import styles from './styles.module.css';
 
 const randomAvatar = AVATARS[Math.floor(Math.random() * AVATARS.length)][0];
 const randomUsername = Math.random().toString(36).substring(7);
@@ -79,14 +77,14 @@ const Lobby = () => {
       {play ? (
         <Room players={players} roomId={roomId} username={player.username} userUuid={player.uuid} />
       ) : (
-        <div className={styles.container}>
-          <h1 className={styles.title}>Yaniv</h1>
+        <>
+          <Title>Yaniv</Title>
           <ShareLink />
-          <div className={styles.sectionContainer}>
+          <SectionContainer>
             <Players error={error} players={players} roomId={roomId} username={player.username} />
             <Profile player={player} roomId={roomId} setPlayer={setPlayer} />
-          </div>
-          <div className={classnames(styles.sectionContainer, styles.alignStart)}>
+          </SectionContainer>
+          <SectionContainer alignStart>
             <RoomConfiguration
               roomId={roomId}
               handCardsNumber={handCardsNumber}
@@ -95,8 +93,8 @@ const Lobby = () => {
               setScoreLimit={setScoreLimit}
             />
             <HowToPlay />
-          </div>
-        </div>
+          </SectionContainer>
+        </>
       )}
     </>
   );

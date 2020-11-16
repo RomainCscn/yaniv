@@ -1,4 +1,6 @@
-.container {
+import styled, { css } from 'styled-components';
+
+export const Container = styled.div`
   display: flex;
   flex-direction: column;
   background: #e2e8f0;
@@ -6,14 +8,18 @@
   border-radius: 12px;
   width: 600px;
   margin: 12px;
-}
+`;
 
-.buttonContainer {
+export const ParameterContainer = styled.div`
   display: flex;
   margin-bottom: 24px;
+`;
+
+interface ValueButtonProps {
+  selected: boolean;
 }
 
-.valueButton {
+export const ValueButton = styled.button<ValueButtonProps>`
   padding: 12px;
   font-size: 2rem;
   width: 82px;
@@ -27,9 +33,11 @@
   margin: 12px;
   opacity: 0.8;
   box-shadow: 0 1px 3px hsla(0, 0%, 0%, 0.2);
-}
 
-.selected {
-  opacity: 1;
-  border: 2px solid #38b2ac;
-}
+  ${({ selected }) =>
+    selected &&
+    css`
+      opacity: 1;
+      border: 2px solid #38b2ac;
+    `}
+`;

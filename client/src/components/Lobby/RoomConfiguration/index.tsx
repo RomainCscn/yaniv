@@ -1,11 +1,9 @@
 import React from 'react';
-import classnames from 'classnames';
 
+import { Container, ParameterContainer, ValueButton } from './styles';
+import { ButtonContainer, SectionTitle, Label } from '../styles';
 import Button from '../../shared/Button';
 import { send } from '../../../core/client';
-
-import styles from './styles.module.css';
-import commonStyles from '../styles.module.css';
 
 interface Props {
   roomId: string;
@@ -15,7 +13,7 @@ interface Props {
   setScoreLimit: (v: number) => void;
 }
 
-const ScoreButton = ({
+const ParameterButton = ({
   currentValue,
   setValue,
   value,
@@ -24,12 +22,9 @@ const ScoreButton = ({
   setValue: (v: number) => void;
   value: number;
 }) => (
-  <button
-    className={classnames(styles.valueButton, { [styles.selected]: currentValue === value })}
-    onClick={() => setValue(value)}
-  >
+  <ValueButton selected={currentValue === value} onClick={() => setValue(value)}>
     {value}
-  </button>
+  </ValueButton>
 );
 
 const RoomConfiguration = ({
@@ -44,26 +39,24 @@ const RoomConfiguration = ({
   };
 
   return (
-    <div className={styles.container}>
-      <h2 className={classnames(commonStyles.sectionTitle, commonStyles.gray)}>
-        Paramètres de jeu
-      </h2>
-      <label className={commonStyles.label}>Nombre de cartes par main</label>
-      <div className={styles.buttonContainer}>
-        <ScoreButton currentValue={handCardsNumber} setValue={setHandCardsNumber} value={5} />
-        <ScoreButton currentValue={handCardsNumber} setValue={setHandCardsNumber} value={7} />
-      </div>
-      <label className={commonStyles.label}>Limite de score</label>
-      <div className={styles.buttonContainer}>
-        <ScoreButton currentValue={scoreLimit} setValue={setScoreLimit} value={100} />
-        <ScoreButton currentValue={scoreLimit} setValue={setScoreLimit} value={200} />
-      </div>
-      <div className={commonStyles.buttonContainer}>
+    <Container>
+      <SectionTitle color='gray'>Paramètres de jeu</SectionTitle>
+      <Label>Nombre de cartes par main</Label>
+      <ParameterContainer>
+        <ParameterButton currentValue={handCardsNumber} setValue={setHandCardsNumber} value={5} />
+        <ParameterButton currentValue={handCardsNumber} setValue={setHandCardsNumber} value={7} />
+      </ParameterContainer>
+      <Label>Limite de score</Label>
+      <ParameterContainer>
+        <ParameterButton currentValue={scoreLimit} setValue={setScoreLimit} value={100} />
+        <ParameterButton currentValue={scoreLimit} setValue={setScoreLimit} value={200} />
+      </ParameterContainer>
+      <ButtonContainer>
         <Button color={'gray'} onClick={updateRoomConfiguration}>
           Mettre à jour
         </Button>
-      </div>
-    </div>
+      </ButtonContainer>
+    </Container>
   );
 };
 

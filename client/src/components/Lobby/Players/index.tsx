@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import classnames from 'classnames';
 
+import { Error, PlayersAvatarContainer, PlayerContainer, PlayerName } from './styles';
+import { ButtonContainer, Container, SectionTitle } from '../styles';
 import AVATARS from '../../Avatar';
 import Button from '../../shared/Button';
 import { send } from '../../../core/client';
 import { CustomError, Player } from '../../../types';
-
-import styles from '../styles.module.css';
 
 interface Props {
   error?: CustomError;
@@ -27,35 +26,35 @@ const Players = ({ error, players, roomId, username }: Props) => {
   };
 
   return (
-    <div className={styles.playersContainer}>
-      <h2 className={classnames(styles.sectionTitle, styles.green)}>Joueurs dans le salon</h2>
-      <div className={styles.playersAvatarContainer}>
+    <Container color='green'>
+      <SectionTitle color='green'>Joueurs dans le salon</SectionTitle>
+      <PlayersAvatarContainer>
         {players.map((player) => (
-          <div className={styles.avatarPlayer} key={player.uuid}>
+          <PlayerContainer key={player.uuid}>
             <img
               width={50}
               src={AVATARS.find((avatar) => avatar[0] === player.avatar)![1]}
               alt={player.avatar}
             />
-            <div className={styles.playerName}>
+            <PlayerName>
               {player.username} {player.username === username && '(vous)'}
-            </div>
-          </div>
+            </PlayerName>
+          </PlayerContainer>
         ))}
-      </div>
+      </PlayersAvatarContainer>
       {error && (
         <p>
           Un ou plusieurs joueurs sont déjà en jeu... Changez de salon ou demandez leur de revenir
           au salon et rafraîchissez la page pour jouer !
         </p>
       )}
-      <div className={styles.buttonContainer}>
+      <ButtonContainer>
         <Button color={'green'} onClick={startGame}>
           Commencer la partie
         </Button>
-        {errorMessage && players.length < 2 && <div className={styles.error}>{errorMessage}</div>}
-      </div>
-    </div>
+        {errorMessage && players.length < 2 && <Error>{errorMessage}</Error>}
+      </ButtonContainer>
+    </Container>
   );
 };
 

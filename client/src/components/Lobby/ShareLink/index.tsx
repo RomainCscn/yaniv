@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './styles.module.css';
+import { CopyButton, Link, LinkContainer, LinkText } from './styles';
 
 const ShareLink = () => {
   const copyLink = () => {
@@ -14,15 +14,11 @@ const ShareLink = () => {
 
   return (
     <div>
-      <p className={styles.linkText}>Partagez ce lien à vos amis pour qu'ils vous rejoignent</p>
-      <div className={styles.linkContainer}>
-        <a className={styles.link} href={window.location.href}>
-          {window.location.host + window.location.pathname}
-        </a>
-        <button className={styles.copyButton} onClick={() => copyLink()}>
-          Copier
-        </button>
-      </div>
+      <LinkText>Partagez ce lien à vos amis pour qu'ils vous rejoignent</LinkText>
+      <LinkContainer>
+        <Link href={window.location.href}>{window.location.host + window.location.pathname}</Link>
+        <CopyButton onClick={() => copyLink()}>Copier</CopyButton>
+      </LinkContainer>
     </div>
   );
 };
