@@ -7,6 +7,12 @@ export interface Card {
 
 export type CustomError = 'GAME_ALREADY_STARTED' | 'TOO_MANY_PLAYERS';
 
+export interface Message {
+  content: string;
+  player: Player;
+  time: string;
+}
+
 export interface NewCard {
   card: Card;
   isFromStack: boolean;
@@ -36,6 +42,7 @@ export interface ReceivedMessage {
   configuration: RoomConfiguration;
   error: CustomError;
   hand: Card[];
+  message: Message;
   newCardInHand?: { card: Card; isFromStack: boolean };
   pickedCard?: Card;
   player: Player;
@@ -55,6 +62,8 @@ export interface ReceivedMessage {
 export type ReceivedMessageType =
   | 'CONFIGURATION_UPDATE'
   | 'END_OF_ROUND_UPDATE'
+  | 'GAME_OVER'
+  | 'NEW_MESSAGE'
   | 'NEW_ROUND'
   | 'PLAYER_UPDATE'
   | 'PLAYERS_UPDATE'
@@ -72,6 +81,7 @@ export type SortOrder = 'asc' | 'desc';
 export type MessageAction =
   | 'CONFIGURATION'
   | 'JOIN'
+  | 'MESSAGE'
   | 'PLAY'
   | 'READY_TO_PLAY'
   | 'START'

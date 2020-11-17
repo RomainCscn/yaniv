@@ -1,14 +1,6 @@
 import { getHand, getSuffledDeck } from './game';
 import rooms from './rooms';
-import { CustomWebSocket, Room, SortOrder, User } from '../types';
-
-interface FormattedPlayer {
-  avatar: string;
-  numberOfCards: number;
-  sortOrder: SortOrder;
-  username: string;
-  uuid: string;
-}
+import { CustomWebSocket, FormattedPlayer, Room, User } from '../types';
 
 export const assignHandToPlayer = (room: Room, user: User): void => {
   const userHand = getHand(room, user.sortOrder);

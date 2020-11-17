@@ -1,7 +1,8 @@
 import { useEffect, useReducer, useState } from 'react';
 
 import client from '../core/client';
-import reducer from '../reducers';
+import cardReducer from '../reducers/cardReducer';
+import chatReducer from '../reducers/chatReducer';
 import { Card, NewCard, Player, PlayerScore, ReceivedMessage, SortOrder } from '../types';
 
 interface Props {
@@ -10,10 +11,13 @@ interface Props {
 }
 
 export default function useMultiplayer({ initialPlayers, userUuid }: Props) {
-  const [state, dispatch] = useReducer(reducer, {
+  const [cardState, cardDispatch] = useReducer(cardReducer, {
     otherPlayers: initialPlayers.filter((player) => player.uuid !== userUuid),
     selectedCards: [],
     thrownCards: [],
+  });
+  const [chatState, chatDispatch] = useReducer(chatReducer, {
+    messages: [],
   });
   const [activePlayer, setActivePlayer] = useState<string>('');
   const [canPlay, setCanPlay] = useState(false);
@@ -42,7 +46,7 @@ export default function useMultiplayer({ initialPlayers, userUuid }: Props) {
       } else if (data.type === 'SET_THROWN_CARDS') {
         const { thrownCards } = data;
         setQuickPlayDone(false);
-        dispatch({ type: 'setThrownCards', payload: thrownCards });
+        cardDispatch({ type: 'setThrownCards', payload: thrownCards });
       } else if (data.type === 'SET_PICKED_CARD') {
         const { pickedCard, previousPlayer } = data;
         setPreviousPlayer(previousPlayer);
@@ -53,7 +57,7 @@ export default function useMultiplayer({ initialPlayers, userUuid }: Props) {
       } else if (data.type === 'SET_OTHER_PLAYERS_CARDS') {
         const { players } = data;
         const otherPlayers = players.filter((player) => player.uuid !== userUuid);
-        dispatch({ type: 'setOtherPlayers', payload: otherPlayers });
+        cardDispatch({ type: 'setOtherPlayers', payload: otherPlayers });
       } else if (data.type === 'QUICK_PLAY_DONE') {
         setQuickPlayDone(true);
       } else if (data.type === 'END_OF_ROUND_UPDATE') {
@@ -63,7 +67,7 @@ export default function useMultiplayer({ initialPlayers, userUuid }: Props) {
         setScores(playersScore);
         setRoundWinner(roundWinner);
         setYanivCaller(yanivCaller);
-        dispatch({ type: 'setOtherPlayersCards', payload: playersCard });
+        cardDispatch({ type: 'setOtherPlayersCards', payload: playersCard });
       } else if (data.type === 'SET_INTIAL_SCORES') {
         const { playersScore } = data;
         setScores(playersScore);
@@ -72,21 +76,25 @@ export default function useMultiplayer({ initialPlayers, userUuid }: Props) {
         setActivePlayer(uuid);
         setCanPlay(uuid === userUuid);
       } else if (data.type === 'NEW_ROUND') {
-        dispatch({ type: 'newRound' });
+        cardDispatch({ type: 'newRound' });
         setGameWinner(undefined);
         setPreviousPlayer(undefined);
         setPickedCard(undefined);
         setRoundWinner(undefined);
-      } else if ('GAME_OVER') {
+      } else if (data.type === 'GAME_OVER') {
         const { winner } = data;
         setGameWinner(winner);
+      } else if (data.type === 'NEW_MESSAGE') {
+        chatDispatch({ type: 'NEW_MESSAGE', payload: data.message });
       }
     };
   }, [userUuid]);
 
   return {
-    state,
-    dispatch,
+    cardState,
+    cardDispatch,
+    chatState,
+    chatDispatch,
     activePlayer,
     canPlay,
     gameWinner,

@@ -1,6 +1,6 @@
-import { canSelectCard } from './core/game';
-import { findCardIndex } from './core/utils';
-import { Card, Player } from './types';
+import { canSelectCard } from '../core/game';
+import { findCardIndex } from '../core/utils';
+import { Card, Player } from '../types';
 
 enum ActionType {
   newRound = 'newRound',
@@ -18,7 +18,7 @@ interface Action {
   payload?: Card | Card[] | Player[] | Record<string, Card[]>;
 }
 
-const reducer = (state: any, action: Action) => {
+const cardReducer = (state: any, action: Action) => {
   if (action.type === 'setThrownCards') {
     return {
       ...state,
@@ -86,4 +86,4 @@ const reducer = (state: any, action: Action) => {
   return state;
 };
 
-export default reducer;
+export default cardReducer;

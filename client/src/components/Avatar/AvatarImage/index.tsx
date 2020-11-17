@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 import AVATARS from '../index';
 
 interface Props {
+  className?: any;
   id: string;
   isSelected?: boolean;
   setAvatar?: (id: string) => void;
@@ -25,8 +26,9 @@ const Image = styled.img<{ selected?: boolean }>`
   }
 `;
 
-const Avatar = ({ id, isSelected, setAvatar }: Props) => (
+const Avatar = ({ className, id, isSelected, setAvatar }: Props) => (
   <Image
+    className={className}
     selected={isSelected}
     alt='avatar-cat'
     onClick={setAvatar ? () => setAvatar(id) : undefined}

@@ -1,5 +1,5 @@
 import { getFormattedPlayers } from '../core/room';
-import { Card, Room, User, Users } from '../types';
+import { Card, Message, Room, User, Users } from '../types';
 
 export const removePreviousCards = (room: Room): void => {
   Object.entries(room.users).forEach(([, user]: [string, User]) =>
@@ -18,6 +18,12 @@ export const sendConfiguration = (room: Room): void => {
     user.ws.send(
       JSON.stringify({ type: 'CONFIGURATION_UPDATE', configuration: room.configuration }),
     );
+  });
+};
+
+export const sendMessage = (room: Room, message: Message): void => {
+  Object.entries(room.users).forEach(([, user]: [string, User]) => {
+    user.ws.send(JSON.stringify({ type: 'NEW_MESSAGE', message }));
   });
 };
 

@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import * as WebSocket from 'ws';
 
 import {
+  handleChat,
   handleConfiguration,
   handleJoin,
   handlePlay,
@@ -36,6 +37,7 @@ wss.on('connection', (ws: CustomWebSocket) => {
       actionType,
       avatar,
       handCardsNumber,
+      message,
       notPickedCards,
       pickedCard,
       room: roomId,
@@ -57,6 +59,8 @@ wss.on('connection', (ws: CustomWebSocket) => {
       handleReadyToPlay(roomId, userUuid);
     } else if (action === 'PLAY') {
       handlePlay(actionType, { notPickedCards, pickedCard, thrownCards }, roomId, userUuid);
+    } else if (action === 'MESSAGE') {
+      handleChat(message, roomId, userUuid);
     }
   });
 

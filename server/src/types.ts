@@ -12,6 +12,20 @@ export interface Card {
   value: typeof VALUES[number] | 98 | 99;
 }
 
+export interface FormattedPlayer {
+  avatar: string;
+  numberOfCards: number;
+  sortOrder: SortOrder;
+  username: string;
+  uuid: string;
+}
+
+export interface Message {
+  content: string;
+  player: FormattedPlayer;
+  time: string;
+}
+
 export interface PlayedCards {
   notPickedCards: undefined | Card[];
   pickedCard: undefined | Card;

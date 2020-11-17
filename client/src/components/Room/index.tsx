@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 
+import Chat from '../Chat';
 import EndRound from '../EndRound';
 import MainPlayer from '../Player/MainPlayer';
 import OtherPlayers from '../Player/OtherPlayers';
@@ -21,13 +22,17 @@ interface RoomProps {
 }
 
 const Container = styled.div`
-  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+`;
+
+const RoomContainer = styled.div`
+  position: relative;
   padding: 24px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: calc(100vh - 48px);
-  max-width: 1200px;
 
   @media screen and (max-height: 850px) {
     padding: 12px;
@@ -42,8 +47,9 @@ const CardsContainer = styled.div`
 
 const Room = ({ players, roomId, userUuid }: RoomProps) => {
   const {
-    state,
-    dispatch,
+    chatState,
+    cardState,
+    cardDispatch,
     activePlayer,
     canPlay,
     gameWinner,
@@ -64,11 +70,11 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
     send(roomId, { action: 'READY_TO_PLAY' });
   }, [roomId]);
 
-  const resetSelectedCards = () => dispatch({ type: 'resetSelectedCards' });
+  const resetSelectedCards = () => cardDispatch({ type: 'resetSelectedCards' });
 
   const pickCard = (card?: Card) => {
-    if (canDropCards(state.selectedCards)) {
-      const cards = getCardsAfterPick(card, state.selectedCards, state.thrownCards);
+    if (canDropCards(cardState.selectedCards)) {
+      const cards = getCardsAfterPick(card, cardState.selectedCards, cardState.thrownCards);
 
       resetSelectedCards();
       send(roomId, { action: 'PLAY', actionType: 'DROP_AND_PICK' }, { ...cards });
@@ -76,51 +82,58 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
   };
 
   const selectCard = (card: Card) => {
-    dispatch({ type: 'selectCard', payload: card });
+    cardDispatch({ type: 'selectCard', payload: card });
   };
 
   return (
     <Container>
-      <ScoreDashboard scores={scores} />
-      <OtherPlayers activePlayer={activePlayer} otherPlayers={state.otherPlayers} scores={scores} />
-      {!roundWinner && (
-        <div>
-          <CardsContainer>
-            <ThrownCards
-              canPlay={canPlay && state.selectedCards.length > 0}
-              pickCard={pickCard}
-              thrownCards={state.thrownCards}
-            />
-            <Stack canPlay={canPlay && state.selectedCards.length > 0} pickCard={pickCard} />
-          </CardsContainer>
-          {previousPlayer && previousPlayer.uuid !== userUuid && (
-            <PickedCardAnnouncement previousPlayer={previousPlayer} pickedCard={pickedCard} />
-          )}
-        </div>
-      )}
-      {(gameWinner || roundWinner) && (
-        <EndRound
-          gameWinner={gameWinner}
-          roomId={roomId}
-          roundWinner={roundWinner}
-          userUuid={userUuid}
-          yanivCaller={yanivCaller}
+      <RoomContainer>
+        <ScoreDashboard scores={scores} />
+        <OtherPlayers
+          activePlayer={activePlayer}
+          otherPlayers={cardState.otherPlayers}
+          scores={scores}
         />
-      )}
-      <MainPlayer
-        canPlay={canPlay}
-        hand={hand}
-        newCard={newCard}
-        quickPlayDone={quickPlayDone}
-        player={player!}
-        resetSelectedCards={resetSelectedCards}
-        roomId={roomId}
-        score={scores.find((score) => score.uuid === userUuid)?.score || 0}
-        sortOrder={sortOrder}
-        selectCard={selectCard}
-        selectedCards={state.selectedCards}
-        thrownCards={state.thrownCards}
-      />
+        {!roundWinner && (
+          <div>
+            <CardsContainer>
+              <ThrownCards
+                canPlay={canPlay && cardState.selectedCards.length > 0}
+                pickCard={pickCard}
+                thrownCards={cardState.thrownCards}
+              />
+              <Stack canPlay={canPlay && cardState.selectedCards.length > 0} pickCard={pickCard} />
+            </CardsContainer>
+            {previousPlayer && previousPlayer.uuid !== userUuid && (
+              <PickedCardAnnouncement previousPlayer={previousPlayer} pickedCard={pickedCard} />
+            )}
+          </div>
+        )}
+        {(gameWinner || roundWinner) && (
+          <EndRound
+            gameWinner={gameWinner}
+            roomId={roomId}
+            roundWinner={roundWinner}
+            userUuid={userUuid}
+            yanivCaller={yanivCaller}
+          />
+        )}
+        <MainPlayer
+          canPlay={canPlay}
+          hand={hand}
+          newCard={newCard}
+          quickPlayDone={quickPlayDone}
+          player={player!}
+          resetSelectedCards={resetSelectedCards}
+          roomId={roomId}
+          score={scores.find((score) => score.uuid === userUuid)?.score || 0}
+          sortOrder={sortOrder}
+          selectCard={selectCard}
+          selectedCards={cardState.selectedCards}
+          thrownCards={cardState.thrownCards}
+        />
+      </RoomContainer>
+      <Chat messages={chatState.messages} roomId={roomId} userUuid={userUuid} />
     </Container>
   );
 };
