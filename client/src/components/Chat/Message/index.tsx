@@ -12,7 +12,7 @@ interface Props {
 const Container = styled.div<{ isSelf: boolean }>`
   display: flex;
   align-items: center;
-  justify-content: ${({ isSelf }) => (isSelf ? 'end' : 'start')};
+  justify-content: ${({ isSelf }) => (isSelf ? 'flex-end' : 'flex-start')};
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 `;
@@ -30,6 +30,10 @@ const MessageContent = styled.div<{ isSelf: boolean }>`
   word-break: break-word;
   background-color: ${({ isSelf }) => (isSelf ? '#BEE3F8' : '#EDF2F7')};
   color: ${({ isSelf }) => (isSelf ? '#2A4365' : '#2D3748')};
+
+  @media screen and (max-height: 850px) {
+    font-size: 14px;
+  }
 `;
 
 const MessageSender = styled.div`

@@ -4,7 +4,7 @@ import CardComponent from './HandCard';
 import ActualScore from '../Score/ActualScore';
 import HandScore from '../Score/HandScore';
 import Avatar from '../../Avatar/AvatarImage';
-import SortButton from '../../SortButton';
+// import SortButton from '../../SortButton';
 import YanivButton from '../../YanivButton';
 import { send } from '../../../core/client';
 import { getCardValue } from '../../../core/game';
@@ -103,10 +103,9 @@ const PlayerHand = ({
             selectedCards={selectedCards}
           />
         ))}
-        <div className={styles.buttonContainer}>
-          <YanivButton hand={hand} canClick={canPlay} roomId={roomId} />
+        {/* <div className={styles.buttonContainer}>
           <SortButton roomId={roomId} sortOrder={sortOrder} />
-        </div>
+        </div> */}
       </div>
       <div className={styles.scoreContainer}>
         <div className={styles.avatarContainer}>
@@ -115,6 +114,7 @@ const PlayerHand = ({
         </div>
         <ActualScore score={score} />
         <HandScore score={handScore} />
+        <YanivButton hand={hand} canClick={canPlay} roomId={roomId} />
       </div>
       {canPlay && <div className={styles.activePlayer}></div>}
     </div>

@@ -49,14 +49,20 @@ const ChatButton = styled(HideButton)`
   border: 1px solid #2c5282;
   border-radius: 12px;
   background-color: white;
-`;
 
-const ChatButtonText = styled.span`
-  margin-right: 9px;
+  @media screen and (max-height: 850px) {
+    top: 12px;
+    right: 12px;
+  }
 `;
 
 const MessagesHeader = styled.div`
-  height: 64px;
+  padding: 12px;
+  font-weight: bold;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  height: 40px;
   background-color: #edf2f7;
 `;
 
@@ -73,12 +79,11 @@ const Chat = ({ messages, roomId, userUuid }: Props) => {
   return (
     <Container>
       <ChatButton style={{ display: isVisible ? 'none' : '' }} onClick={() => setIsVisible(true)}>
-        <ChatButtonText>CHAT</ChatButtonText>
         <ChatIcon fill='#2c5282' height='24px' />
       </ChatButton>
       <ChatContainer style={{ display: isVisible ? '' : 'none' }}>
         <HideButton onClick={() => setIsVisible(false)}>Cacher</HideButton>
-        <MessagesHeader />
+        <MessagesHeader>Discussions</MessagesHeader>
         <MessagesContainer>
           {messages.map((message) => (
             <Message isSelf={message.player.uuid === userUuid} message={message} />
