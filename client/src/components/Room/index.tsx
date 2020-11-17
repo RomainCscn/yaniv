@@ -82,12 +82,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
   return (
     <Container>
       <ScoreDashboard scores={scores} />
-      <OtherPlayers
-        activePlayer={activePlayer}
-        otherPlayers={state.otherPlayers}
-        roundWinner={roundWinner}
-        scores={scores}
-      />
+      <OtherPlayers activePlayer={activePlayer} otherPlayers={state.otherPlayers} scores={scores} />
       {!roundWinner && (
         <div>
           <CardsContainer>

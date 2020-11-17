@@ -2,19 +2,22 @@ import React from 'react';
 
 import OtherPlayerHand from './OtherPlayerHand';
 import { Player, PlayerScore } from '../../../types';
-
-import styles from './styles.module.css';
+import styled from 'styled-components';
 
 interface OtherPlayersProps {
   activePlayer: string;
   otherPlayers: Player[];
-  roundWinner: undefined | Player;
   scores: PlayerScore[];
 }
 
-const OtherPlayers = ({ activePlayer, otherPlayers, roundWinner, scores }: OtherPlayersProps) => {
+const Container = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+`;
+
+const OtherPlayers = ({ activePlayer, otherPlayers, scores }: OtherPlayersProps) => {
   return (
-    <div className={styles.container}>
+    <Container>
       {otherPlayers.map(({ avatar, hand, numberOfCards, username, uuid }: Player) => (
         <OtherPlayerHand
           key={username}
@@ -26,7 +29,7 @@ const OtherPlayers = ({ activePlayer, otherPlayers, roundWinner, scores }: Other
           username={username}
         />
       ))}
-    </div>
+    </Container>
   );
 };
 
