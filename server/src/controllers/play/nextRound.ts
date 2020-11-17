@@ -1,9 +1,9 @@
 import { Room, User } from '../../types';
-import { assignHandToPlayer, getFormattedPlayers, resetDeck } from '../../core/room';
+import { assignHandToPlayer, getFormattedPlayers, resetRoom } from '../../core/room';
 
 export const handleNextRound = (room: Room): void => {
   if (room.roundWinner) {
-    resetDeck(room);
+    resetRoom(room);
 
     Object.entries(room.users).forEach(([, user]: [string, User]) => {
       assignHandToPlayer(room, user);

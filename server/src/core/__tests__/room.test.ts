@@ -7,7 +7,7 @@ import initRoom, {
   getPlayerByUuid,
   getFormattedPlayer,
   getFormattedPlayers,
-  resetDeck,
+  resetRoom,
 } from '../room';
 import { CustomWebSocket, Room, User } from '../../types';
 
@@ -134,7 +134,7 @@ describe('room', () => {
     (getSuffledDeck as jest.Mock).mockReturnValue(deck);
 
     const updatedRoom = { ...room, thrownCards: [1, 2], activePlayer: 'toto', roundWinner: 'tata' };
-    resetDeck(updatedRoom);
+    resetRoom(updatedRoom);
 
     expect(updatedRoom).toEqual({
       ...room,
@@ -148,7 +148,7 @@ describe('room', () => {
     (getSuffledDeck as jest.Mock).mockReturnValue(deck);
 
     const updatedRoom = { ...room, thrownCards: [1, 2], activePlayer: 'toto', roundWinner: 'tata' };
-    resetDeck(updatedRoom, { resetScore: true });
+    resetRoom(updatedRoom, { resetScore: true });
 
     expect(updatedRoom).toEqual({
       ...room,

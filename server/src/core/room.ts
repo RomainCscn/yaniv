@@ -75,7 +75,7 @@ export const getPlayersScore = (room: Room): Pick<User, 'score' | 'scoreHistory'
     username: user.username,
   }));
 
-export const resetDeck = (room: Room, { resetScore = false } = {}): void => {
+export const resetRoom = (room: Room, { resetScore = false } = {}): void => {
   room.deck = getSuffledDeck();
   room.thrownCards = [];
   room.activePlayer = room.roundWinner || Object.keys(room.users)[0];

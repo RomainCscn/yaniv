@@ -3,11 +3,11 @@ import {
   assignHandToPlayer,
   getFormattedPlayers,
   getPlayersScore,
-  resetDeck,
+  resetRoom,
 } from '../../core/room';
 
 export const handlePlayAgain = (room: Room): void => {
-  resetDeck(room, { resetScore: true });
+  resetRoom(room, { resetScore: true });
 
   Object.entries(room.users).forEach(([, user]: [string, User]) => {
     assignHandToPlayer(room, user);
