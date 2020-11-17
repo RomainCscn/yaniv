@@ -1,11 +1,9 @@
 import React from 'react';
-import classnames from 'classnames';
 
+import CardImage from './styles';
 import { BACK } from '../../constants';
 import { getCardUniqueIndex, getCardImagePath } from '../../core/utils';
 import { Card } from '../../types';
-
-import styles from './styles.module.css';
 
 interface GenericCardProps {
   card?: Card;
@@ -30,18 +28,13 @@ const GenericCard = ({
   onCardClick,
   onCardDoubleClick,
 }: GenericCardProps) => (
-  <img
-    className={classnames(styles.baseCard, {
-      // @ts-ignore
-      [styles[`${cardType}Card`]]: true,
-      [styles.pointer]: canClick,
-      [styles.selected]: isSelected,
-      [styles.last]: isLast,
-      [styles.new]: isNew,
-    })}
-    style={{
-      transform: degree ? `rotate(${degree}deg)` : 'rotate(0)',
-    }}
+  <CardImage
+    canClick={canClick}
+    cardType={cardType}
+    degree={degree}
+    isLast={isLast}
+    isNew={isNew}
+    isSelected={isSelected}
     alt={card ? `card-${getCardUniqueIndex(card)}` : 'stack'}
     onClick={canClick ? onCardClick : undefined}
     onDoubleClick={canClick ? onCardDoubleClick : undefined}
