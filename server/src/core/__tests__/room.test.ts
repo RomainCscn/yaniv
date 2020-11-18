@@ -25,7 +25,7 @@ describe('room', () => {
   let room: any;
   const user = {
     username: 'a',
-    avatarId: '123',
+    avatar: '123',
     hand: [
       { suit: 'club', value: 1 },
       { suit: 'diamond', value: 2 },
@@ -80,7 +80,7 @@ describe('room', () => {
     addUser('123', room, { avatar: 'abc', username: 'toto' }, {} as CustomWebSocket);
 
     expect(room.users['123']).toEqual({
-      avatarId: 'abc',
+      avatar: 'abc',
       hand: [],
       score: 0,
       scoreHistory: [],

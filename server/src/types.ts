@@ -49,12 +49,14 @@ export interface Room {
 export type SortOrder = 'asc' | 'desc';
 
 export interface User {
-  avatarId: string;
+  avatar: string;
   hand: Card[];
   score: number;
   scoreHistory: number[];
+  sessionUuid: string;
   sortOrder: SortOrder;
   username: string;
+  uuid: string;
   ws: CustomWebSocket;
 }
 

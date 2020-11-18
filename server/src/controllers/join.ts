@@ -1,17 +1,18 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import { sendConfiguration, sendPlayersUpdate } from '../core/dispatcher';
 import initRoom, { addUser } from '../core/room';
 import rooms from '../core/rooms';
-import { CustomWebSocket } from '../types';
+import { CustomWebSocket, User } from '../types';
 
-const isExistingUser = (roomId: string, userUuid: string) =>
-  typeof rooms[roomId].users[userUuid] === 'object';
+const isExistingUser = (roomId: string, player: User) =>
+  player && typeof rooms[roomId].users[player.uuid] === 'object';
 
 const handleJoin = (
   actionType: string,
-  avatar: string,
   roomId: string,
-  username: string,
-  userUuid: string,
+  player: User,
+  sessionUuid: string,
   ws: CustomWebSocket,
 ): void => {
   if (actionType === 'JOINED_LOBBY') {
@@ -27,11 +28,12 @@ const handleJoin = (
       return ws.send(JSON.stringify({ error: 'GAME_ALREADY_STARTED' }));
     }
 
-    if (!isExistingUser(roomId, userUuid)) {
-      addUser(userUuid, rooms[roomId], { avatar, username }, ws);
-    }
+    if (!isExistingUser(roomId, player)) {
+      const playerUuid = uuidv4();
 
-    ws.send(JSON.stringify({ type: 'PLAYER_JOINED' }));
+      addUser(playerUuid, rooms[roomId], { ...player, sessionUuid }, ws);
+      ws.send(JSON.stringify({ type: 'ASSIGN_UUID', playerUuid }));
+    }
 
     sendConfiguration(rooms[roomId]);
     sendPlayersUpdate(rooms[roomId]);

@@ -12,23 +12,25 @@ export const assignHandToPlayer = (room: Room, user: User): void => {
 export const addUser = (
   userUuid: string,
   room: Room,
-  { avatar, username }: { avatar: string; username: string },
+  { avatar, sessionUuid, username }: User,
   userWs: CustomWebSocket,
 ): void => {
   room.users[userUuid] = {
-    avatarId: avatar,
+    avatar,
     hand: [],
     score: 0,
     scoreHistory: [],
+    sessionUuid,
     sortOrder: 'asc',
     username,
+    uuid: userUuid,
     ws: userWs,
   };
 };
 
-export const findRoom = (userUuid: string): [string, Room] | [] => {
+export const findRoom = (sessionUuid: string): [string, Room] | [] => {
   for (const [roomId, room] of Object.entries(rooms)) {
-    if (room.users[userUuid]) {
+    if (Object.values(room.users).find((user) => user.sessionUuid === sessionUuid)) {
       return [roomId, room];
     }
   }
@@ -38,9 +40,12 @@ export const findRoom = (userUuid: string): [string, Room] | [] => {
 
 export const getPlayerByUuid = (room: Room, userUuid: string): User => room.users[userUuid];
 
+export const getPlayerUuidBySessionUuid = (room: Room, sessionUuid: string): string | undefined =>
+  Object.values(room.users).find((user) => user.sessionUuid === sessionUuid)?.uuid;
+
 export const getFormattedPlayers = (room: Room): FormattedPlayer[] =>
   Object.entries(room.users).map(([uuid, user]: [string, User]) => ({
-    avatar: user.avatarId,
+    avatar: user.avatar,
     numberOfCards: user.hand.length,
     sortOrder: user.sortOrder,
     uuid,
@@ -48,7 +53,7 @@ export const getFormattedPlayers = (room: Room): FormattedPlayer[] =>
   }));
 
 export const getFormattedPlayer = (room: Room, uuid: string): FormattedPlayer => {
-  const { avatarId: avatar, hand, sortOrder, username } = room.users[uuid];
+  const { avatar: avatar, hand, sortOrder, username } = room.users[uuid];
 
   return {
     avatar,

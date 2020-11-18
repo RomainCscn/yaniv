@@ -2,21 +2,11 @@ import { sendPlayersUpdate } from '../core/dispatcher';
 import { sortHand } from '../core/game';
 import { getPlayerByUuid } from '../core/room';
 import rooms from '../core/rooms';
-import { SortOrder } from '../types';
+import { SortOrder, User } from '../types';
 
-interface UserInformation {
-  avatar: string;
-  sortOrder?: SortOrder;
-  username: string;
-}
-
-const handleUpdate = (
-  roomId: string,
-  userUuid: string,
-  { avatar, sortOrder, username }: UserInformation,
-): void => {
+const handleUpdate = (roomId: string, player: User, sortOrder?: SortOrder): void => {
   const room = rooms[roomId];
-  const user = getPlayerByUuid(room, userUuid);
+  const user = getPlayerByUuid(room, player.uuid);
 
   if (sortOrder) {
     user.sortOrder = sortOrder;
@@ -27,8 +17,8 @@ const handleUpdate = (
     return;
   }
 
-  user.avatarId = avatar;
-  user.username = username;
+  user.avatar = player.avatar;
+  user.username = player.username;
 
   sendPlayersUpdate(room);
 };

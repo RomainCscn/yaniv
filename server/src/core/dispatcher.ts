@@ -1,30 +1,30 @@
 import { getFormattedPlayers } from '../core/room';
-import { Card, Message, Room, User, Users } from '../types';
+import { Card, Message, Room, Users } from '../types';
 
 export const removePreviousCards = (room: Room): void => {
-  Object.entries(room.users).forEach(([, user]: [string, User]) =>
+  Object.values(room.users).forEach((user) =>
     user.ws.send(JSON.stringify({ type: 'SET_PREVIOUS_CARDS', previousCards: [] })),
   );
 };
 
 export const sendPlayersUpdate = (room: Room): void => {
-  Object.entries(room.users).forEach(([, user]: [string, User]) => {
+  Object.values(room.users).forEach((user) => {
     user.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', players: getFormattedPlayers(room) }));
   });
 };
 
 export const sendConfiguration = (room: Room): void => {
-  Object.entries(room.users).forEach(([, user]: [string, User]) => {
+  Object.values(room.users).forEach((user) =>
     user.ws.send(
       JSON.stringify({ type: 'CONFIGURATION_UPDATE', configuration: room.configuration }),
-    );
-  });
+    ),
+  );
 };
 
 export const sendMessage = (room: Room, message: Message): void => {
-  Object.entries(room.users).forEach(([, user]: [string, User]) => {
-    user.ws.send(JSON.stringify({ type: 'NEW_MESSAGE', message }));
-  });
+  Object.values(room.users).forEach((user) =>
+    user.ws.send(JSON.stringify({ type: 'NEW_MESSAGE', message })),
+  );
 };
 
 export const sendThrownCards = (users: Users, cards: Card[]): void => {
@@ -44,7 +44,7 @@ export const sendThrownCards = (users: Users, cards: Card[]): void => {
     sortedCards.splice(cardGapIndex, 0, jokerCard);
   }
 
-  Object.entries(users).forEach(([, user]: [string, User]) =>
+  Object.values(users).forEach((user) =>
     user.ws.send(JSON.stringify({ type: 'SET_THROWN_CARDS', thrownCards: sortedCards })),
   );
 };

@@ -22,8 +22,8 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws: CustomWebSocket) => {
-  const userUuid = uuidv4();
-  logger.info({ userUuid }, 'User connected');
+  const sessionUuid = uuidv4();
+  logger.info({ sessionUuid }, 'User connected');
 
   ws.isAlive = true;
 
@@ -35,39 +35,38 @@ wss.on('connection', (ws: CustomWebSocket) => {
     const {
       action,
       actionType,
-      avatar,
       handCardsNumber,
       message,
       notPickedCards,
       pickedCard,
+      player,
       room: roomId,
       scoreLimit,
       sortOrder,
       thrownCards,
-      username,
     } = JSON.parse(data);
 
     if (action === 'JOIN') {
-      handleJoin(actionType, avatar, roomId, username, userUuid, ws);
+      handleJoin(actionType, roomId, player, sessionUuid, ws);
     } else if (action === 'CONFIGURATION') {
       handleConfiguration(roomId, { handCardsNumber, scoreLimit });
     } else if (action === 'UPDATE') {
-      handleUpdate(roomId, userUuid, { avatar, sortOrder, username });
+      handleUpdate(roomId, player, sortOrder);
     } else if (action === 'START') {
       handleStart(roomId);
     } else if (action === 'READY_TO_PLAY') {
-      handleReadyToPlay(roomId, userUuid);
+      handleReadyToPlay(roomId, player.uuid);
     } else if (action === 'PLAY') {
-      handlePlay(actionType, { notPickedCards, pickedCard, thrownCards }, roomId, userUuid);
+      handlePlay(actionType, { notPickedCards, pickedCard, thrownCards }, roomId, player.uuid);
     } else if (action === 'MESSAGE') {
-      handleChat(message, roomId, userUuid);
+      handleChat(message, roomId, player.uuid);
     }
   });
 
   ws.onclose = () => {
-    logger.info({ userUuid }, 'WebSocket closed');
+    logger.info({ sessionUuid }, 'WebSocket closed');
 
-    handleWebSocketClosed(userUuid);
+    handleWebSocketClosed(sessionUuid);
   };
 });
 
@@ -90,6 +89,6 @@ wss.on('close', () => {
   clearInterval(interval);
 });
 
-console.log('Server started on port ', process.env.PORT || 8999);
+logger.info('Server started on port ', process.env.PORT || 8999);
 
 server.listen(process.env.PORT || 8999);
