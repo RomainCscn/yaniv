@@ -65,6 +65,7 @@ export type ReceivedMessageType =
   | 'CONFIGURATION_UPDATE'
   | 'END_OF_ROUND_UPDATE'
   | 'GAME_OVER'
+  | 'JOIN_ONGOING_GAME'
   | 'NEW_MESSAGE'
   | 'NEW_ROUND'
   | 'PLAYER_UPDATE'
@@ -74,7 +75,6 @@ export type ReceivedMessageType =
   | 'SET_INTIAL_SCORES'
   | 'SET_PLAYER_HAND'
   | 'SET_PICKED_CARD'
-  | 'SET_OTHER_PLAYERS_CARDS'
   | 'SET_THROWN_CARDS'
   | 'START_GAME';
 

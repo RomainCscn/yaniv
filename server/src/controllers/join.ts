@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import { sendConfiguration, sendPlayersUpdate } from '../core/dispatcher';
-import initRoom, { addUser } from '../core/room';
+import initRoom, { addUser, getPlayerByUuid, getFormattedPlayers } from '../core/room';
 import rooms from '../core/rooms';
 import { CustomWebSocket, User } from '../types';
 
@@ -25,10 +25,29 @@ const handleJoin = (
     }
 
     if (rooms[roomId].activePlayer) {
+      if (isExistingUser(roomId, player)) {
+        // re-establish ws connection
+        getPlayerByUuid(rooms[roomId], player.uuid).sessionUuid = sessionUuid;
+        getPlayerByUuid(rooms[roomId], player.uuid).ws = ws;
+
+        sendPlayersUpdate(rooms[roomId]);
+
+        return ws.send(
+          JSON.stringify({
+            type: 'JOIN_ONGOING_GAME',
+            players: getFormattedPlayers(rooms[roomId]),
+          }),
+        );
+      }
+
       return ws.send(JSON.stringify({ error: 'GAME_ALREADY_STARTED' }));
     }
 
-    if (!isExistingUser(roomId, player)) {
+    if (isExistingUser(roomId, player)) {
+      // re-establish ws connection
+      getPlayerByUuid(rooms[roomId], player.uuid).sessionUuid = sessionUuid;
+      getPlayerByUuid(rooms[roomId], player.uuid).ws = ws;
+    } else {
       const playerUuid = uuidv4();
 
       addUser(playerUuid, rooms[roomId], { ...player, sessionUuid }, ws);

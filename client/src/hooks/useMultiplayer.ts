@@ -54,7 +54,7 @@ export default function useMultiplayer({ initialPlayers, userUuid }: Props) {
         if (previousPlayer.uuid !== userUuid) {
           setNewCard(undefined); // reset new card if a card is picked by another player
         }
-      } else if (data.type === 'SET_OTHER_PLAYERS_CARDS') {
+      } else if (data.type === 'PLAYERS_UPDATE') {
         const { players } = data;
         const otherPlayers = players.filter((player) => player.uuid !== userUuid);
         cardDispatch({ type: 'setOtherPlayers', payload: otherPlayers });

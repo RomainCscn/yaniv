@@ -49,6 +49,9 @@ const Lobby = () => {
         setScoreLimit(configuration.scoreLimit);
       } else if (type === 'ASSIGN_UUID') {
         setPlayer((prevPlayer: Player) => ({ ...prevPlayer, uuid: playerUuid }));
+      } else if (type === 'JOIN_ONGOING_GAME') {
+        setPlayers(players);
+        setPlay(true);
       } else if (type === 'PLAYERS_UPDATE') {
         setPlayers(players);
       } else if (type === 'START_GAME') {

@@ -27,6 +27,11 @@ export const sendMessage = (room: Room, message: Message): void => {
   );
 };
 
+export const sendStartGame = (room: Room): void =>
+  Object.values(room.users).forEach((user) => {
+    user.ws.send(JSON.stringify({ type: 'START_GAME', players: getFormattedPlayers(room) }));
+  });
+
 export const sendThrownCards = (users: Users, cards: Card[]): void => {
   let sortedCards: Card[] = [];
   const jokerCard = cards.find((c: Card) => c.suit === 'joker');

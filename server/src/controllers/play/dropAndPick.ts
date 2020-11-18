@@ -59,8 +59,6 @@ export const handleDropAndPick = (
         previousPlayer: getFormattedPlayer(room, playersUuid[activePlayerIndex]),
       }),
     );
-    user.ws.send(
-      JSON.stringify({ type: 'SET_OTHER_PLAYERS_CARDS', players: getFormattedPlayers(room) }),
-    );
+    user.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', players: getFormattedPlayers(room) }));
   });
 };

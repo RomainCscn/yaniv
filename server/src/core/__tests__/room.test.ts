@@ -77,7 +77,12 @@ describe('room', () => {
   });
 
   it('should add a user to the room', () => {
-    addUser('123', room, { avatar: 'abc', username: 'toto' }, {} as CustomWebSocket);
+    addUser(
+      '123',
+      room,
+      { avatar: 'abc', username: 'toto', sessionUuid: '456', uuid: '123' } as User,
+      {} as CustomWebSocket,
+    );
 
     expect(room.users['123']).toEqual({
       avatar: 'abc',
@@ -85,6 +90,8 @@ describe('room', () => {
       score: 0,
       scoreHistory: [],
       username: 'toto',
+      sessionUuid: '456',
+      uuid: '123',
       ws: {},
     });
   });

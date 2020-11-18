@@ -44,13 +44,15 @@ export const getPlayerUuidBySessionUuid = (room: Room, sessionUuid: string): str
   Object.values(room.users).find((user) => user.sessionUuid === sessionUuid)?.uuid;
 
 export const getFormattedPlayers = (room: Room): FormattedPlayer[] =>
-  Object.entries(room.users).map(([uuid, user]: [string, User]) => ({
-    avatar: user.avatar,
-    numberOfCards: user.hand.length,
-    sortOrder: user.sortOrder,
-    uuid,
-    username: user.username,
-  }));
+  Object.values(room.users)
+    .filter((user) => user.ws.readyState !== user.ws.CLOSED)
+    .map((user) => ({
+      avatar: user.avatar,
+      numberOfCards: user.hand.length,
+      sortOrder: user.sortOrder,
+      uuid: user.uuid,
+      username: user.username,
+    }));
 
 export const getFormattedPlayer = (room: Room, uuid: string): FormattedPlayer => {
   const { avatar: avatar, hand, sortOrder, username } = room.users[uuid];
