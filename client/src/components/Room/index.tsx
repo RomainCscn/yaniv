@@ -50,6 +50,15 @@ const RoomContainer = styled.div`
 const CardsContainer = styled.div`
   display: flex;
   justify-content: center;
+  align-items: baseline;
+`;
+
+const PlayersTurn = styled.p`
+  text-align: center;
+  min-height: 25px;
+  margin-bottom: 24px;
+  font-size: 18px;
+  font-weight: bold;
 `;
 
 const Room = ({ players, roomId, setPlay, userUuid }: RoomProps) => {
@@ -112,6 +121,7 @@ const Room = ({ players, roomId, setPlay, userUuid }: RoomProps) => {
           />
           {!roundWinner && (
             <div>
+              <PlayersTurn>{canPlay ? `C'est à vous !` : ''}</PlayersTurn>
               <CardsContainer>
                 <ThrownCards
                   canPlay={canPlay && cardState.selectedCards.length > 0}

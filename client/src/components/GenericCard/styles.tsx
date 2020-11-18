@@ -33,6 +33,10 @@ const cardStyle = {
   hand: css`
     margin-right: -64px;
     align-self: flex-end;
+
+    @media screen and (max-height: 850px) {
+      margin-right: -46px;
+    }
   `,
   stack: css`
     margin-right: 0px;
@@ -63,16 +67,19 @@ const CardImage = styled.img<CardImageProps>`
   transform: ${({ degree }) => (degree ? `rotate(${degree}deg)` : 'rotate(0)')};
 
   @media screen and (max-height: 850px) {
-    margin-right: -46px;
     width: 90px;
     height: 125px;
   }
 
   ${({ cardType }) => cardType && cardStyle[cardType]}
+
   ${({ isLast }) =>
     isLast &&
     css`
       margin-right: 0;
+      @media screen and (max-height: 850px) {
+        margin-right: 0;
+      }
     `}
   ${({ isSelected }) =>
     isSelected &&
