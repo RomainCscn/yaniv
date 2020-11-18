@@ -1,17 +1,15 @@
 import React, { useCallback } from 'react';
 
+import { ActivePlayer, AvatarContainer, Container, HandContainer, ScoreContainer } from './styles';
 import CardComponent from './HandCard';
 import ActualScore from '../Score/ActualScore';
 import HandScore from '../Score/HandScore';
 import Avatar from '../../Avatar/AvatarImage';
-// import SortButton from '../../SortButton';
 import YanivButton from '../../YanivButton';
 import { send } from '../../../core/client';
 import { getCardValue } from '../../../core/game';
 import { getCardUniqueIndex } from '../../../core/utils';
 import { Card, NewCard, Player, SortOrder } from '../../../types';
-
-import styles from './styles.module.css';
 
 interface PlayerHandProps {
   canPlay: boolean;
@@ -86,8 +84,8 @@ const PlayerHand = ({
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.handContainer}>
+    <Container>
+      <HandContainer>
         {hand.map((card, index) => (
           <CardComponent
             key={getCardUniqueIndex(card) + index}
@@ -103,21 +101,18 @@ const PlayerHand = ({
             selectedCards={selectedCards}
           />
         ))}
-        {/* <div className={styles.buttonContainer}>
-          <SortButton roomId={roomId} sortOrder={sortOrder} />
-        </div> */}
-      </div>
-      <div className={styles.scoreContainer}>
-        <div className={styles.avatarContainer}>
+      </HandContainer>
+      <ScoreContainer>
+        <AvatarContainer>
           <Avatar id={player.avatar} />
           {player.username}
-        </div>
+        </AvatarContainer>
         <ActualScore score={score} />
         <HandScore score={handScore} />
         <YanivButton hand={hand} canClick={canPlay} roomId={roomId} />
-      </div>
-      {canPlay && <div className={styles.activePlayer}></div>}
-    </div>
+      </ScoreContainer>
+      {canPlay && <ActivePlayer />}
+    </Container>
   );
 };
 

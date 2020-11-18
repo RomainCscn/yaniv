@@ -1,13 +1,11 @@
 import React from 'react';
-import classnames from 'classnames';
+import styled from 'styled-components';
 
-import Dot from '../Dot';
+import Dots from '../Dots';
 import ActualScore from '../../Score/ActualScore';
 import AvatarImage from '../../../Avatar/AvatarImage';
 import GenericCard from '../../../GenericCard';
 import { Card } from '../../../../types';
-
-import styles from './styles.module.css';
 
 interface OtherPlayerHandProps {
   avatar: string;
@@ -18,13 +16,32 @@ interface OtherPlayerHandProps {
   username: string;
 }
 
-const Dots = () => (
-  <div className={styles.dots}>
-    <Dot>.</Dot>
-    <Dot>.</Dot>
-    <Dot>.</Dot>
-  </div>
-);
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const BottomContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  min-width: 200px;
+
+  @media screen and (max-height: 850px) {
+    min-width: 175px;
+  }
+`;
+
+const AvatarContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const PlayerName = styled.div<{ isActive: boolean }>`
+  ${({ isActive }) => isActive && 'border-bottom: 3px solid #4fd1c5'}
+`;
 
 const OtherPlayerHand = ({
   avatar,
@@ -35,7 +52,7 @@ const OtherPlayerHand = ({
   username,
 }: OtherPlayerHandProps) => {
   return (
-    <div className={styles.container}>
+    <Container>
       <div>
         {hand
           ? hand.map((card, index) => (
@@ -56,15 +73,15 @@ const OtherPlayerHand = ({
               />
             ))}
       </div>
-      <div className={styles.scoreContainer}>
-        <div className={styles.avatarContainer}>
+      <BottomContainer>
+        <AvatarContainer>
           <AvatarImage id={avatar} />
-          <div className={classnames({ [styles.activePlayer]: isActivePlayer })}>{username}</div>
-        </div>
+          <PlayerName isActive={isActivePlayer}>{username}</PlayerName>
+        </AvatarContainer>
         {isActivePlayer && <Dots />}
         <ActualScore isOtherPlayer score={score} />
-      </div>
-    </div>
+      </BottomContainer>
+    </Container>
   );
 };
 
