@@ -43,7 +43,7 @@ const RoundOver = ({ roundWinner, roomId, userUuid, yanivCaller }: Props) => (
         <WinnerUsername>{roundWinner.username}</WinnerUsername>
       </AvatarContainer>
     )}
-    <NextRoundButton roomId={roomId} />
+    <NextRoundButton roomId={roomId} userUuid={userUuid} />
   </Container>
 );
 

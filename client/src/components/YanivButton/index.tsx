@@ -5,11 +5,12 @@ import DefaultButton from '../shared/Button';
 import { MAX_VALUE_TO_SUBMIT } from '../../constants';
 import { send } from '../../core/client';
 import { getCardValue } from '../../core/game';
-import { Card } from '../../types';
+import { Card, Player } from '../../types';
 
 interface YanivButtonProps {
   canClick: boolean;
   hand: Card[];
+  player: Player;
   roomId: string;
 }
 
@@ -42,10 +43,10 @@ const canSubmitYaniv = (hand: Card[], canClick: boolean): boolean => {
   return canClick && handSum <= MAX_VALUE_TO_SUBMIT;
 };
 
-const YanivButton = ({ hand, canClick, roomId }: YanivButtonProps) => {
+const YanivButton = ({ hand, canClick, roomId, player }: YanivButtonProps) => {
   const canSubmit = canSubmitYaniv(hand, canClick);
 
-  const submit = () => send(roomId, { action: 'PLAY', actionType: 'YANIV' });
+  const submit = () => send(roomId, { action: 'PLAY', actionType: 'YANIV' }, { player });
 
   return (
     <Button color='green' canClick={canSubmit} onClick={canSubmit ? submit : undefined}>

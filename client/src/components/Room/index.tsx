@@ -12,12 +12,11 @@ import { send } from '../../core/client';
 import { canDropCards, getCardsAfterPick } from '../../core/game';
 import { Card, Player } from '../../types';
 import ScoreDashboard from '../ScoreDashboard';
-import useMultiplayer from '../../hooks/multiplayer';
+import useMultiplayer from '../../hooks/useMultiplayer';
 
 interface RoomProps {
   players: Player[];
   roomId: string;
-  username: string;
   userUuid: string;
 }
 
@@ -67,8 +66,8 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
   const player = useMemo(() => players.find((p) => p.uuid === userUuid), [players, userUuid]);
 
   useEffect(() => {
-    send(roomId, { action: 'READY_TO_PLAY' });
-  }, [roomId]);
+    send(roomId, { action: 'READY_TO_PLAY' }, { player });
+  }, [player, roomId]);
 
   const resetSelectedCards = () => cardDispatch({ type: 'resetSelectedCards' });
 
@@ -77,7 +76,7 @@ const Room = ({ players, roomId, userUuid }: RoomProps) => {
       const cards = getCardsAfterPick(card, cardState.selectedCards, cardState.thrownCards);
 
       resetSelectedCards();
-      send(roomId, { action: 'PLAY', actionType: 'DROP_AND_PICK' }, { ...cards });
+      send(roomId, { action: 'PLAY', actionType: 'DROP_AND_PICK' }, { ...cards, player });
     }
   };
 

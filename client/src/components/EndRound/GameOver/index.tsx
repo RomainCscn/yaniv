@@ -39,7 +39,7 @@ const GameOver = ({ gameWinner, roomId, userUuid }: Props) => (
       <Avatar id={gameWinner.avatar} />
       <WinnerUsername>{gameWinner.username}</WinnerUsername>
     </AvatarContainer>
-    <PlayAgainButton roomId={roomId} />
+    <PlayAgainButton roomId={roomId} userUuid={userUuid} />
   </Container>
 );
 

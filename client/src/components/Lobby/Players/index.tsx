@@ -11,10 +11,10 @@ interface Props {
   error?: CustomError;
   players: Player[];
   roomId: string;
-  username: string;
+  currentPlayer: Player;
 }
 
-const Players = ({ error, players, roomId, username }: Props) => {
+const Players = ({ error, players, roomId, currentPlayer }: Props) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const startGame = () => {
@@ -37,7 +37,7 @@ const Players = ({ error, players, roomId, username }: Props) => {
               alt={player.avatar}
             />
             <PlayerName>
-              {player.username} {player.username === username && '(vous)'}
+              {player.username} {player.uuid === currentPlayer.uuid && '(vous)'}
             </PlayerName>
           </PlayerContainer>
         ))}

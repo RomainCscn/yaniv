@@ -79,7 +79,7 @@ const PlayerHand = ({
     send(
       roomId,
       { action: 'PLAY', actionType: 'QUICK_PLAY' },
-      { thrownCards: [...thrownCards, card] },
+      { thrownCards: [...thrownCards, card], player },
     );
   };
 
@@ -109,7 +109,7 @@ const PlayerHand = ({
         </AvatarContainer>
         <ActualScore score={score} />
         <HandScore score={handScore} />
-        <YanivButton hand={hand} canClick={canPlay} roomId={roomId} />
+        <YanivButton hand={hand} canClick={canPlay} player={player} roomId={roomId} />
       </ScoreContainer>
       {canPlay && <ActivePlayer />}
     </Container>

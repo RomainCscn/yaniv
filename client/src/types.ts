@@ -46,6 +46,7 @@ export interface ReceivedMessage {
   newCardInHand?: { card: Card; isFromStack: boolean };
   pickedCard?: Card;
   player: Player;
+  playerUuid: string;
   players: Player[];
   playersCard: Record<string, Card[]>;
   playersScore: PlayerScore[];
@@ -60,6 +61,7 @@ export interface ReceivedMessage {
 }
 
 export type ReceivedMessageType =
+  | 'ASSIGN_UUID'
   | 'CONFIGURATION_UPDATE'
   | 'END_OF_ROUND_UPDATE'
   | 'GAME_OVER'

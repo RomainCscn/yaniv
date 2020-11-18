@@ -15,7 +15,7 @@ interface Props {
 
 const Profile = ({ roomId, player, setPlayer }: Props) => {
   const updatePlayerInformation = () => {
-    send(roomId, { action: 'UPDATE' }, { avatar: player.avatar, username: player.username });
+    send(roomId, { action: 'UPDATE' }, { player });
   };
 
   const setUsername = (e: any) => setPlayer({ ...player, username: e.target.value });

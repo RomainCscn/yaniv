@@ -90,7 +90,7 @@ const Chat = ({ messages, roomId, userUuid }: Props) => {
           ))}
           <div ref={messagesRef}></div>
         </MessagesContainer>
-        <NewMessage roomId={roomId} />
+        <NewMessage roomId={roomId} userUuid={userUuid} />
       </ChatContainer>
     </Container>
   );
