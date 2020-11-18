@@ -5,8 +5,13 @@ export const handleNextRound = (room: Room): void => {
   if (room.roundWinner) {
     resetRoom(room);
 
+    // first assign a hand to each player
     Object.entries(room.users).forEach(([, user]: [string, User]) => {
       assignHandToPlayer(room, user);
+    });
+
+    // then dispatch the messages
+    Object.entries(room.users).forEach(([, user]: [string, User]) => {
       user.ws.send(JSON.stringify({ type: 'NEW_ROUND' }));
       user.ws.send(
         JSON.stringify({ type: 'SET_OTHER_PLAYERS_CARDS', players: getFormattedPlayers(room) }),
