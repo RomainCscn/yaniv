@@ -22,10 +22,11 @@ const Lobby = () => {
   let { roomId } = useParams() as any;
   const history = useHistory();
 
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<CustomError>();
   const [handCardsNumber, setHandCardsNumber] = useState(7);
   const [scoreLimit, setScoreLimit] = useState(200);
-  const [play, setPlay] = useState(false);
+  const [play, setPlay] = useState<boolean | undefined>(undefined);
   const [player, setPlayer] = useLocalStorage('player', initialPlayer);
   const [players, setPlayers] = useState<Player[]>([]);
 
@@ -40,6 +41,8 @@ const Lobby = () => {
         message.data,
       );
 
+      if (type !== 'JOIN_ONGOING_GAME') setIsLoading(false);
+
       if (error === 'GAME_ALREADY_STARTED') {
         return setError(error);
       }
@@ -52,6 +55,7 @@ const Lobby = () => {
       } else if (type === 'JOIN_ONGOING_GAME') {
         setPlayers(players);
         setPlay(true);
+        setIsLoading(false);
       } else if (type === 'PLAYERS_UPDATE') {
         setPlayers(players);
       } else if (type === 'START_GAME') {
@@ -68,20 +72,32 @@ const Lobby = () => {
 
   useEffect(() => {
     if (client.readyState !== client.OPEN) {
-      client.addEventListener('open', () => {
-        sendJoin();
-        client.onmessage = handleMessage;
-      });
+      if (client.onopen === null) {
+        client.onopen = () => {
+          if (play === undefined) sendJoin(); // useful to handle back to lobby
+          client.onmessage = handleMessage;
+        };
+      }
     } else if (client.onmessage === null) {
-      sendJoin();
+      if (play === undefined) sendJoin();
       client.onmessage = handleMessage;
     }
-  }, [handleMessage, sendJoin, roomId]);
+  }, [handleMessage, play, sendJoin, roomId]);
+
+  useEffect(() => {
+    if (play === false) {
+      send(roomId, { action: 'JOIN', actionType: 'BACK' });
+    }
+  }, [play, roomId]);
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <>
       {play ? (
-        <Room players={players} roomId={roomId} userUuid={player.uuid} />
+        <Room players={players} roomId={roomId} setPlay={setPlay} userUuid={player.uuid} />
       ) : (
         <>
           <Title>Yaniv</Title>

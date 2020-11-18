@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-type Color = 'green' | 'gray' | 'purple';
+type Color = 'green' | 'gray' | 'orange' | 'purple';
 
 const handleColor = (color: Color) => {
   switch (color) {
@@ -15,6 +15,12 @@ const handleColor = (color: Color) => {
         color: #1a202c;
         background: #a0aec0;
         border-bottom: 4px solid #4a5568;
+      `;
+    case 'orange':
+      return css`
+        color: #7b341e;
+        background: #ed8936;
+        border-bottom: 4px solid #c05621;
       `;
     case 'purple':
       return css`
@@ -34,6 +40,10 @@ const handleActiveBorderColor = (color: Color) => {
     case 'gray':
       return css`
         border-bottom: 2px solid #a0aec0;
+      `;
+    case 'orange':
+      return css`
+        border-bottom: 2px solid #ed8936;
       `;
     case 'purple':
       return css`

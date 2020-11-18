@@ -90,6 +90,7 @@ export type MessageAction =
   | 'UPDATE';
 
 export type MessageActionType =
+  | 'BACK'
   | 'DROP_AND_PICK'
   | 'JOINED_LOBBY'
   | 'NEXT_ROUND'

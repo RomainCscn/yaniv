@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 
 import client from '../core/client';
 import cardReducer from '../reducers/cardReducer';
@@ -19,6 +19,7 @@ export default function useMultiplayer({ initialPlayers, userUuid }: Props) {
   const [chatState, chatDispatch] = useReducer(chatReducer, {
     messages: [],
   });
+  const [playerQuit, setPlayerQuit] = useState(false);
   const [activePlayer, setActivePlayer] = useState<string>('');
   const [canPlay, setCanPlay] = useState(false);
   const [gameWinner, setGameWinner] = useState<Player>();
@@ -57,7 +58,12 @@ export default function useMultiplayer({ initialPlayers, userUuid }: Props) {
       } else if (data.type === 'PLAYERS_UPDATE') {
         const { players } = data;
         const otherPlayers = players.filter((player) => player.uuid !== userUuid);
-        cardDispatch({ type: 'setOtherPlayers', payload: otherPlayers });
+        if (cardState.otherPlayers.length !== otherPlayers.length) {
+          setPlayerQuit(true);
+        } else {
+          setPlayerQuit(false);
+          cardDispatch({ type: 'setOtherPlayers', payload: otherPlayers });
+        }
       } else if (data.type === 'QUICK_PLAY_DONE') {
         setQuickPlayDone(true);
       } else if (data.type === 'END_OF_ROUND_UPDATE') {
@@ -88,7 +94,9 @@ export default function useMultiplayer({ initialPlayers, userUuid }: Props) {
         chatDispatch({ type: 'NEW_MESSAGE', payload: data.message });
       }
     };
-  }, [userUuid]);
+  }, [cardState.otherPlayers.length, userUuid]);
+
+  const resetOnMessage = useCallback(() => (client.onmessage = null), []);
 
   return {
     cardState,
@@ -101,8 +109,10 @@ export default function useMultiplayer({ initialPlayers, userUuid }: Props) {
     hand,
     newCard,
     pickedCard,
+    playerQuit,
     previousPlayer,
     quickPlayDone,
+    resetOnMessage,
     roundWinner,
     scores,
     sortOrder,
