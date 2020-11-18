@@ -5,22 +5,29 @@ const Container = styled.div`
   width: 600px;
   padding: 6px 16px;
   margin: 18px;
+  font-family: 'Roboto';
 
   li {
     margin-bottom: 12px;
   }
 `;
 
+const Title = styled.h2`
+  font-family: 'Simplicity';
+  font-size: 48px;
+  margin: 12px 0;
+  color: #4a5568;
+`;
+
 const Link = styled.a`
   text-align: center;
   font-weight: bold;
   color: #2b6cb0;
-  margin-right: 24px;
 `;
 
 const HowToPlay = () => (
   <Container>
-    <h2>Comment jouer</h2>
+    <Title>Comment jouer</Title>
     <div>
       <ul>
         <li>

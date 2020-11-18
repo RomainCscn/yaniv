@@ -68,7 +68,7 @@ const MessagesHeader = styled.div`
 
 const Chat = ({ messages, roomId, userUuid }: Props) => {
   const messagesRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     if (messagesRef.current) {

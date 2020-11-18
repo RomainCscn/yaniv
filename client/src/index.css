@@ -13,11 +13,13 @@
   src: local('Simplicity'), url(./assets/fonts/simplicity.ttf) format('truetype');
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
 body {
   color: #1a202c;
   background-color: #ebf4ff;
   margin: 0;
-  font-family: 'Kurril', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+  font-family: 'Kurril', -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen', 'Ubuntu',
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
