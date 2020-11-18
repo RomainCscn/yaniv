@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import { sendConfiguration, sendPlayersUpdate } from '../core/dispatcher';
-import initRoom, { addUser, getPlayerByUuid, getFormattedPlayers } from '../core/room';
+import initRoom, { addUser, getPlayerByUuid, getFormattedPlayers, resetRoom } from '../core/room';
 import rooms from '../core/rooms';
 import { CustomWebSocket, User } from '../types';
 
@@ -30,14 +30,14 @@ const handleJoin = (
         getPlayerByUuid(rooms[roomId], player.uuid).sessionUuid = sessionUuid;
         getPlayerByUuid(rooms[roomId], player.uuid).ws = ws;
 
-        sendPlayersUpdate(rooms[roomId]);
-
-        return ws.send(
+        ws.send(
           JSON.stringify({
             type: 'JOIN_ONGOING_GAME',
             players: getFormattedPlayers(rooms[roomId]),
           }),
         );
+
+        return sendPlayersUpdate(rooms[roomId]);
       }
 
       return ws.send(JSON.stringify({ error: 'GAME_ALREADY_STARTED' }));
@@ -55,6 +55,9 @@ const handleJoin = (
     }
 
     sendConfiguration(rooms[roomId]);
+    sendPlayersUpdate(rooms[roomId]);
+  } else if (actionType === 'BACK') {
+    resetRoom(rooms[roomId], { resetActivePlayer: true });
     sendPlayersUpdate(rooms[roomId]);
   }
 };

@@ -1,6 +1,6 @@
 import { getHand, getSuffledDeck } from './game';
 import rooms from './rooms';
-import { CustomWebSocket, FormattedPlayer, Room, User } from '../types';
+import { Card, CustomWebSocket, FormattedPlayer, Room, User } from '../types';
 
 export const assignHandToPlayer = (room: Room, user: User): void => {
   const userHand = getHand(room, user.sortOrder);
@@ -74,10 +74,33 @@ export const getPlayersScore = (room: Room): Pick<User, 'score' | 'scoreHistory'
     username: user.username,
   }));
 
-export const resetRoom = (room: Room, { resetScore = false } = {}): void => {
+export const getSortedCards = (cards: Card[]): Card[] => {
+  let sortedCards: Card[] = [];
+  const jokerCard = cards.find((c: Card) => c.suit === 'joker');
+
+  if (!jokerCard) {
+    sortedCards = cards.sort((a, b) => a.value - b.value);
+  } else {
+    sortedCards = cards.filter((c) => c.suit !== 'joker').sort((a, b) => a.value - b.value);
+
+    const cardGapIndex =
+      sortedCards.findIndex(
+        (card, index) => sortedCards[index + 1] && card.value + 2 === sortedCards[index + 1].value,
+      ) + 1; // + 1 here because we removed the joker (in case of J 2 4 cards where J = 98 or 99)
+
+    sortedCards.splice(cardGapIndex, 0, jokerCard);
+  }
+
+  return sortedCards;
+};
+
+export const resetRoom = (
+  room: Room,
+  { resetScore = false, resetActivePlayer = false } = {},
+): void => {
   room.deck = getSuffledDeck();
   room.thrownCards = [];
-  room.activePlayer = room.roundWinner || Object.keys(room.users)[0];
+  room.activePlayer = resetActivePlayer ? null : room.roundWinner || Object.keys(room.users)[0];
   room.roundWinner = null;
 
   if (resetScore) {

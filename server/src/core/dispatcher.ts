@@ -1,5 +1,5 @@
-import { getFormattedPlayers } from '../core/room';
-import { Card, Message, Room, Users } from '../types';
+import { getFormattedPlayers, getSortedCards } from '../core/room';
+import { Message, Room } from '../types';
 
 export const removePreviousCards = (room: Room): void => {
   Object.values(room.users).forEach((user) =>
@@ -32,24 +32,10 @@ export const sendStartGame = (room: Room): void =>
     user.ws.send(JSON.stringify({ type: 'START_GAME', players: getFormattedPlayers(room) }));
   });
 
-export const sendThrownCards = (users: Users, cards: Card[]): void => {
-  let sortedCards: Card[] = [];
-  const jokerCard = cards.find((c: Card) => c.suit === 'joker');
-
-  if (!jokerCard) {
-    sortedCards = cards.sort((a, b) => a.value - b.value);
-  } else {
-    sortedCards = cards.filter((c) => c.suit !== 'joker').sort((a, b) => a.value - b.value);
-
-    const cardGapIndex =
-      sortedCards.findIndex(
-        (card, index) => sortedCards[index + 1] && card.value + 2 === sortedCards[index + 1].value,
-      ) + 1; // + 1 here because we removed the joker (in case of J 2 4 cards where J = 98 or 99)
-
-    sortedCards.splice(cardGapIndex, 0, jokerCard);
-  }
-
-  Object.values(users).forEach((user) =>
-    user.ws.send(JSON.stringify({ type: 'SET_THROWN_CARDS', thrownCards: sortedCards })),
+export const sendThrownCards = (room: Room): void => {
+  Object.values(room.users).forEach((user) =>
+    user.ws.send(
+      JSON.stringify({ type: 'SET_THROWN_CARDS', thrownCards: getSortedCards(room.thrownCards) }),
+    ),
   );
 };

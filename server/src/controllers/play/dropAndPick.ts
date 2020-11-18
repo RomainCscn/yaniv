@@ -8,7 +8,8 @@ export const handleDropAndPick = (
   user: User,
   { notPickedCards, pickedCard, thrownCards }: PlayedCards,
 ): void => {
-  sendThrownCards(room.users, thrownCards);
+  room.thrownCards = thrownCards;
+  sendThrownCards(room);
 
   thrownCards.forEach((c: Card) => {
     user.hand.splice(

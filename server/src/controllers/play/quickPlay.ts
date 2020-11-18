@@ -5,7 +5,8 @@ import { Card, PlayedCards, Room, User } from '../../types';
 export const handleQuickPlay = (room: Room, user: User, { thrownCards }: PlayedCards): void => {
   // disallow quick play when the round is finished
   if (!room.roundWinner) {
-    sendThrownCards(room.users, thrownCards);
+    room.thrownCards = thrownCards;
+    sendThrownCards(room);
 
     const quickThrownCard = thrownCards[thrownCards.length - 1];
 
