@@ -71,13 +71,11 @@ const Lobby = () => {
   }, [player, roomId]);
 
   useEffect(() => {
-    if (client.readyState !== client.OPEN) {
-      if (client.onopen === null) {
-        client.onopen = () => {
-          if (play === undefined) sendJoin(); // useful to handle back to lobby
-          client.onmessage = handleMessage;
-        };
-      }
+    if (client.readyState !== client.OPEN && client.onopen === null) {
+      client.onopen = () => {
+        if (play === undefined) sendJoin(); // useful to handle back to lobby
+        client.onmessage = handleMessage;
+      };
     } else if (client.onmessage === null) {
       if (play === undefined) sendJoin();
       client.onmessage = handleMessage;

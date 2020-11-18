@@ -56,6 +56,17 @@ const ChatButton = styled(HideButton)`
   }
 `;
 
+const ChatNotification = styled.div`
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: #e53e3e;
+  top: -4px;
+  right: -4px;
+  z-index: 10;
+  border-radius: 100%;
+`;
+
 const MessagesHeader = styled.div`
   padding: 12px;
   font-weight: bold;
@@ -69,6 +80,7 @@ const MessagesHeader = styled.div`
 const Chat = ({ messages, roomId, userUuid }: Props) => {
   const messagesRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [hasNewMessage, setHasNewMessage] = useState(false);
 
   useEffect(() => {
     if (messagesRef.current) {
@@ -76,13 +88,33 @@ const Chat = ({ messages, roomId, userUuid }: Props) => {
     }
   }, [messages]);
 
+  useEffect(() => {
+    if (messages.filter((message) => message.player.uuid !== userUuid).length >= 1) {
+      setHasNewMessage(true);
+    }
+  }, [messages, userUuid]);
+
   return (
     <Container>
-      <ChatButton style={{ display: isVisible ? 'none' : '' }} onClick={() => setIsVisible(true)}>
+      <ChatButton
+        style={{ display: isVisible ? 'none' : '' }}
+        onClick={() => {
+          setIsVisible(true);
+          setHasNewMessage(false);
+        }}
+      >
+        {!isVisible && hasNewMessage && <ChatNotification />}
         <ChatIcon fill='#2c5282' height='24px' />
       </ChatButton>
       <ChatContainer style={{ display: isVisible ? '' : 'none' }}>
-        <HideButton onClick={() => setIsVisible(false)}>Cacher</HideButton>
+        <HideButton
+          onClick={() => {
+            setIsVisible(false);
+            setHasNewMessage(false);
+          }}
+        >
+          Cacher
+        </HideButton>
         <MessagesHeader>Discussions</MessagesHeader>
         <MessagesContainer>
           {messages.map((message) => (
