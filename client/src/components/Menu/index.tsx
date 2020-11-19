@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import Modal from '../Modal';
 import Score from '../ScoreDashboard';
+import Modal from '../shared/Modal';
 import { ReactComponent as CloseIcon } from '../../assets/close.svg';
 import { PlayerScore } from '../../types';
 
 const Container = styled.div`
   position: absolute;
   height: calc(100vh);
-  min-width: 200px;
+  min-width: 300px;
   background-color: #2a3649;
   color: white;
   z-index: 10;

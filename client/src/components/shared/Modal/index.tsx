@@ -1,13 +1,13 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-import DefaultButton from '../shared/Button';
+import DefaultButton from '../Button';
 
 type Color = 'orange';
 
 const Container = styled.div<{ color: Color }>`
   position: absolute;
-  max-width: 500px;
+  min-width: 600px;
   padding: 36px;
   z-index: 99;
   left: 50%;

@@ -12,8 +12,8 @@ const Table = styled.table`
   color: white;
   border: solid 2px #3b4a61;
   max-height: 500px;
-  display: block;
   overflow: auto;
+  width: 100%;
   font-family: 'Roboto', sans-serif;
 
   thead th {
@@ -36,6 +36,14 @@ const TableHeader = styled.th`
   background-color: #172035;
   color: #ebf8ff;
   padding: 6px 12px;
+
+  &:first-child {
+    border-top-left-radius: 6px;
+  }
+
+  &:last-child {
+    border-top-right-radius: 6px;
+  }
 `;
 
 const ScoreDashboard = ({ scores }: { scores: PlayerScore[] }) => {
