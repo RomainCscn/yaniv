@@ -32,7 +32,11 @@ const HowToPlay = () => (
       <ul>
         <li>
           Cliquez sur une ou plusieurs cartes de votre main pour la/les sélectionner (voir{' '}
-          <Link href='https://fr.wikipedia.org/wiki/Yaniv_(jeu_de_cartes)#Remplacement_de_cartes'>
+          <Link
+            target='_blank'
+            rel='noopener noreferrer'
+            href='https://fr.wikipedia.org/wiki/Yaniv_(jeu_de_cartes)#Remplacement_de_cartes'
+          >
             ici
           </Link>{' '}
           pour les combinaisons possibles)
@@ -92,7 +96,11 @@ const HowToPlay = () => (
       <b> 7 ou moins</b> pour annoncer <b>Yaniv</b>. Le score maximal est de <b>200 points</b>.
     </p>
     <p>
-      <Link href='https://fr.wikipedia.org/wiki/Yaniv_(jeu_de_cartes)'>
+      <Link
+        target='_blank'
+        rel='noopener noreferrer'
+        href='https://fr.wikipedia.org/wiki/Yaniv_(jeu_de_cartes)'
+      >
         En savoir plus sur le Yaniv et ses règles
       </Link>
     </p>
