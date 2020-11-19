@@ -18,7 +18,7 @@ const handleColor = (color: Color) => {
       `;
     case 'orange':
       return css`
-        color: #7b341e;
+        color: #531c0c;
         background: #ed8936;
         border-bottom: 4px solid #c05621;
       `;

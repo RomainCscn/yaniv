@@ -4,8 +4,17 @@
 }
 
 @font-face {
-  font-family: 'Kurril';
-  src: local('Kurril'), url(./assets/fonts/kurril.ttf) format('truetype');
+  font-family: 'Kurri';
+  src: url(./assets/fonts/kurri-regular.ttf) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Kurri';
+  src: url(./assets/fonts/kurri-bold.ttf) format('truetype');
+  font-weight: bold;
+  font-style: normal;
 }
 
 @font-face {
@@ -13,18 +22,18 @@
   src: local('Simplicity'), url(./assets/fonts/simplicity.ttf) format('truetype');
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 body {
   color: #1a202c;
   background-color: #ebf4ff;
   margin: 0;
-  font-family: 'Kurril', -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen', 'Ubuntu',
-    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Kurri', -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
+    'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 button {
-  font-family: 'Kurril';
+  font-family: 'Kurri';
 }

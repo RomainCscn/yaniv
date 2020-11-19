@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 import Chat from '../Chat';
 import EndRound from '../EndRound';
+import Menu from '../Menu';
 import MainPlayer from '../Player/MainPlayer';
 import OtherPlayers from '../Player/OtherPlayers';
 import PickedCardAnnouncement from '../PickedCardAnnouncement';
@@ -12,7 +13,6 @@ import Stack from '../Stack';
 import { send } from '../../core/client';
 import { canDropCards, getCardsAfterPick } from '../../core/game';
 import { Card, Player } from '../../types';
-import ScoreDashboard from '../ScoreDashboard';
 import useMultiplayer from '../../hooks/useMultiplayer';
 
 interface RoomProps {
@@ -22,11 +22,11 @@ interface RoomProps {
   userUuid: string;
 }
 
-const Container = styled.div<{ playerQuit: boolean }>`
+const Container = styled.div<{ showModal: boolean }>`
   display: grid;
   grid-template-columns: 1fr auto;
-  ${({ playerQuit }) =>
-    playerQuit &&
+  ${({ showModal }) =>
+    showModal &&
     css`
       opacity: 0.2;
       pointer-events: none;
@@ -62,6 +62,8 @@ const PlayersTurn = styled.p`
 `;
 
 const Room = ({ players, roomId, setPlay, userUuid }: RoomProps) => {
+  const [showModal, setShowModal] = useState(false);
+
   const {
     chatState,
     cardState,
@@ -78,6 +80,7 @@ const Room = ({ players, roomId, setPlay, userUuid }: RoomProps) => {
     resetOnMessage,
     roundWinner,
     scores,
+    shouldGoBackToLobby,
     sortOrder,
     yanivCaller,
   } = useMultiplayer({ initialPlayers: players, userUuid });
@@ -87,6 +90,19 @@ const Room = ({ players, roomId, setPlay, userUuid }: RoomProps) => {
   useEffect(() => {
     send(roomId, { action: 'READY_TO_PLAY' }, { player });
   }, [player, roomId]);
+
+  // handle another player going back to lobby
+  useEffect(() => {
+    if (shouldGoBackToLobby) {
+      resetOnMessage();
+      setPlay(false);
+    }
+  }, [resetOnMessage, setPlay, shouldGoBackToLobby]);
+
+  const backToLobby = useCallback(() => {
+    resetOnMessage();
+    setPlay(false);
+  }, [resetOnMessage, setPlay]);
 
   const resetSelectedCards = () => cardDispatch({ type: 'resetSelectedCards' });
 
@@ -103,17 +119,12 @@ const Room = ({ players, roomId, setPlay, userUuid }: RoomProps) => {
     cardDispatch({ type: 'selectCard', payload: card });
   };
 
-  const backToLobby = useCallback(() => {
-    resetOnMessage();
-    setPlay(false);
-  }, [resetOnMessage, setPlay]);
-
   return (
     <>
       {playerQuit && <QuitModal backToLobby={backToLobby} />}
-      <Container playerQuit={playerQuit}>
+      <Menu backToLobby={backToLobby} scores={scores} setShowModal={setShowModal} />
+      <Container showModal={playerQuit || showModal}>
         <RoomContainer>
-          <ScoreDashboard scores={scores} />
           <OtherPlayers
             activePlayer={activePlayer}
             otherPlayers={cardState.otherPlayers}

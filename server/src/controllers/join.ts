@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { sendConfiguration, sendPlayersUpdate } from '../core/dispatcher';
+import { sendBackToLobby, sendConfiguration, sendPlayersUpdate } from '../core/dispatcher';
 import initRoom, { addUser, getPlayerByUuid, getFormattedPlayers, resetRoom } from '../core/room';
 import rooms from '../core/rooms';
 import { CustomWebSocket, User } from '../types';
@@ -58,6 +58,7 @@ const handleJoin = (
     sendPlayersUpdate(rooms[roomId]);
   } else if (actionType === 'BACK') {
     resetRoom(rooms[roomId], { resetActivePlayer: true, resetScore: true });
+    sendBackToLobby(rooms[roomId]);
     sendPlayersUpdate(rooms[roomId]);
   }
 };

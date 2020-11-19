@@ -62,6 +62,7 @@ export interface ReceivedMessage {
 
 export type ReceivedMessageType =
   | 'ASSIGN_UUID'
+  | 'BACK_TO_LOBBY'
   | 'CONFIGURATION_UPDATE'
   | 'END_OF_ROUND_UPDATE'
   | 'GAME_OVER'
@@ -81,6 +82,7 @@ export type ReceivedMessageType =
 export type SortOrder = 'asc' | 'desc';
 
 export type MessageAction =
+  | 'BACK_TO_LOBBY'
   | 'CONFIGURATION'
   | 'JOIN'
   | 'MESSAGE'

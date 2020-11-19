@@ -19,25 +19,28 @@ export default function useMultiplayer({ initialPlayers, userUuid }: Props) {
   const [chatState, chatDispatch] = useReducer(chatReducer, {
     messages: [],
   });
-  const [playerQuit, setPlayerQuit] = useState(false);
   const [activePlayer, setActivePlayer] = useState<string>('');
   const [canPlay, setCanPlay] = useState(false);
   const [gameWinner, setGameWinner] = useState<Player>();
   const [hand, setHand] = useState<Card[]>([]);
   const [newCard, setNewCard] = useState<NewCard>();
   const [pickedCard, setPickedCard] = useState<Card>();
+  const [playerQuit, setPlayerQuit] = useState(false);
   const [previousPlayer, setPreviousPlayer] = useState<Player>();
   const [quickPlayDone, setQuickPlayDone] = useState(false);
   const [roundWinner, setRoundWinner] = useState<Player>();
   const [scores, setScores] = useState<PlayerScore[]>([]);
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  const [shouldGoBackToLobby, setShouldGoBackToLobby] = useState<boolean>(false);
   const [yanivCaller, setYanivCaller] = useState<Player>();
 
   useEffect(() => {
     client.onmessage = (message) => {
       const data: ReceivedMessage = JSON.parse(message.data);
 
-      if (data.type === 'SET_PLAYER_HAND') {
+      if (data.type === 'BACK_TO_LOBBY') {
+        setShouldGoBackToLobby(true);
+      } else if (data.type === 'SET_PLAYER_HAND') {
         const { newCardInHand, hand } = data;
         setHand(hand);
         setNewCard(newCardInHand);
@@ -115,6 +118,7 @@ export default function useMultiplayer({ initialPlayers, userUuid }: Props) {
     resetOnMessage,
     roundWinner,
     scores,
+    shouldGoBackToLobby,
     sortOrder,
     yanivCaller,
   };

@@ -13,6 +13,12 @@ export const sendPlayersUpdate = (room: Room): void => {
   });
 };
 
+export const sendBackToLobby = (room: Room): void => {
+  Object.values(room.users).forEach((user) => {
+    user.ws.send(JSON.stringify({ type: 'BACK_TO_LOBBY' }));
+  });
+};
+
 export const sendConfiguration = (room: Room): void => {
   Object.values(room.users).forEach((user) =>
     user.ws.send(
