@@ -111,7 +111,7 @@ const PlayerHand = ({
         <HandScore score={handScore} />
         <YanivButton hand={hand} canClick={canPlay} player={player} roomId={roomId} />
       </ScoreContainer>
-      {canPlay && <ActivePlayer />}
+      <ActivePlayer isActivePlayer={canPlay} />
     </Container>
   );
 };

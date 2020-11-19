@@ -4,15 +4,12 @@ import styled, { keyframes } from 'styled-components';
 const DotsContainer = styled.div`
   position: absolute;
   font-size: 32px;
-  width: 50px;
   text-align: center;
-  top: 42px;
-  padding: 6px;
+  left: 50%;
+  transform: translate(-50%, 0);
 
   @media screen and (max-height: 850px) {
-    top: 24px;
     font-size: 24px;
-    width: 30px;
   }
 `;
 

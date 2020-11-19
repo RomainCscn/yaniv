@@ -35,15 +35,15 @@ const Container = styled.div<{ showModal: boolean }>`
 
 const RoomContainer = styled.div`
   position: relative;
-  padding: 24px;
+  padding: 24px 24px 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: calc(100vh - 48px);
+  height: calc(100vh - 24px);
 
   @media screen and (max-height: 850px) {
     padding: 12px;
-    height: calc(100vh - 24px);
+    height: calc(100vh - 12px);
   }
 `;
 

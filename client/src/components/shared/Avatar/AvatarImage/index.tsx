@@ -3,18 +3,17 @@ import styled, { css } from 'styled-components';
 
 import AVATARS from '../index';
 
-interface Props {
-  className?: any;
-  id: string;
-  isSelected?: boolean;
-  setAvatar?: (id: string) => void;
-}
-
-const Image = styled.img<{ canClick: boolean; selected?: boolean }>`
+const Image = styled.img<{ canClick: boolean; selected?: boolean; small?: boolean }>`
   padding: 6px;
   width: 50px;
 
   ${({ canClick }) => canClick && 'cursor: pointer'}
+
+  ${({ small }) =>
+    small &&
+    css`
+      width: 36px;
+    `}
 
   ${({ selected }) =>
     selected &&
@@ -27,12 +26,21 @@ const Image = styled.img<{ canClick: boolean; selected?: boolean }>`
   }
 `;
 
-const Avatar = ({ className, id, isSelected, setAvatar }: Props) => (
+interface Props {
+  className?: any;
+  id: string;
+  isSelected?: boolean;
+  isSmall?: boolean;
+  setAvatar?: (id: string) => void;
+}
+
+const Avatar = ({ className, id, isSelected, isSmall, setAvatar }: Props) => (
   <Image
     canClick={!!setAvatar}
     className={className}
     selected={isSelected}
-    alt='avatar-cat'
+    small={isSmall}
+    alt='avatar'
     onClick={setAvatar ? () => setAvatar(id) : undefined}
     src={AVATARS.find((a) => a[0] === id)![1]}
   />

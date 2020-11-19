@@ -1,11 +1,64 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import Dots from '../Dots';
 import ActualScore from '../../Score/ActualScore';
 import AvatarImage from '../../../../shared/Avatar/AvatarImage';
 import GenericCard from '../../../GenericCard';
 import { Card } from '../../../../../types';
+
+const Container = styled.div<{ isActivePlayer: boolean }>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  ${({ isActivePlayer }) =>
+    !isActivePlayer &&
+    css`
+      opacity: 0.5;
+    `}
+`;
+
+const BottomContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  min-width: 150px;
+`;
+
+const AvatarContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const Circle = styled.div<{ isActivePlayer: boolean }>`
+  background: #f0fdf4;
+  width: 280px;
+  height: 140px;
+  border-bottom-left-radius: 280px;
+  border-bottom-right-radius: 280px;
+  position: absolute;
+  z-index: -1;
+  border: 2px solid #bbf7d0;
+  border-top: none;
+  transition: all 0.5s ease-out;
+
+  @media screen and (max-height: 850px) {
+    width: 230px;
+    height: 120px;
+    border-bottom-left-radius: 230px;
+    border-bottom-right-radius: 230px;
+  }
+
+  ${({ isActivePlayer }) =>
+    isActivePlayer
+      ? css`
+          top: 0;
+        `
+      : css`
+          top: -140px;
+        `}
+`;
 
 interface OtherPlayerHandProps {
   avatar: string;
@@ -16,33 +69,6 @@ interface OtherPlayerHandProps {
   username: string;
 }
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const BottomContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  min-width: 200px;
-
-  @media screen and (max-height: 850px) {
-    min-width: 175px;
-  }
-`;
-
-const AvatarContainer = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const PlayerName = styled.div<{ isActive: boolean }>`
-  ${({ isActive }) => isActive && 'border-bottom: 3px solid #4fd1c5'}
-`;
-
 const OtherPlayerHand = ({
   avatar,
   hand,
@@ -52,8 +78,15 @@ const OtherPlayerHand = ({
   username,
 }: OtherPlayerHandProps) => {
   return (
-    <Container>
-      <div>
+    <Container isActivePlayer={isActivePlayer}>
+      <BottomContainer>
+        <AvatarContainer>
+          <AvatarImage id={avatar} isSmall={true} />
+          <div>{username}</div>
+        </AvatarContainer>
+        <ActualScore isOtherPlayer score={score} />
+      </BottomContainer>
+      <div style={{ position: 'relative' }}>
         {hand
           ? hand.map((card, index) => (
               <GenericCard
@@ -72,15 +105,9 @@ const OtherPlayerHand = ({
                 isLast={index === numberOfCards! - 1}
               />
             ))}
-      </div>
-      <BottomContainer>
-        <AvatarContainer>
-          <AvatarImage id={avatar} />
-          <PlayerName isActive={isActivePlayer}>{username}</PlayerName>
-        </AvatarContainer>
         {isActivePlayer && <Dots />}
-        <ActualScore isOtherPlayer score={score} />
-      </BottomContainer>
+      </div>
+      <Circle isActivePlayer={isActivePlayer} />
     </Container>
   );
 };
