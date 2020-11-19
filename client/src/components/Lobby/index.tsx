@@ -7,7 +7,7 @@ import Profile from './Profile';
 import RoomConfiguration from './RoomConfiguration';
 import ShareLink from './ShareLink';
 import { SectionContainer, Title } from './styles';
-import AVATARS from '../Avatar';
+import AVATARS from '../shared/Avatar';
 import Room from '../Room';
 import client, { send } from '../../core/client';
 import { CustomError, Player, ReceivedMessage } from '../../types';

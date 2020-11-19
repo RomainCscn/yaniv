@@ -1,7 +1,7 @@
 import React from 'react';
 
+import AvatarList from './AvatarList';
 import { ButtonContainer, Container, Label, SectionTitle } from '../styles';
-import AvatarList from '../../Avatar/AvatarList';
 import Button from '../../shared/Button';
 import Input from '../../shared/Input';
 import { send } from '../../../core/client';

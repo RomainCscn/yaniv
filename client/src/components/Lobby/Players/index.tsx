@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { Error, PlayersAvatarContainer, PlayerContainer, PlayerName } from './styles';
 import { ButtonContainer, Container, SectionTitle } from '../styles';
-import AVATARS from '../../Avatar';
+import AVATARS from '../../shared/Avatar';
 import Button from '../../shared/Button';
 import { send } from '../../../core/client';
 import { CustomError, Player } from '../../../types';

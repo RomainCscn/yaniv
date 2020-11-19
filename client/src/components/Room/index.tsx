@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styled, { css } from 'styled-components';
 
-import Chat from '../Chat';
-import EndRound from '../EndRound';
-import Menu from '../Menu';
-import MainPlayer from '../Player/MainPlayer';
-import OtherPlayers from '../Player/OtherPlayers';
-import PickedCardAnnouncement from '../PickedCardAnnouncement';
-import QuitModal from '../QuitModal';
-import ThrownCards from '../ThrownCards';
-import Stack from '../Stack';
+import Chat from './Chat';
+import EndRound from './EndRound';
+import Menu from './Menu';
+import MainPlayer from './Player/MainPlayer';
+import OtherPlayers from './Player/OtherPlayers';
+import PickedCardAnnouncement from './PickedCardAnnouncement';
+import QuitModal from './QuitModal';
+import ThrownCards from './ThrownCards';
+import Stack from './Stack';
 import { send } from '../../core/client';
 import { canDropCards, getCardsAfterPick } from '../../core/game';
 import { Card, Player } from '../../types';

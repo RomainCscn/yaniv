@@ -1,0 +1,41 @@
+import React from 'react';
+import styled, { css } from 'styled-components';
+
+import AVATARS from '../index';
+
+interface Props {
+  className?: any;
+  id: string;
+  isSelected?: boolean;
+  setAvatar?: (id: string) => void;
+}
+
+const Image = styled.img<{ canClick: boolean; selected?: boolean }>`
+  padding: 6px;
+  width: 50px;
+
+  ${({ canClick }) => canClick && 'cursor: pointer'}
+
+  ${({ selected }) =>
+    selected &&
+    css`
+      border-bottom: 3px solid #667eea;
+    `}
+
+  @media screen and (max-height: 850px) {
+    width: 30px;
+  }
+`;
+
+const Avatar = ({ className, id, isSelected, setAvatar }: Props) => (
+  <Image
+    canClick={!!setAvatar}
+    className={className}
+    selected={isSelected}
+    alt='avatar-cat'
+    onClick={setAvatar ? () => setAvatar(id) : undefined}
+    src={AVATARS.find((a) => a[0] === id)![1]}
+  />
+);
+
+export default Avatar;
