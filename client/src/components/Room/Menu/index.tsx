@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import Score from './ScoreDashboard';
 import Modal from '../../shared/Modal';
-import { ReactComponent as CloseIcon } from '../../../assets/close.svg';
+import { ReactComponent as CloseIcon } from '../../../assets/icons/close.svg';
 import { PlayerScore } from '../../../types';
 
 const Container = styled.div`

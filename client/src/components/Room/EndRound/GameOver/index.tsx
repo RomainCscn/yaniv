@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { AvatarContainer, WinnerText, WinnerUsername } from '../styles';
 import PlayAgainButton from '../../PlayAgainButton';
 import Avatar from '../../../shared/Avatar/AvatarImage';
-import trophy from '../../../../assets/winner-trophy.png';
+import trophy from '../../../../assets/icons/winner-trophy.png';
 import { Player } from '../../../../types';
 
 interface Props {

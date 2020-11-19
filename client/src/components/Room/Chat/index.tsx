@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import Message from './Message';
 import NewMessage from './NewMessage';
-import { ReactComponent as ChatIcon } from '../../../assets/chat.svg';
+import { ReactComponent as ChatIcon } from '../../../assets/icons/chat.svg';
 import { Message as MessageType } from '../../../types';
 
 interface Props {

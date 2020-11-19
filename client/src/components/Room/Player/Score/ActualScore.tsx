@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ScoreContainer from './styles';
-import { ReactComponent as TrophyIcons } from '../../../../assets/trophy.svg';
+import { ReactComponent as TrophyIcons } from '../../../../assets/icons/trophy.svg';
 
 const Score = ({ isOtherPlayer, score }: { isOtherPlayer?: boolean; score: number }) => {
   return (

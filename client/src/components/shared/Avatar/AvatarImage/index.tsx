@@ -7,7 +7,11 @@ const Image = styled.img<{ canClick: boolean; selected?: boolean; small?: boolea
   padding: 6px;
   width: 50px;
 
-  ${({ canClick }) => canClick && 'cursor: pointer'}
+  ${({ canClick }) =>
+    canClick &&
+    css`
+      cursor: pointer;
+    `}
 
   ${({ small }) =>
     small &&
@@ -36,7 +40,7 @@ interface Props {
 
 const Avatar = ({ className, id, isSelected, isSmall, setAvatar }: Props) => (
   <Image
-    canClick={!!setAvatar}
+    canClick={typeof setAvatar === 'function'}
     className={className}
     selected={isSelected}
     small={isSmall}

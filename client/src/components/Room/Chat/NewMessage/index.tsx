@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import Input from '../../../shared/Input';
 import { send } from '../../../../core/client';
-import { ReactComponent as SendIcon } from '../../../../assets/send.svg';
+import { ReactComponent as SendIcon } from '../../../../assets/icons/send.svg';
 
 const Container = styled.div`
   background-color: #edf2f7;

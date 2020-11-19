@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-import { ReactComponent as CrownIcon } from '../../../../assets/crown.svg';
+import { ReactComponent as CrownIcon } from '../../../../assets/icons/crown.svg';
 import { PlayerScore } from '../../../../types';
 
 const Table = styled.table`
