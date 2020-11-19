@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
+import { ReactComponent as CrownIcon } from '../../../../assets/crown.svg';
 import { PlayerScore } from '../../../../types';
 
 const Table = styled.table`
@@ -22,13 +23,14 @@ const Table = styled.table`
   }
 `;
 
-const TableCell = styled.td<{ isWinningCell: boolean }>`
+const TableCell = styled.div<{ isWinningCell: boolean }>`
+  display: flex;
+  align-items: center;
   padding: 6px 12px;
   ${({ isWinningCell }) =>
     isWinningCell &&
     css`
       font-weight: bold;
-      background: #3b4a61;
     `}
 `;
 
@@ -36,6 +38,7 @@ const TableHeader = styled.th`
   background-color: #172035;
   color: #ebf8ff;
   padding: 6px 12px;
+  text-align: left;
 
   &:first-child {
     border-top-left-radius: 6px;
@@ -53,7 +56,16 @@ const ScoreDashboard = ({ scores }: { scores: PlayerScore[] }) => {
         score.scoreHistory[index] === 0 ||
         score.scoreHistory[index - 1] === score.scoreHistory[index];
 
-      return <TableCell isWinningCell={isWinningCell}>{score.scoreHistory[index]}</TableCell>;
+      return (
+        <td>
+          <TableCell isWinningCell={isWinningCell}>
+            {score.scoreHistory[index]}{' '}
+            {isWinningCell && (
+              <CrownIcon height='16px' fill='white' style={{ marginLeft: '9px' }} />
+            )}
+          </TableCell>
+        </td>
+      );
     });
 
   return (
