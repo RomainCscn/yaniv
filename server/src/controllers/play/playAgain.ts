@@ -15,9 +15,7 @@ export const handlePlayAgain = (room: Room): void => {
     user.ws.send(
       JSON.stringify({ type: 'SET_INTIAL_SCORES', playersScore: getPlayersScore(room) }),
     );
-    user.ws.send(
-      JSON.stringify({ type: 'SET_OTHER_PLAYERS_CARDS', players: getFormattedPlayers(room) }),
-    );
+    user.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', players: getFormattedPlayers(room) }));
     user.ws.send(JSON.stringify({ type: 'SET_ACTIVE_PLAYER', uuid: room.activePlayer }));
     user.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: user.hand }));
   });

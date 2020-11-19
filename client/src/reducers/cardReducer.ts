@@ -7,7 +7,7 @@ enum ActionType {
   resetSelectedCards = 'resetSelectedCards',
   selectCard = 'selectCard',
   setOtherPlayers = 'setOtherPlayers',
-  setOtherPlayersCards = 'setOtherPlayersCards',
+  setOtherPlayersWithCards = 'setOtherPlayersWithCards',
   setThrownCards = 'setThrownCards',
 }
 
@@ -65,7 +65,7 @@ const cardReducer = (state: any, action: Action) => {
     };
   }
 
-  if (action.type === 'setOtherPlayersCards') {
+  if (action.type === 'setOtherPlayersWithCards') {
     const otherPlayersWithHand = state.otherPlayers.map((player: Player) => {
       const otherPlayers = action.payload as Record<string, Card[]>;
       const playerHand = otherPlayers[player.uuid];

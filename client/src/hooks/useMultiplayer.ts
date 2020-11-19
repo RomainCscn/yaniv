@@ -73,7 +73,7 @@ export default function useMultiplayer({ initialPlayers, userUuid }: Props) {
         setScores(playersScore);
         setRoundWinner(roundWinner);
         setYanivCaller(yanivCaller);
-        cardDispatch({ type: 'setOtherPlayersCards', payload: playersCard });
+        cardDispatch({ type: 'setOtherPlayersWithCards', payload: playersCard });
       } else if (data.type === 'SET_INTIAL_SCORES') {
         const { playersScore } = data;
         setScores(playersScore);
