@@ -10,6 +10,11 @@ const handleStart = (roomId: string): void => {
     assignHandToPlayer(room, user);
   });
 
+  // remove users with WebSocket closed
+  room.users = Object.fromEntries(
+    Object.entries(room.users).filter(([, user]) => user.ws.readyState !== user.ws.CLOSED),
+  );
+
   sendStartGame(room);
 };
 
