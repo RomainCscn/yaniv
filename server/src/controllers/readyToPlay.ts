@@ -5,10 +5,10 @@ const handleReadyToPlay = (roomId: string, userUuid: string): void => {
   const player = getPlayerByUuid(rooms[roomId], userUuid);
 
   if (!rooms[roomId].activePlayer) {
-    const playersNumber = Object.entries(rooms[roomId].users).length;
-    const firstPlayerUuid = Object.entries(rooms[roomId].users)[
+    const playersNumber = Object.keys(rooms[roomId].users).length;
+    const firstPlayerUuid = Object.keys(rooms[roomId].users)[
       Math.floor(Math.random() * playersNumber)
-    ][0];
+    ];
 
     rooms[roomId].activePlayer = firstPlayerUuid;
   }

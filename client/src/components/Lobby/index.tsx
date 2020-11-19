@@ -22,6 +22,11 @@ const Lobby = () => {
   let { roomId } = useParams() as any;
   const history = useHistory();
 
+  if (!roomId) {
+    roomId = Math.random().toString(36).substring(7);
+    history.replace('/' + roomId);
+  }
+
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<CustomError>();
   const [handCardsNumber, setHandCardsNumber] = useState(7);
@@ -29,11 +34,6 @@ const Lobby = () => {
   const [play, setPlay] = useState<boolean | undefined>(undefined);
   const [player, setPlayer] = useLocalStorage('player', initialPlayer);
   const [players, setPlayers] = useState<Player[]>([]);
-
-  if (!roomId) {
-    roomId = Math.random().toString(36).substring(7);
-    history.replace('/' + roomId);
-  }
 
   const handleMessage = useCallback(
     (message: any) => {
@@ -76,11 +76,11 @@ const Lobby = () => {
         if (play === undefined) sendJoin(); // useful to handle back to lobby
         client.onmessage = handleMessage;
       };
-    } else if (client.onmessage === null) {
+    } else if (client.readyState === client.OPEN && client.onmessage === null) {
       if (play === undefined) sendJoin();
       client.onmessage = handleMessage;
     }
-  }, [handleMessage, play, sendJoin, roomId]);
+  }, [handleMessage, play, sendJoin]);
 
   useEffect(() => {
     if (play === false) {

@@ -57,7 +57,7 @@ const handleJoin = (
     sendConfiguration(rooms[roomId]);
     sendPlayersUpdate(rooms[roomId]);
   } else if (actionType === 'BACK') {
-    resetRoom(rooms[roomId], { resetActivePlayer: true });
+    resetRoom(rooms[roomId], { resetActivePlayer: true, resetScore: true });
     sendPlayersUpdate(rooms[roomId]);
   }
 };
