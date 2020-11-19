@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getHand, getSuffledDeck } from '../game';
 import initRoom, {
-  addUser,
+  addPlayer,
   assignHandToPlayer,
   findRoom,
   getPlayerByUuid,
@@ -9,7 +9,7 @@ import initRoom, {
   getFormattedPlayers,
   resetRoom,
 } from '../room';
-import { CustomWebSocket, Room, User } from '../../types';
+import { CustomWebSocket, Room, Player } from '../../types';
 
 const mockRooms = jest.fn();
 
@@ -23,7 +23,7 @@ jest.mock('../rooms', () => ({
 
 describe('room', () => {
   let room: any;
-  const user = {
+  const player = {
     username: 'a',
     avatar: '123',
     hand: [
@@ -41,9 +41,9 @@ describe('room', () => {
   beforeEach(() => {
     room = {
       deck,
-      users: {
-        '1': user,
-        '2': { ...user, username: 'b' },
+      players: {
+        '1': player,
+        '2': { ...player, username: 'b' },
       },
     };
   });
@@ -57,34 +57,34 @@ describe('room', () => {
       activePlayer: null,
       deck,
       roundWinner: null,
-      users: {},
+      players: {},
     });
   });
 
   it('should assign a hand to a given player', () => {
-    const user: any = {};
+    const player: any = {};
     (getHand as jest.Mock).mockReturnValue([
       { suit: 'club', value: 1 },
       { suit: 'diamond', value: 2 },
     ]);
 
-    assignHandToPlayer(room as Room, user as User);
+    assignHandToPlayer(room as Room, player as Player);
 
-    expect(user.hand).toEqual([
+    expect(player.hand).toEqual([
       { suit: 'club', value: 1 },
       { suit: 'diamond', value: 2 },
     ]);
   });
 
-  it('should add a user to the room', () => {
-    addUser(
+  it('should add a player to the room', () => {
+    addPlayer(
       '123',
       room,
-      { avatar: 'abc', username: 'toto', sessionUuid: '456', uuid: '123' } as User,
+      { avatar: 'abc', username: 'toto', sessionUuid: '456', uuid: '123' } as Player,
       {} as CustomWebSocket,
     );
 
-    expect(room.users['123']).toEqual({
+    expect(room.players['123']).toEqual({
       avatar: 'abc',
       hand: [],
       score: 0,
@@ -96,19 +96,19 @@ describe('room', () => {
     });
   });
 
-  it('should return a room from a user uuid', () => {
+  it('should return a room from a player uuid', () => {
     mockRooms.mockReturnValue({
-      abc: { users: { '1': {} } },
-      def: { users: { '2': {} } },
+      abc: { players: { '1': {} } },
+      def: { players: { '2': {} } },
     });
 
-    expect(findRoom('1')).toEqual(['abc', { users: { '1': {} } }]);
-    expect(findRoom('2')).toEqual(['def', { users: { '2': {} } }]);
+    expect(findRoom('1')).toEqual(['abc', { players: { '1': {} } }]);
+    expect(findRoom('2')).toEqual(['def', { players: { '2': {} } }]);
     expect(findRoom('3')).toEqual([]);
   });
 
   it('should return a player by uuid', () => {
-    expect(getPlayerByUuid(room, '1')).toEqual(user);
+    expect(getPlayerByUuid(room, '1')).toEqual(player);
   });
 
   it('should return formatted player', () => {

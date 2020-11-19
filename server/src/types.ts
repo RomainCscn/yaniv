@@ -43,12 +43,12 @@ export interface Room {
   deck: Card[];
   roundWinner: null | string;
   thrownCards: Card[];
-  users: Users;
+  players: Players;
 }
 
 export type SortOrder = 'asc' | 'desc';
 
-export interface User {
+export interface Player {
   avatar: string;
   hand: Card[];
   score: number;
@@ -60,4 +60,4 @@ export interface User {
   ws: CustomWebSocket;
 }
 
-export type Users = Record<string, User>;
+export type Players = Record<string, Player>;

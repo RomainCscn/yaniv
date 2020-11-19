@@ -21,7 +21,7 @@ const room: Room = {
   deck,
   roundWinner: null,
   thrownCards: [],
-  users: {},
+  players: {},
 };
 
 const mockHandCardsNumber = jest.fn();

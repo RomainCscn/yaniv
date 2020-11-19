@@ -1,61 +1,61 @@
 import { getFormattedPlayer } from '../../core/room';
 import { getCardValue, getSmallestScore } from '../../core/game';
-import { Room, User } from '../../types';
+import { Room, Player } from '../../types';
 
 const getScores = (room: Room): { uuid: string; score: number }[] => {
-  const usersScore: { uuid: string; score: number }[] = [];
+  const playersScore: { uuid: string; score: number }[] = [];
 
-  Object.entries(room.users).forEach(([uuid, user]: [string, User]) => {
-    const handSum = user.hand.reduce((sum: number, card) => {
+  Object.entries(room.players).forEach(([uuid, player]: [string, Player]) => {
+    const handSum = player.hand.reduce((sum: number, card) => {
       return sum + getCardValue(card);
     }, 0);
 
-    usersScore.push({ uuid, score: handSum });
+    playersScore.push({ uuid, score: handSum });
   });
 
-  return usersScore;
+  return playersScore;
 };
 
-export const handleEndRound = (room: Room, userUuid: string): void => {
-  const usersScore = getScores(room);
-  const currentUserScore = usersScore.find((s) => s.uuid === userUuid)?.score;
-  const otherPlayersScore = usersScore.filter((s) => s.uuid !== userUuid);
+export const handleEndRound = (room: Room, playerUuid: string): void => {
+  let playersScore = getScores(room);
+  const currentPlayerScore = playersScore.find((s) => s.uuid === playerUuid)?.score;
+  const otherPlayersScore = playersScore.filter((s) => s.uuid !== playerUuid);
   const smallestScore = getSmallestScore(otherPlayersScore);
   const smallestOtherPlayersScore = otherPlayersScore.filter((s) => s.score === smallestScore);
 
-  const currentUserLost =
-    Object.keys(smallestOtherPlayersScore).length > 0 && smallestScore <= (currentUserScore ?? 0);
+  const currentPlayerLost =
+    Object.keys(smallestOtherPlayersScore).length > 0 && smallestScore <= (currentPlayerScore ?? 0);
 
-  if (currentUserLost) {
+  if (currentPlayerLost) {
     room.roundWinner = smallestOtherPlayersScore[0].uuid;
 
-    usersScore.forEach(({ uuid, score }) => {
+    playersScore.forEach(({ uuid, score }) => {
       let scoreToAdd = score;
       if (smallestOtherPlayersScore.map((s) => s.uuid).includes(uuid)) {
         scoreToAdd = 0;
-      } else if (userUuid === uuid) {
+      } else if (playerUuid === uuid) {
         scoreToAdd = score + 30;
       }
-      room.users[uuid].score += scoreToAdd;
-      room.users[uuid].scoreHistory.push(room.users[uuid].score);
+      room.players[uuid].score += scoreToAdd;
+      room.players[uuid].scoreHistory.push(room.players[uuid].score);
     });
   } else {
-    room.roundWinner = userUuid;
-    usersScore.forEach(({ uuid, score }) => {
-      room.users[uuid].score += uuid === userUuid ? 0 : score;
-      room.users[uuid].scoreHistory.push(room.users[uuid].score);
+    room.roundWinner = playerUuid;
+    playersScore.forEach(({ uuid, score }) => {
+      room.players[uuid].score += uuid === playerUuid ? 0 : score;
+      room.players[uuid].scoreHistory.push(room.players[uuid].score);
     });
   }
 
-  const playersScore = Object.entries(room.users).map(([uuid, user]: [string, User]) => ({
-    score: user.score,
-    scoreHistory: user.scoreHistory,
+  playersScore = Object.entries(room.players).map(([uuid, player]: [string, Player]) => ({
+    score: player.score,
+    scoreHistory: player.scoreHistory,
     uuid,
-    username: user.username,
+    username: player.username,
   }));
 
   const playerAboveScoreLimit = playersScore.find(
-    (userScore) => userScore.score >= room.configuration.scoreLimit,
+    (playerScore) => playerScore.score >= room.configuration.scoreLimit,
   );
 
   if (playerAboveScoreLimit) {
@@ -63,25 +63,25 @@ export const handleEndRound = (room: Room, userUuid: string): void => {
       previous.score < current.score ? previous : current,
     );
 
-    Object.entries(room.users).forEach(([, user]: [string, User]) => {
-      user.ws.send(
+    Object.entries(room.players).forEach(([, player]: [string, Player]) => {
+      player.ws.send(
         JSON.stringify({ type: 'GAME_OVER', winner: getFormattedPlayer(room, winner.uuid) }),
       );
     });
   }
 
   const playersCard = Object.fromEntries(
-    Object.entries(room.users).map(([uuid, user]: [string, User]) => [uuid, user.hand]),
+    Object.entries(room.players).map(([uuid, player]: [string, Player]) => [uuid, player.hand]),
   );
 
-  Object.entries(room.users).forEach(([, user]: [string, User]) => {
-    user.ws.send(
+  Object.entries(room.players).forEach(([, player]: [string, Player]) => {
+    player.ws.send(
       JSON.stringify({
         type: 'END_OF_ROUND_UPDATE',
         playersCard,
         playersScore,
         roundWinner: getFormattedPlayer(room, room.roundWinner ?? ''),
-        yanivCaller: getFormattedPlayer(room, userUuid),
+        yanivCaller: getFormattedPlayer(room, playerUuid),
       }),
     );
   });

@@ -1,19 +1,19 @@
 import { sendThrownCards } from '../../core/dispatcher';
 import { sortHand } from '../../core/game';
 import { getFormattedPlayer, getFormattedPlayers } from '../../core/room';
-import { Card, PlayedCards, Room, User } from '../../types';
+import { Card, PlayedCards, Room, Player } from '../../types';
 
 export const handleDropAndPick = (
   room: Room,
-  user: User,
+  player: Player,
   { notPickedCards, pickedCard, thrownCards }: PlayedCards,
 ): void => {
   room.thrownCards = thrownCards;
   sendThrownCards(room);
 
   thrownCards.forEach((c: Card) => {
-    user.hand.splice(
-      user.hand.findIndex(
+    player.hand.splice(
+      player.hand.findIndex(
         (handCard: Card) => handCard.value == c.value && handCard.suit === c.suit,
       ),
       1,
@@ -24,23 +24,23 @@ export const handleDropAndPick = (
 
   // player picked one card from mutiple thrown cards
   if (pickedCard && notPickedCards) {
-    user.hand = sortHand([...user.hand, pickedCard], user.sortOrder);
+    player.hand = sortHand([...player.hand, pickedCard], player.sortOrder);
     room.deck.push(...notPickedCards);
     // player picked the thrown card
   } else if (pickedCard) {
-    user.hand = sortHand([...user.hand, pickedCard], user.sortOrder);
+    player.hand = sortHand([...player.hand, pickedCard], player.sortOrder);
     // player picked one card from the stack
   } else if (notPickedCards) {
     newCardInHand = { card: room.deck[0], isFromStack: true };
-    user.hand = sortHand([...user.hand, room.deck[0]], user.sortOrder);
+    player.hand = sortHand([...player.hand, room.deck[0]], player.sortOrder);
     room.deck = room.deck.slice(1);
     room.deck.push(...notPickedCards);
   }
 
-  // send the hand to the user who picked the card
-  user.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: user.hand, newCardInHand }));
+  // send the hand to the player who picked the card
+  player.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: player.hand, newCardInHand }));
 
-  const playersUuid = Object.entries(room.users).map(([uuid]) => uuid);
+  const playersUuid = Object.entries(room.players).map(([uuid]) => uuid);
   const activePlayerIndex = playersUuid.indexOf(room.activePlayer as string);
 
   const nextPlayerUuid =
@@ -51,15 +51,15 @@ export const handleDropAndPick = (
   room.activePlayer = nextPlayerUuid;
 
   // sync players to display other players cards
-  Object.entries(room.users).forEach(([, user]: [string, User]) => {
-    user.ws.send(JSON.stringify({ type: 'SET_ACTIVE_PLAYER', uuid: nextPlayerUuid }));
-    user.ws.send(
+  Object.entries(room.players).forEach(([, player]: [string, Player]) => {
+    player.ws.send(JSON.stringify({ type: 'SET_ACTIVE_PLAYER', uuid: nextPlayerUuid }));
+    player.ws.send(
       JSON.stringify({
         type: 'SET_PICKED_CARD',
         pickedCard,
         previousPlayer: getFormattedPlayer(room, playersUuid[activePlayerIndex]),
       }),
     );
-    user.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', players: getFormattedPlayers(room) }));
+    player.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', players: getFormattedPlayers(room) }));
   });
 };

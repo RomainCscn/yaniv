@@ -1,4 +1,4 @@
-import { Room, User } from '../../types';
+import { Room, Player } from '../../types';
 import {
   assignHandToPlayer,
   getFormattedPlayers,
@@ -9,14 +9,14 @@ import {
 export const handlePlayAgain = (room: Room): void => {
   resetRoom(room, { resetScore: true });
 
-  Object.entries(room.users).forEach(([, user]: [string, User]) => {
-    assignHandToPlayer(room, user);
-    user.ws.send(JSON.stringify({ type: 'NEW_ROUND' }));
-    user.ws.send(
+  Object.entries(room.players).forEach(([, player]: [string, Player]) => {
+    assignHandToPlayer(room, player);
+    player.ws.send(JSON.stringify({ type: 'NEW_ROUND' }));
+    player.ws.send(
       JSON.stringify({ type: 'SET_INTIAL_SCORES', playersScore: getPlayersScore(room) }),
     );
-    user.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', players: getFormattedPlayers(room) }));
-    user.ws.send(JSON.stringify({ type: 'SET_ACTIVE_PLAYER', uuid: room.activePlayer }));
-    user.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: user.hand }));
+    player.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', players: getFormattedPlayers(room) }));
+    player.ws.send(JSON.stringify({ type: 'SET_ACTIVE_PLAYER', uuid: room.activePlayer }));
+    player.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: player.hand }));
   });
 };

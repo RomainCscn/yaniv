@@ -9,15 +9,15 @@ export const handleWebSocketClosed = (sessionUuid: string): void => {
   const [roomId, room] = findRoom(sessionUuid);
 
   if (roomId && room) {
-    const wsState = new Set(Object.entries(room.users).map(([, user]) => user.ws.readyState));
+    const wsState = new Set(Object.entries(room.players).map(([, player]) => player.ws.readyState));
 
     if (wsState.size === 1 && wsState.has(WebSocket.CLOSED)) {
       logger.info({ roomId }, 'Room deleted');
       delete rooms[roomId];
     } else {
-      const userUuid = getPlayerUuidBySessionUuid(room, sessionUuid);
-      if (userUuid) {
-        logger.info({ roomId, userUuid }, 'Player quit an ongoing game');
+      const playerUuid = getPlayerUuidBySessionUuid(room, sessionUuid);
+      if (playerUuid) {
+        logger.info({ roomId, playerUuid }, 'Player quit an ongoing game');
         sendPlayersUpdate(room);
       }
     }

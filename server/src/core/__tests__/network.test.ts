@@ -16,48 +16,48 @@ jest.mock('../rooms', () => ({
 }));
 
 describe('network', () => {
-  it('should delete the room if there is no user connected', () => {
-    const users = {
+  it('should delete the room if there is no player connected', () => {
+    const players = {
       '1': { ws: { readyState: WebSocket.CLOSED } },
       '2': { ws: { readyState: WebSocket.CLOSED } },
       '3': { ws: { readyState: WebSocket.CLOSED } },
     };
 
     mockRooms.mockReturnValue({
-      abc: { users },
-      def: { users: { '4': { ws: { readyState: WebSocket.OPEN } } } },
+      abc: { players },
+      def: { players: { '4': { ws: { readyState: WebSocket.OPEN } } } },
     });
 
-    (findRoom as jest.Mock).mockReturnValue(['abc', { users }]);
+    (findRoom as jest.Mock).mockReturnValue(['abc', { players }]);
 
     handleWebSocketClosed('1');
 
-    expect(rooms).toEqual({ def: { users: { '4': { ws: { readyState: WebSocket.OPEN } } } } });
+    expect(rooms).toEqual({ def: { players: { '4': { ws: { readyState: WebSocket.OPEN } } } } });
   });
 
-  it('should not delete the room if there is at least one user connected', () => {
-    const users = {
+  it('should not delete the room if there is at least one player connected', () => {
+    const players = {
       '4': { ws: { readyState: WebSocket.OPEN } },
       '5': { ws: { readyState: WebSocket.CLOSED } },
     };
-    mockRooms.mockReturnValue({ def: { users } });
+    mockRooms.mockReturnValue({ def: { players } });
 
-    (findRoom as jest.Mock).mockReturnValue(['abc', { users }]);
+    (findRoom as jest.Mock).mockReturnValue(['abc', { players }]);
 
     handleWebSocketClosed('4');
 
-    expect(rooms).toEqual({ def: { users } });
+    expect(rooms).toEqual({ def: { players } });
   });
 
   it('should do nothing if the room is not find', () => {
     mockRooms.mockReturnValue({
-      def: { users: { '4': { ws: { readyState: WebSocket.OPEN } } } },
+      def: { players: { '4': { ws: { readyState: WebSocket.OPEN } } } },
     });
 
     (findRoom as jest.Mock).mockReturnValue([]);
 
     handleWebSocketClosed('1');
 
-    expect(rooms).toEqual({ def: { users: { '4': { ws: { readyState: WebSocket.OPEN } } } } });
+    expect(rooms).toEqual({ def: { players: { '4': { ws: { readyState: WebSocket.OPEN } } } } });
   });
 });

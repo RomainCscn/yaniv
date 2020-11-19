@@ -1,21 +1,21 @@
 import { getHand, getSuffledDeck } from './game';
 import rooms from './rooms';
-import { Card, CustomWebSocket, FormattedPlayer, Room, User } from '../types';
+import { Card, CustomWebSocket, FormattedPlayer, Room, Player } from '../types';
 
-export const assignHandToPlayer = (room: Room, user: User): void => {
-  const userHand = getHand(room, user.sortOrder);
+export const assignHandToPlayer = (room: Room, player: Player): void => {
+  const playerHand = getHand(room, player.sortOrder);
 
-  user.hand = userHand;
+  player.hand = playerHand;
   room.deck = room.deck.slice(room.configuration.handCardsNumber);
 };
 
-export const addUser = (
-  userUuid: string,
+export const addPlayer = (
+  playerUuid: string,
   room: Room,
-  { avatar, sessionUuid, username }: User,
-  userWs: CustomWebSocket,
+  { avatar, sessionUuid, username }: Player,
+  playerWs: CustomWebSocket,
 ): void => {
-  room.users[userUuid] = {
+  room.players[playerUuid] = {
     avatar,
     hand: [],
     score: 0,
@@ -23,14 +23,14 @@ export const addUser = (
     sessionUuid,
     sortOrder: 'asc',
     username,
-    uuid: userUuid,
-    ws: userWs,
+    uuid: playerUuid,
+    ws: playerWs,
   };
 };
 
 export const findRoom = (sessionUuid: string): [string, Room] | [] => {
   for (const [roomId, room] of Object.entries(rooms)) {
-    if (Object.values(room.users).find((user) => user.sessionUuid === sessionUuid)) {
+    if (Object.values(room.players).find((player) => player.sessionUuid === sessionUuid)) {
       return [roomId, room];
     }
   }
@@ -38,24 +38,24 @@ export const findRoom = (sessionUuid: string): [string, Room] | [] => {
   return [];
 };
 
-export const getPlayerByUuid = (room: Room, userUuid: string): User => room.users[userUuid];
+export const getPlayerByUuid = (room: Room, playerUuid: string): Player => room.players[playerUuid];
 
 export const getPlayerUuidBySessionUuid = (room: Room, sessionUuid: string): string | undefined =>
-  Object.values(room.users).find((user) => user.sessionUuid === sessionUuid)?.uuid;
+  Object.values(room.players).find((player) => player.sessionUuid === sessionUuid)?.uuid;
 
 export const getFormattedPlayers = (room: Room): FormattedPlayer[] =>
-  Object.values(room.users)
-    .filter((user) => user.ws.readyState !== user.ws.CLOSED)
-    .map((user) => ({
-      avatar: user.avatar,
-      numberOfCards: user.hand.length,
-      sortOrder: user.sortOrder,
-      uuid: user.uuid,
-      username: user.username,
+  Object.values(room.players)
+    .filter((player) => player.ws.readyState !== player.ws.CLOSED)
+    .map((player) => ({
+      avatar: player.avatar,
+      numberOfCards: player.hand.length,
+      sortOrder: player.sortOrder,
+      uuid: player.uuid,
+      username: player.username,
     }));
 
 export const getFormattedPlayer = (room: Room, uuid: string): FormattedPlayer => {
-  const { avatar: avatar, hand, sortOrder, username } = room.users[uuid];
+  const { avatar: avatar, hand, sortOrder, username } = room.players[uuid];
 
   return {
     avatar,
@@ -66,12 +66,14 @@ export const getFormattedPlayer = (room: Room, uuid: string): FormattedPlayer =>
   };
 };
 
-export const getPlayersScore = (room: Room): Pick<User, 'score' | 'scoreHistory' | 'username'>[] =>
-  Object.entries(room.users).map(([uuid, user]: [string, User]) => ({
-    score: user.score,
-    scoreHistory: user.scoreHistory,
+export const getPlayersScore = (
+  room: Room,
+): Pick<Player, 'score' | 'scoreHistory' | 'username'>[] =>
+  Object.entries(room.players).map(([uuid, player]: [string, Player]) => ({
+    score: player.score,
+    scoreHistory: player.scoreHistory,
     uuid,
-    username: user.username,
+    username: player.username,
   }));
 
 export const getSortedCards = (cards: Card[]): Card[] => {
@@ -100,13 +102,13 @@ export const resetRoom = (
 ): void => {
   room.deck = getSuffledDeck();
   room.thrownCards = [];
-  room.activePlayer = resetActivePlayer ? null : room.roundWinner || Object.keys(room.users)[0];
+  room.activePlayer = resetActivePlayer ? null : room.roundWinner || Object.keys(room.players)[0];
   room.roundWinner = null;
 
   if (resetScore) {
-    Object.entries(room.users).forEach(([, user]) => {
-      user.score = 0;
-      user.scoreHistory = [];
+    Object.entries(room.players).forEach(([, player]) => {
+      player.score = 0;
+      player.scoreHistory = [];
     });
   }
 };
@@ -118,6 +120,6 @@ export default function initRoom(): Room {
     deck: getSuffledDeck(),
     roundWinner: null,
     thrownCards: [],
-    users: {},
+    players: {},
   };
 }

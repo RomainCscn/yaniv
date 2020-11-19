@@ -23,7 +23,7 @@ const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws: CustomWebSocket) => {
   const sessionUuid = uuidv4();
-  logger.info({ sessionUuid }, 'User connected');
+  logger.info({ sessionUuid }, 'Player connected');
 
   ws.isAlive = true;
 
@@ -75,7 +75,7 @@ const interval = setInterval(() => {
     const customWs = ws as CustomWebSocket;
 
     if (!customWs.isAlive) {
-      logger.warn('User disconnected due to inactive WebSocket');
+      logger.warn('Player disconnected due to inactive WebSocket');
 
       return customWs.terminate();
     }
