@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useReducer, useState } from 'react';
 
 import client from '../core/client';
+import { getSortedOtherPlayers } from '../core/utils';
 import cardReducer from '../reducers/cardReducer';
 import chatReducer from '../reducers/chatReducer';
 import { Card, NewCard, Player, PlayerScore, ReceivedMessage, SortOrder } from '../types';
@@ -59,8 +60,8 @@ export default function useMultiplayer({ initialPlayers, playerUuid }: Props) {
           setNewCard(undefined); // reset new card if a card is picked by another player
         }
       } else if (data.type === 'PLAYERS_UPDATE') {
-        const { players } = data;
-        const otherPlayers = players.filter((player) => player.uuid !== playerUuid);
+        const otherPlayers = getSortedOtherPlayers(data.players, playerUuid);
+
         if (cardState.otherPlayers.length !== otherPlayers.length) {
           setPlayerQuit(true);
         } else {

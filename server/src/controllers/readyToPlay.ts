@@ -19,7 +19,7 @@ const handleReadyToPlay = (roomId: string, playerUuid: string): void => {
   player.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: player.hand }));
   player.ws.send(JSON.stringify({ type: 'SET_INTIAL_SCORES', playersScore }));
 
-  // if the player reconnect, we need to sync thrown cards
+  // if the player reconnects, we need to sync thrown cards
   if (rooms[roomId].thrownCards.length > 0) {
     player.ws.send(
       JSON.stringify({

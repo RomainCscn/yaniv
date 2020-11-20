@@ -78,4 +78,12 @@ const getCardsAfterPick = (card: undefined | Card, selectedCards: Card[], thrown
   }
 };
 
-export { canDropCards, canSelectCard, getCardValue, getCardsAfterPick, isAdjacent, isSameValue };
+export {
+  canDropCards,
+  canSelectCard,
+  getCardValue,
+  getCardsAfterPick,
+  isAdjacent,
+  isAdjacentWithJoker,
+  isSameValue,
+};
