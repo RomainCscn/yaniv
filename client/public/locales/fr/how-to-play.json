@@ -1,0 +1,30 @@
+{
+  "title": "Comment jouer",
+  "selectCard": {
+    "part1": "Cliquez sur une ou plusieurs cartes de votre main pour la/les sélectionner (voir ",
+    "here": "ici",
+    "link": "https://fr.wikipedia.org/wiki/Yaniv_(jeu_de_cartes)#Remplacement_de_cartes",
+    "part2": "pour les combinaisons possibles)"
+  },
+  "deck": "Cliquez sur la pioche ou sur une carte de la défausse pour la piocher",
+  "quickPlay": {
+    "summary": "Double-cliquez sur une de vos cartes pour la jouer rapidement (ceci n'est pas considéré comme un tour de jeu). Deux cas possibles :",
+    "case1": "Vous venez de piocher une carte de même valeur que celle que vous venez de défausser et le joueur suivant n'a pas joué",
+    "case2": "Quelqu'un a posé une paire / un brelan et vous avez une carte de même valeur et le joueur suivant n'a pas joué"
+  },
+  "yaniv": {
+    "summary": "Si vous avez <1>7 ou moins</1> dans votre main, appuyez sur le bouton Yaniv pour terminer la manche :",
+    "winner": "Vous gagnez si aucun autre joueur n'a un score inférieur ou égal au vôtre et marquez <1>0 point</1>",
+    "loser": "Vous perdez si au moins un autre joueur a un score inférieur ou égal au vôtre et vous marquez <1>30 points + la valeur de votre main</1>"
+  },
+  "cards": {
+    "summary": "Les valeurs des cartes sont :",
+    "aces": "Les As valent <1>1</1>",
+    "numbers": "Les nombres du <1>2 au 10</1> valent leur valeur",
+    "faces": "Les figures valent <1>10</1>",
+    "joker": "Les Jokers valent <1>0</1>"
+  },
+  "end": "La partie se termine lorsqu'un joueur atteint 200 points. Le gagnant est le joueur avec le moins de points",
+  "link": "https://fr.wikipedia.org/wiki/Yaniv_(jeu_de_cartes)",
+  "linkText": "En savoir plus sur le Yaniv et ses règles"
+}

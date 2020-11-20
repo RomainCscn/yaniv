@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Container, ParameterContainer, ValueButton } from './styles';
 import { ButtonContainer, SectionTitle, Label } from '../styles';
@@ -34,26 +35,28 @@ const RoomConfiguration = ({
   scoreLimit,
   setScoreLimit,
 }: Props) => {
+  const { t } = useTranslation();
+
   const updateRoomConfiguration = () => {
     send(roomId, { action: 'CONFIGURATION' }, { handCardsNumber, scoreLimit });
   };
 
   return (
     <Container>
-      <SectionTitle color='gray'>Paramètres de jeu</SectionTitle>
-      <Label>Nombre de cartes par main</Label>
+      <SectionTitle color='gray'>{t('lobby.room.title')}</SectionTitle>
+      <Label>{t('lobby.room.cardsNumber')}</Label>
       <ParameterContainer>
         <ParameterButton currentValue={handCardsNumber} setValue={setHandCardsNumber} value={5} />
         <ParameterButton currentValue={handCardsNumber} setValue={setHandCardsNumber} value={7} />
       </ParameterContainer>
-      <Label>Limite de score</Label>
+      <Label>{t('lobby.room.scoreLimit')}</Label>
       <ParameterContainer>
         <ParameterButton currentValue={scoreLimit} setValue={setScoreLimit} value={100} />
         <ParameterButton currentValue={scoreLimit} setValue={setScoreLimit} value={200} />
       </ParameterContainer>
       <ButtonContainer>
         <Button color={'gray'} onClick={updateRoomConfiguration}>
-          Mettre à jour
+          {t('common.update')}
         </Button>
       </ButtonContainer>
     </Container>

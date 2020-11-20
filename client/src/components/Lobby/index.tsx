@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+// import { useTranslation } from 'react-i18next';
 
 import HowToPlay from './HowToPlay';
 import Players from './Players';
@@ -33,9 +34,15 @@ const Lobby = () => {
     setScoreLimit,
   } = useLobby({ roomId });
 
+  // const { i18n } = useTranslation();
+
   if (isLoading) {
     return null;
   }
+
+  // const changeLanguage = (lng: string) => {
+  //   i18n.changeLanguage(lng);
+  // };
 
   return (
     <>
@@ -43,6 +50,8 @@ const Lobby = () => {
         <Room players={players} roomId={roomId} setPlay={setPlay} playerUuid={player.uuid} />
       ) : (
         <>
+          {/* <button onClick={() => changeLanguage('en')}>en</button>
+          <button onClick={() => changeLanguage('fr')}>fr</button> */}
           <Title>Yaniv</Title>
           <ShareLink />
           <SectionContainer>

@@ -1,0 +1,30 @@
+{
+  "title": "How to play",
+  "selectCard": {
+    "part1": "Click on one or more cards in your hand to select it/them (see ",
+    "here": "here",
+    "link": "https://en.wikipedia.org/wiki/Yaniv_(card_game)#Sets",
+    "part2": "for possible combinations)"
+  },
+  "deck": "Click on the deck or on one card of the discard pile to draw a card",
+  "quickPlay": {
+    "summary": "Double-click on one of your cards to play it quickly (this is not considered a round). Two possible cases:",
+    "case1": "You have just drawn a card of the same value as the one you have just discarded and the next player has not played",
+    "case2": "Someone has put down a pair or three of a kind and you have a card of the same value and the next player hasn't played"
+  },
+  "yaniv": {
+    "summary": "If you have <1>7 or less</1> in your hand, press the Yaniv button to finish the round:",
+    "winner": "You win if no other player has a score less than or equal to yours and score <1>0 point</1>",
+    "loser": "You lose if at least one other player has a score less than or equal to yours and you score <1>30 points + the value of your hand</1>"
+  },
+  "cards": {
+    "summary": "Card values are:",
+    "aces": "Aces worth <1>1</1>",
+    "numbers": "Numerical cards from <1>2 to 10</1> are worth their rank",
+    "faces": "Faces worth <1>10</1>",
+    "joker": "Jokers worth <1>0</1>"
+  },
+  "end": "The game ends when a player reaches <1>200 points</1>. The winner is the player with the fewest points",
+  "link": "https://en.wikipedia.org/wiki/Yaniv_(card_game)",
+  "linkText": "Learn more about the Yaniv and its rules"
+}

@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import Routes from './components/Routes';
 import { SUITS, VALUES } from './constants';
 import { getCardImagePath } from './core/utils';
+
+const Loader = () => <div>Loading...</div>;
 
 const App = () => {
   const cacheImages = async (imageArray: string[]) => {
@@ -38,7 +40,9 @@ const App = () => {
 
   return (
     <Router>
-      <Routes />
+      <Suspense fallback={<Loader />}>
+        <Routes />
+      </Suspense>
     </Router>
   );
 };

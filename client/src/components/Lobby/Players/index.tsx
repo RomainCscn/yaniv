@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Error, PlayersAvatarContainer, PlayerContainer, PlayerName } from './styles';
 import { ButtonContainer, Container, SectionTitle } from '../styles';
@@ -15,19 +16,20 @@ interface Props {
 }
 
 const Players = ({ error, players, roomId, currentPlayer }: Props) => {
+  const { t } = useTranslation();
   const [errorMessage, setErrorMessage] = useState('');
 
   const startGame = () => {
     if (players.length >= 2) {
       send(roomId, { action: 'START' });
     } else {
-      setErrorMessage('Un seul joueur dans le salon ! Au moins deux joueurs requis pour jouer.');
+      setErrorMessage(t('lobby.players.onePlayer'));
     }
   };
 
   return (
     <Container color='green'>
-      <SectionTitle color='green'>Joueurs dans le salon</SectionTitle>
+      <SectionTitle color='green'>{t('lobby.players.title')}</SectionTitle>
       <PlayersAvatarContainer>
         {players.map((player) => (
           <PlayerContainer key={player.uuid}>
@@ -37,20 +39,15 @@ const Players = ({ error, players, roomId, currentPlayer }: Props) => {
               alt={player.avatar}
             />
             <PlayerName>
-              {player.username} {player.uuid === currentPlayer.uuid && '(vous)'}
+              {player.username} {player.uuid === currentPlayer.uuid && t('lobby.players.you')}
             </PlayerName>
           </PlayerContainer>
         ))}
       </PlayersAvatarContainer>
-      {error && (
-        <p>
-          Un ou plusieurs joueurs sont déjà en jeu... Changez de salon ou demandez leur de revenir
-          au salon et rafraîchissez la page pour jouer !
-        </p>
-      )}
+      {error && <p>{t('lobby.players.inGame')}</p>}
       <ButtonContainer>
         <Button color={'green'} onClick={startGame}>
-          Commencer la partie
+          {t('lobby.players.start')}
         </Button>
         {errorMessage && players.length < 2 && <Error>{errorMessage}</Error>}
       </ButtonContainer>

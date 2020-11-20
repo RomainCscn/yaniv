@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import AvatarList from './AvatarList';
 import { ButtonContainer, Container, Label, SectionTitle } from '../styles';
@@ -14,6 +15,8 @@ interface Props {
 }
 
 const Profile = ({ roomId, player, setPlayer }: Props) => {
+  const { t } = useTranslation();
+
   const updatePlayerInformation = () => {
     send(roomId, { action: 'UPDATE' }, { player });
   };
@@ -23,9 +26,9 @@ const Profile = ({ roomId, player, setPlayer }: Props) => {
 
   return (
     <Container color='indigo'>
-      <SectionTitle color='indigo'>Modifier votre profil</SectionTitle>
+      <SectionTitle color='indigo'>{t('lobby.profile.title')}</SectionTitle>
       <div style={{ marginBottom: '24px' }}>
-        <Label>Nom</Label>
+        <Label>{t('lobby.profile.name')}</Label>
         <Input value={player.username} onChange={setUsername} />
       </div>
       <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -33,7 +36,7 @@ const Profile = ({ roomId, player, setPlayer }: Props) => {
       </div>
       <ButtonContainer>
         <Button color={'purple'} onClick={updatePlayerInformation}>
-          Mettre à jour
+          {t('common.update')}
         </Button>
       </ButtonContainer>
     </Container>
