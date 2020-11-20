@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import Message from './Message';
@@ -78,6 +79,8 @@ const MessagesHeader = styled.div`
 `;
 
 const Chat = ({ messages, roomId, playerUuid }: Props) => {
+  const { t } = useTranslation('room');
+
   const messagesRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [hasNewMessage, setHasNewMessage] = useState(false);
@@ -113,9 +116,9 @@ const Chat = ({ messages, roomId, playerUuid }: Props) => {
             setHasNewMessage(false);
           }}
         >
-          Cacher
+          X
         </HideButton>
-        <MessagesHeader>Discussions</MessagesHeader>
+        <MessagesHeader>{t('chat.title')}</MessagesHeader>
         <MessagesContainer>
           {messages.map((message) => (
             <Message isSelf={message.player.uuid === playerUuid} message={message} />

@@ -35,7 +35,7 @@ const RoomConfiguration = ({
   scoreLimit,
   setScoreLimit,
 }: Props) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('lobby');
 
   const updateRoomConfiguration = () => {
     send(roomId, { action: 'CONFIGURATION' }, { handCardsNumber, scoreLimit });
@@ -43,20 +43,20 @@ const RoomConfiguration = ({
 
   return (
     <Container>
-      <SectionTitle color='gray'>{t('lobby.room.title')}</SectionTitle>
-      <Label>{t('lobby.room.cardsNumber')}</Label>
+      <SectionTitle color='gray'>{t('room.title')}</SectionTitle>
+      <Label>{t('room.cardsNumber')}</Label>
       <ParameterContainer>
         <ParameterButton currentValue={handCardsNumber} setValue={setHandCardsNumber} value={5} />
         <ParameterButton currentValue={handCardsNumber} setValue={setHandCardsNumber} value={7} />
       </ParameterContainer>
-      <Label>{t('lobby.room.scoreLimit')}</Label>
+      <Label>{t('room.scoreLimit')}</Label>
       <ParameterContainer>
         <ParameterButton currentValue={scoreLimit} setValue={setScoreLimit} value={100} />
         <ParameterButton currentValue={scoreLimit} setValue={setScoreLimit} value={200} />
       </ParameterContainer>
       <ButtonContainer>
         <Button color={'gray'} onClick={updateRoomConfiguration}>
-          {t('common.update')}
+          {t('update')}
         </Button>
       </ButtonContainer>
     </Container>

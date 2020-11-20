@@ -15,7 +15,7 @@ interface Props {
 }
 
 const Profile = ({ roomId, player, setPlayer }: Props) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('lobby');
 
   const updatePlayerInformation = () => {
     send(roomId, { action: 'UPDATE' }, { player });
@@ -26,9 +26,9 @@ const Profile = ({ roomId, player, setPlayer }: Props) => {
 
   return (
     <Container color='indigo'>
-      <SectionTitle color='indigo'>{t('lobby.profile.title')}</SectionTitle>
+      <SectionTitle color='indigo'>{t('profile.title')}</SectionTitle>
       <div style={{ marginBottom: '24px' }}>
-        <Label>{t('lobby.profile.name')}</Label>
+        <Label>{t('profile.name')}</Label>
         <Input value={player.username} onChange={setUsername} />
       </div>
       <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -36,7 +36,7 @@ const Profile = ({ roomId, player, setPlayer }: Props) => {
       </div>
       <ButtonContainer>
         <Button color={'purple'} onClick={updatePlayerInformation}>
-          {t('common.update')}
+          {t('update')}
         </Button>
       </ButtonContainer>
     </Container>

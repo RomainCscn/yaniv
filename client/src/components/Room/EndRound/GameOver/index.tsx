@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { AvatarContainer, WinnerText, WinnerUsername } from '../styles';
@@ -30,17 +31,21 @@ const Image = styled.img`
   width: 96px;
 `;
 
-const GameOver = ({ gameWinner, roomId, playerUuid }: Props) => (
-  <Container>
-    <EndGameText>Fin de la partie</EndGameText>
-    {gameWinner.uuid === playerUuid && <Image src={trophy} alt='trophy' />}
-    <AvatarContainer>
-      <WinnerText>Bravo</WinnerText>
-      <Avatar id={gameWinner.avatar} />
-      <WinnerUsername>{gameWinner.username}</WinnerUsername>
-    </AvatarContainer>
-    <PlayAgainButton roomId={roomId} playerUuid={playerUuid} />
-  </Container>
-);
+const GameOver = ({ gameWinner, roomId, playerUuid }: Props) => {
+  const { t } = useTranslation('room');
+
+  return (
+    <Container>
+      <EndGameText>{t('end.gameOver')}</EndGameText>
+      {gameWinner.uuid === playerUuid && <Image src={trophy} alt='trophy' />}
+      <AvatarContainer>
+        <WinnerText>{t('end.congrats')}</WinnerText>
+        <Avatar id={gameWinner.avatar} />
+        <WinnerUsername>{gameWinner.username}</WinnerUsername>
+      </AvatarContainer>
+      <PlayAgainButton roomId={roomId} playerUuid={playerUuid} />
+    </Container>
+  );
+};
 
 export default GameOver;

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import Score from './ScoreDashboard';
@@ -90,6 +91,8 @@ interface Props {
 }
 
 const Menu = ({ backToLobby, scores, setShowModal }: Props) => {
+  const { t } = useTranslation('room');
+
   const [isVisible, setIsVisible] = useState(false);
   const [showQuitModal, setShowQuitModal] = useState(false);
 
@@ -118,19 +121,19 @@ const Menu = ({ backToLobby, scores, setShowModal }: Props) => {
           <ContentContainer>
             <ScoreTitle>Scores</ScoreTitle>
             <Score scores={scores} />
-            <QuitButton onClick={showModal}>QUITTER LA PARTIE</QuitButton>
+            <QuitButton onClick={showModal}>{t('menu.quit')}</QuitButton>
           </ContentContainer>
         </Container>
       )}
       {showQuitModal && (
         <Modal
-          title='Arrêter la partie'
-          content='En quittant la partie, vous et les autres joueurs retournerez au salon. Êtes-vous sûr de vouloir quitter ?'
+          title={t('menu.modal.title')}
+          content={t('menu.modal.content')}
           color='orange'
           primaryAction={backToLobby}
-          primaryButtonText='Oui, retour au salon'
+          primaryButtonText={t('menu.modal.quitButton')}
           secondaryAction={hideModal}
-          secondaryButtonText='Non, retour à la partie'
+          secondaryButtonText={t('menu.modal.cancelButton')}
         />
       )}
     </>

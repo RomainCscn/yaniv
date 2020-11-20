@@ -1,0 +1,31 @@
+{
+  "chat": {
+    "title": "Messages"
+  },
+  "end": {
+    "gameOver": "Game over",
+    "congrats": "Well done",
+    "win": "You won 🥳",
+    "lose": "You lost",
+    "called": " called Yaniv!",
+    "roundWinner": "Round winner"
+  },
+  "menu": {
+    "quit": "LEAVE THE GAME",
+    "modal": {
+      "title": "Leave the game",
+      "content": "By leaving the game, you and the other players will go back to the lobby. Are you sure you want to leave?",
+      "quitButton": "Yes, back to the lobby",
+      "cancelButton": "No, back to the game"
+    }
+  },
+  "nextRound": "NEXT ROUND",
+  "drew": " drew",
+  "playAgain": "PLAY AGAIN",
+  "quitModal": {
+    "title": "A player has left the game!",
+    "content": "Please wait for the player to reconnect to resume the game or return to the lobby to play again.",
+    "button": "Back to the lobby"
+  },
+  "yourTurn": "It's your turn!"
+}

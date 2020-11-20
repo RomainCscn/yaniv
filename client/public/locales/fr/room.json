@@ -1,0 +1,31 @@
+{
+  "chat": {
+    "title": "Discussions"
+  },
+  "end": {
+    "gameOver": "Fin de la partie",
+    "congrats": "Bravo",
+    "win": "Gagné 🥳",
+    "lose": "Perdu",
+    "called": " a annoncé Yaniv !",
+    "roundWinner": "Gagnant de la manche"
+  },
+  "menu": {
+    "quit": "QUITTER LA PARTIE",
+    "modal": {
+      "title": "Arrêter la partie",
+      "content": "En quittant la partie, vous et les autres joueurs retournerez au salon. Êtes-vous sûr de vouloir quitter ?",
+      "quitButton": "Oui, retour au salon",
+      "cancelButton": "Non, retour à la partie"
+    }
+  },
+  "nextRound": "MANCHE SUIVANTE",
+  "drew": " a pioché",
+  "playAgain": "REJOUER",
+  "quitModal": {
+    "title": "Un joueur a quitté la partie !",
+    "content": "Merci d'attendre que le joueur se reconnecte pour reprendre la partie ou retourner au salon pour rejouer.",
+    "button": "Retour au salon"
+  },
+  "yourTurn": "C'est à vous !"
+}

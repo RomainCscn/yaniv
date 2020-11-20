@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components';
 
 import Chat from './Chat';
@@ -62,6 +63,8 @@ const PlayersTurn = styled.p`
 `;
 
 const Room = ({ players, roomId, setPlay, playerUuid }: RoomProps) => {
+  const { t } = useTranslation('room');
+
   const [showModal, setShowModal] = useState(false);
 
   const {
@@ -132,7 +135,7 @@ const Room = ({ players, roomId, setPlay, playerUuid }: RoomProps) => {
           />
           {!roundWinner && (
             <div>
-              <PlayersTurn>{canPlay ? `C'est à vous !` : ''}</PlayersTurn>
+              <PlayersTurn>{canPlay ? t('yourTurn') : ''}</PlayersTurn>
               <CardsContainer>
                 <ThrownCards
                   canPlay={canPlay && cardState.selectedCards.length > 0}

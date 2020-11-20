@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { CopyButton, Link, LinkContainer, LinkText } from './styles';
 
 const ShareLink = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('lobby');
 
   const copyLink = () => {
     const textField = document.createElement('textarea');
@@ -17,10 +17,10 @@ const ShareLink = () => {
 
   return (
     <div>
-      <LinkText>{t('lobby.share.text')}</LinkText>
+      <LinkText>{t('share.text')}</LinkText>
       <LinkContainer>
         <Link href={window.location.href}>{window.location.host + window.location.pathname}</Link>
-        <CopyButton onClick={() => copyLink()}>{t('lobby.share.copy')}</CopyButton>
+        <CopyButton onClick={() => copyLink()}>{t('share.copy')}</CopyButton>
       </LinkContainer>
     </div>
   );

@@ -16,20 +16,20 @@ interface Props {
 }
 
 const Players = ({ error, players, roomId, currentPlayer }: Props) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('lobby');
   const [errorMessage, setErrorMessage] = useState('');
 
   const startGame = () => {
     if (players.length >= 2) {
       send(roomId, { action: 'START' });
     } else {
-      setErrorMessage(t('lobby.players.onePlayer'));
+      setErrorMessage(t('players.onePlayer'));
     }
   };
 
   return (
     <Container color='green'>
-      <SectionTitle color='green'>{t('lobby.players.title')}</SectionTitle>
+      <SectionTitle color='green'>{t('players.title')}</SectionTitle>
       <PlayersAvatarContainer>
         {players.map((player) => (
           <PlayerContainer key={player.uuid}>
@@ -39,15 +39,15 @@ const Players = ({ error, players, roomId, currentPlayer }: Props) => {
               alt={player.avatar}
             />
             <PlayerName>
-              {player.username} {player.uuid === currentPlayer.uuid && t('lobby.players.you')}
+              {player.username} {player.uuid === currentPlayer.uuid && t('players.you')}
             </PlayerName>
           </PlayerContainer>
         ))}
       </PlayersAvatarContainer>
-      {error && <p>{t('lobby.players.inGame')}</p>}
+      {error && <p>{t('players.inGame')}</p>}
       <ButtonContainer>
         <Button color={'green'} onClick={startGame}>
-          {t('lobby.players.start')}
+          {t('players.start')}
         </Button>
         {errorMessage && players.length < 2 && <Error>{errorMessage}</Error>}
       </ButtonContainer>
