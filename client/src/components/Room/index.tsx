@@ -19,7 +19,7 @@ interface RoomProps {
   players: Player[];
   roomId: string;
   setPlay: (b: boolean) => void;
-  userUuid: string;
+  playerUuid: string;
 }
 
 const Container = styled.div<{ showModal: boolean }>`
@@ -61,7 +61,7 @@ const PlayersTurn = styled.p`
   font-weight: bold;
 `;
 
-const Room = ({ players, roomId, setPlay, userUuid }: RoomProps) => {
+const Room = ({ players, roomId, setPlay, playerUuid }: RoomProps) => {
   const [showModal, setShowModal] = useState(false);
 
   const {
@@ -83,9 +83,9 @@ const Room = ({ players, roomId, setPlay, userUuid }: RoomProps) => {
     shouldGoBackToLobby,
     sortOrder,
     yanivCaller,
-  } = useMultiplayer({ initialPlayers: players, userUuid });
+  } = useMultiplayer({ initialPlayers: players, playerUuid });
 
-  const player = useMemo(() => players.find((p) => p.uuid === userUuid), [players, userUuid]);
+  const player = useMemo(() => players.find((p) => p.uuid === playerUuid), [players, playerUuid]);
 
   useEffect(() => {
     send(roomId, { action: 'READY_TO_PLAY' }, { player });
@@ -144,7 +144,7 @@ const Room = ({ players, roomId, setPlay, userUuid }: RoomProps) => {
                   pickCard={pickCard}
                 />
               </CardsContainer>
-              {previousPlayer && previousPlayer.uuid !== userUuid && (
+              {previousPlayer && previousPlayer.uuid !== playerUuid && (
                 <PickedCardAnnouncement previousPlayer={previousPlayer} pickedCard={pickedCard} />
               )}
             </div>
@@ -154,7 +154,7 @@ const Room = ({ players, roomId, setPlay, userUuid }: RoomProps) => {
               gameWinner={gameWinner}
               roomId={roomId}
               roundWinner={roundWinner}
-              userUuid={userUuid}
+              playerUuid={playerUuid}
               yanivCaller={yanivCaller}
             />
           )}
@@ -166,14 +166,14 @@ const Room = ({ players, roomId, setPlay, userUuid }: RoomProps) => {
             player={player!}
             resetSelectedCards={resetSelectedCards}
             roomId={roomId}
-            score={scores.find((score) => score.uuid === userUuid)?.score || 0}
+            score={scores.find((score) => score.uuid === playerUuid)?.score || 0}
             sortOrder={sortOrder}
             selectCard={selectCard}
             selectedCards={cardState.selectedCards}
             thrownCards={cardState.thrownCards}
           />
         </RoomContainer>
-        <Chat messages={chatState.messages} roomId={roomId} userUuid={userUuid} />
+        <Chat messages={chatState.messages} roomId={roomId} playerUuid={playerUuid} />
       </Container>
     </>
   );

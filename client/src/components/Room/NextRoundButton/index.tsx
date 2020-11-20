@@ -3,9 +3,9 @@ import React from 'react';
 import Button from '../../shared/Button';
 import { send } from '../../../core/client';
 
-const NextRoundButton = ({ roomId, userUuid }: { roomId: string; userUuid: string }) => {
+const NextRoundButton = ({ roomId, playerUuid }: { roomId: string; playerUuid: string }) => {
   const nextRound = () => {
-    send(roomId, { action: 'PLAY', actionType: 'NEXT_ROUND' }, { player: { uuid: userUuid } });
+    send(roomId, { action: 'PLAY', actionType: 'NEXT_ROUND' }, { player: { uuid: playerUuid } });
   };
 
   return (

@@ -29,10 +29,10 @@ const Button = styled(DefaultButton)`
   }
 `;
 
-const SortButton = ({ roomId, sortOrder: userSortOrder }: Props) => (
+const SortButton = ({ roomId, sortOrder: playerSortOrder }: Props) => (
   <Button
     onClick={() =>
-      send(roomId, { action: 'UPDATE' }, { sortOrder: userSortOrder === 'asc' ? 'desc' : 'asc' })
+      send(roomId, { action: 'UPDATE' }, { sortOrder: playerSortOrder === 'asc' ? 'desc' : 'asc' })
     }
   >
     Changer l'ordre

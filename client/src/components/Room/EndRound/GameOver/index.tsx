@@ -10,7 +10,7 @@ import { Player } from '../../../../types';
 interface Props {
   gameWinner: Player;
   roomId: string;
-  userUuid: string;
+  playerUuid: string;
 }
 
 const Container = styled.div`
@@ -30,16 +30,16 @@ const Image = styled.img`
   width: 96px;
 `;
 
-const GameOver = ({ gameWinner, roomId, userUuid }: Props) => (
+const GameOver = ({ gameWinner, roomId, playerUuid }: Props) => (
   <Container>
     <EndGameText>Fin de la partie</EndGameText>
-    {gameWinner.uuid === userUuid && <Image src={trophy} alt='trophy' />}
+    {gameWinner.uuid === playerUuid && <Image src={trophy} alt='trophy' />}
     <AvatarContainer>
       <WinnerText>Bravo</WinnerText>
       <Avatar id={gameWinner.avatar} />
       <WinnerUsername>{gameWinner.username}</WinnerUsername>
     </AvatarContainer>
-    <PlayAgainButton roomId={roomId} userUuid={userUuid} />
+    <PlayAgainButton roomId={roomId} playerUuid={playerUuid} />
   </Container>
 );
 

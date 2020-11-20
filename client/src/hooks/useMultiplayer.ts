@@ -7,12 +7,12 @@ import { Card, NewCard, Player, PlayerScore, ReceivedMessage, SortOrder } from '
 
 interface Props {
   initialPlayers: Player[];
-  userUuid: string;
+  playerUuid: string;
 }
 
-export default function useMultiplayer({ initialPlayers, userUuid }: Props) {
+export default function useMultiplayer({ initialPlayers, playerUuid }: Props) {
   const [cardState, cardDispatch] = useReducer(cardReducer, {
-    otherPlayers: initialPlayers.filter((player) => player.uuid !== userUuid),
+    otherPlayers: initialPlayers.filter((player) => player.uuid !== playerUuid),
     selectedCards: [],
     thrownCards: [],
   });
@@ -55,12 +55,12 @@ export default function useMultiplayer({ initialPlayers, userUuid }: Props) {
         const { pickedCard, previousPlayer } = data;
         setPreviousPlayer(previousPlayer);
         setPickedCard(pickedCard);
-        if (previousPlayer.uuid !== userUuid) {
+        if (previousPlayer.uuid !== playerUuid) {
           setNewCard(undefined); // reset new card if a card is picked by another player
         }
       } else if (data.type === 'PLAYERS_UPDATE') {
         const { players } = data;
-        const otherPlayers = players.filter((player) => player.uuid !== userUuid);
+        const otherPlayers = players.filter((player) => player.uuid !== playerUuid);
         if (cardState.otherPlayers.length !== otherPlayers.length) {
           setPlayerQuit(true);
         } else {
@@ -83,7 +83,7 @@ export default function useMultiplayer({ initialPlayers, userUuid }: Props) {
       } else if (data.type === 'SET_ACTIVE_PLAYER') {
         const { uuid } = data;
         setActivePlayer(uuid);
-        setCanPlay(uuid === userUuid);
+        setCanPlay(uuid === playerUuid);
       } else if (data.type === 'NEW_ROUND') {
         cardDispatch({ type: 'newRound' });
         setGameWinner(undefined);
@@ -97,7 +97,7 @@ export default function useMultiplayer({ initialPlayers, userUuid }: Props) {
         chatDispatch({ type: 'NEW_MESSAGE', payload: data.message });
       }
     };
-  }, [cardState.otherPlayers.length, userUuid]);
+  }, [cardState.otherPlayers.length, playerUuid]);
 
   const resetOnMessage = useCallback(() => (client.onmessage = null), []);
 

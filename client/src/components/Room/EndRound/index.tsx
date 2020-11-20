@@ -10,7 +10,7 @@ interface Props {
   gameWinner?: Player;
   roomId: string;
   roundWinner?: Player;
-  userUuid: string;
+  playerUuid: string;
   yanivCaller?: Player;
 }
 
@@ -19,16 +19,16 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-const EndRound = ({ gameWinner, roomId, roundWinner, userUuid, yanivCaller }: Props) => (
+const EndRound = ({ gameWinner, roomId, roundWinner, playerUuid, yanivCaller }: Props) => (
   <Container>
     {gameWinner ? (
-      <GameOver roomId={roomId} gameWinner={gameWinner} userUuid={userUuid} />
+      <GameOver roomId={roomId} gameWinner={gameWinner} playerUuid={playerUuid} />
     ) : (
       roundWinner && (
         <RoundOver
           roomId={roomId}
           roundWinner={roundWinner}
-          userUuid={userUuid}
+          playerUuid={playerUuid}
           yanivCaller={yanivCaller}
         />
       )

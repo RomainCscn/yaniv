@@ -9,7 +9,7 @@ import { Message as MessageType } from '../../../types';
 interface Props {
   messages: MessageType[];
   roomId: string;
-  userUuid: string;
+  playerUuid: string;
 }
 
 const Container = styled.div`
@@ -77,7 +77,7 @@ const MessagesHeader = styled.div`
   background-color: #edf2f7;
 `;
 
-const Chat = ({ messages, roomId, userUuid }: Props) => {
+const Chat = ({ messages, roomId, playerUuid }: Props) => {
   const messagesRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [hasNewMessage, setHasNewMessage] = useState(false);
@@ -89,10 +89,10 @@ const Chat = ({ messages, roomId, userUuid }: Props) => {
   }, [messages]);
 
   useEffect(() => {
-    if (messages.filter((message) => message.player.uuid !== userUuid).length >= 1) {
+    if (messages.filter((message) => message.player.uuid !== playerUuid).length >= 1) {
       setHasNewMessage(true);
     }
-  }, [messages, userUuid]);
+  }, [messages, playerUuid]);
 
   return (
     <Container>
@@ -118,11 +118,11 @@ const Chat = ({ messages, roomId, userUuid }: Props) => {
         <MessagesHeader>Discussions</MessagesHeader>
         <MessagesContainer>
           {messages.map((message) => (
-            <Message isSelf={message.player.uuid === userUuid} message={message} />
+            <Message isSelf={message.player.uuid === playerUuid} message={message} />
           ))}
           <div ref={messagesRef}></div>
         </MessagesContainer>
-        <NewMessage roomId={roomId} userUuid={userUuid} />
+        <NewMessage roomId={roomId} playerUuid={playerUuid} />
       </ChatContainer>
     </Container>
   );

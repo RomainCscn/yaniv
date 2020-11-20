@@ -26,14 +26,14 @@ const SendButton = styled.div`
   cursor: pointer;
 `;
 
-const NewMessage = ({ roomId, userUuid }: { roomId: string; userUuid: string }) => {
+const NewMessage = ({ roomId, playerUuid }: { roomId: string; playerUuid: string }) => {
   const [newMessage, setNewMessage] = useState('');
 
   const sendMessage = useCallback(() => {
     if (newMessage.length > 0)
-      send(roomId, { action: 'MESSAGE' }, { message: newMessage, player: { uuid: userUuid } });
+      send(roomId, { action: 'MESSAGE' }, { message: newMessage, player: { uuid: playerUuid } });
     setNewMessage('');
-  }, [newMessage, roomId, userUuid]);
+  }, [newMessage, roomId, playerUuid]);
 
   const handleMessageChange = useCallback((e) => setNewMessage(e.target.value), []);
 

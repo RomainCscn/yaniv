@@ -9,7 +9,7 @@ import { Player } from '../../../../types';
 interface Props {
   roundWinner: Player;
   roomId: string;
-  userUuid: string;
+  playerUuid: string;
   yanivCaller?: Player;
 }
 
@@ -27,23 +27,23 @@ const YanivCallerContainer = styled.div`
   align-items: center;
 `;
 
-const RoundOver = ({ roundWinner, roomId, userUuid, yanivCaller }: Props) => (
+const RoundOver = ({ roundWinner, roomId, playerUuid, yanivCaller }: Props) => (
   <Container>
-    <WinnerText>{roundWinner.uuid === userUuid ? 'GAGNÉ 🥳' : 'PERDU !'}</WinnerText>
-    {yanivCaller && yanivCaller?.uuid !== userUuid && (
+    <WinnerText>{roundWinner.uuid === playerUuid ? 'GAGNÉ 🥳' : 'PERDU !'}</WinnerText>
+    {yanivCaller && yanivCaller?.uuid !== playerUuid && (
       <YanivCallerContainer>
         <Avatar id={yanivCaller.avatar} />
         {yanivCaller?.username} a annoncé Yaniv !
       </YanivCallerContainer>
     )}
-    {roundWinner.uuid !== userUuid && (
+    {roundWinner.uuid !== playerUuid && (
       <AvatarContainer>
         <div>Gagnant de la manche</div>
         <Avatar id={roundWinner.avatar} />
         <WinnerUsername>{roundWinner.username}</WinnerUsername>
       </AvatarContainer>
     )}
-    <NextRoundButton roomId={roomId} userUuid={userUuid} />
+    <NextRoundButton roomId={roomId} playerUuid={playerUuid} />
   </Container>
 );
 
