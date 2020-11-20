@@ -5,8 +5,6 @@ import Routes from './components/Routes';
 import { SUITS, VALUES } from './constants';
 import { getCardImagePath } from './core/utils';
 
-const Loader = () => <div>Loading...</div>;
-
 const App = () => {
   const cacheImages = async (imageArray: string[]) => {
     const promises = await imageArray.map((src) => {
@@ -40,7 +38,7 @@ const App = () => {
 
   return (
     <Router>
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback=''>
         <Routes />
       </Suspense>
     </Router>

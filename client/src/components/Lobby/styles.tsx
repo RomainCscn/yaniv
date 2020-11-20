@@ -84,3 +84,18 @@ export const Title = styled.h1`
   font-size: 76px;
   font-family: 'Alloy';
 `;
+
+export const Languages = styled.div`
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  display: flex;
+  font-family: 'Roboto', sans-serif;
+  cursor: pointer;
+  color: #075985;
+  text-decoration: underline;
+
+  div:first-child {
+    margin-right: 12px;
+  }
+`;
