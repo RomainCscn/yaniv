@@ -2,6 +2,7 @@ import React from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import Footer from './Footer';
 import HowToPlay from './HowToPlay';
 import Players from './Players';
 import Profile from './Profile';
@@ -40,10 +41,6 @@ const Lobby = () => {
     return null;
   }
 
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
-  };
-
   return (
     <>
       {play ? (
@@ -51,8 +48,8 @@ const Lobby = () => {
       ) : (
         <>
           <Languages>
-            <div onClick={() => changeLanguage('en')}>English</div>
-            <div onClick={() => changeLanguage('fr')}>Français</div>
+            <div onClick={() => i18n.changeLanguage('en')}>English</div>
+            <div onClick={() => i18n.changeLanguage('fr')}>Français</div>
           </Languages>
           <Title>Yaniv</Title>
           <ShareLink />
@@ -70,6 +67,7 @@ const Lobby = () => {
             />
             <HowToPlay />
           </SectionContainer>
+          <Footer />
         </>
       )}
     </>

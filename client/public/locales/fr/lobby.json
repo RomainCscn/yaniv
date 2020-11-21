@@ -19,5 +19,9 @@
     "text": "Partagez ce lien à vos amis pour qu'ils vous rejoignent",
     "copy": "Copier"
   },
-  "update": "Mettre à jour"
+  "update": "Mettre à jour",
+  "footer": {
+    "creator": "Créé par ",
+    "code": "Code source disponible sur"
+  }
 }

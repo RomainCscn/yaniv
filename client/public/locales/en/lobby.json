@@ -19,5 +19,9 @@
     "text": "Share this link to your friends so they can join you",
     "copy": "Copy"
   },
-  "update": "Update"
+  "update": "Update",
+  "footer": {
+    "creator": "Created by ",
+    "code": "Source code available on"
+  }
 }
