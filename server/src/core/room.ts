@@ -3,7 +3,7 @@ import rooms from './rooms';
 import { Card, CustomWebSocket, FormattedPlayer, Room, Player } from '../types';
 
 export const assignHandToPlayer = (room: Room, player: Player): void => {
-  const playerHand = getHand(room, player.sortOrder);
+  const playerHand = getHand(room, player.sort);
 
   player.hand = playerHand;
   room.deck = room.deck.slice(room.configuration.handCardsNumber);
@@ -21,7 +21,7 @@ export const addPlayer = (
     score: 0,
     scoreHistory: [],
     sessionUuid,
-    sortOrder: 'asc',
+    sort: { order: 'asc', type: 'suit' },
     username,
     uuid: playerUuid,
     ws: playerWs,
@@ -49,18 +49,18 @@ export const getFormattedPlayers = (room: Room): FormattedPlayer[] =>
     .map((player) => ({
       avatar: player.avatar,
       numberOfCards: player.hand.length,
-      sortOrder: player.sortOrder,
+      sort: player.sort,
       uuid: player.uuid,
       username: player.username,
     }));
 
 export const getFormattedPlayer = (room: Room, uuid: string): FormattedPlayer => {
-  const { avatar: avatar, hand, sortOrder, username } = room.players[uuid];
+  const { avatar: avatar, hand, sort, username } = room.players[uuid];
 
   return {
     avatar,
     numberOfCards: hand.length,
-    sortOrder,
+    sort,
     username,
     uuid,
   };

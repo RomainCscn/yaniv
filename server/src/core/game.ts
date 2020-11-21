@@ -1,5 +1,5 @@
 import { SUITS, VALUES } from '../constants';
-import { Card, Room, SortOrder } from '../types';
+import { Card, Room, SortOrder, SortType } from '../types';
 
 const getCardValue = (card: Card): number =>
   card.suit === 'joker' ? 0 : card.value <= 10 ? card.value : 10;
@@ -35,23 +35,31 @@ const shuffle = (deck: Card[]) => {
 
 const getSuffledDeck = (): Card[] => shuffle(getDeck());
 
-const sortHand = (hand: Card[], sortOrder: SortOrder = 'asc'): Card[] =>
-  hand
-    .sort((a, b) => (sortOrder === 'asc' ? a.value - b.value : b.value - a.value))
-    .sort((a, b) => {
-      if (a.suit < b.suit) {
-        return -1;
-      }
+const sortHand = (
+  hand: Card[],
+  sort: {
+    order: SortOrder;
+    type: SortType;
+  },
+): Card[] => {
+  if (sort.type === 'rank') {
+    return hand.sort((a, b) => (sort.order === 'desc' ? b.value - a.value : a.value - b.value));
+  }
 
-      if (a.suit > b.suit) {
-        return 1;
-      }
+  const order = { club: 1, diamond: 2, spade: 3, heart: 4, joker: 5 };
 
-      return 0;
-    });
+  return hand
+    .sort((a, b) => (sort.order === 'desc' ? b.value - a.value : a.value - b.value))
+    .sort((a, b) => order[a.suit] - order[b.suit]);
+};
 
-const getHand = (room: Room, sortOrder: SortOrder = 'asc'): Card[] =>
-  sortHand(room.deck.slice(0, room.configuration.handCardsNumber), sortOrder);
+const getHand = (
+  room: Room,
+  sort: {
+    order: SortOrder;
+    type: SortType;
+  },
+): Card[] => sortHand(room.deck.slice(0, room.configuration.handCardsNumber), sort);
 
 const getSmallestScore = (scores: { uuid: string; score: number }[]): number =>
   scores.reduce((prev, curr) => (prev.score <= curr.score ? prev : curr)).score;

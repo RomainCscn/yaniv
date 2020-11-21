@@ -15,7 +15,10 @@ export interface Card {
 export interface FormattedPlayer {
   avatar: string;
   numberOfCards: number;
-  sortOrder: SortOrder;
+  sort: {
+    order: SortOrder;
+    type: SortType;
+  };
   username: string;
   uuid: string;
 }
@@ -47,6 +50,7 @@ export interface Room {
 }
 
 export type SortOrder = 'asc' | 'desc';
+export type SortType = 'rank' | 'suit';
 
 export interface Player {
   avatar: string;
@@ -54,7 +58,10 @@ export interface Player {
   score: number;
   scoreHistory: number[];
   sessionUuid: string;
-  sortOrder: SortOrder;
+  sort: {
+    order: SortOrder;
+    type: SortType;
+  };
   username: string;
   uuid: string;
   ws: CustomWebSocket;

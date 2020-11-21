@@ -42,7 +42,7 @@ wss.on('connection', (ws: CustomWebSocket) => {
       player,
       room: roomId,
       scoreLimit,
-      sortOrder,
+      sort,
       thrownCards,
     } = JSON.parse(data);
 
@@ -51,7 +51,7 @@ wss.on('connection', (ws: CustomWebSocket) => {
     } else if (action === 'CONFIGURATION') {
       handleConfiguration(roomId, { handCardsNumber, scoreLimit });
     } else if (action === 'UPDATE') {
-      handleUpdate(roomId, player, sortOrder);
+      handleUpdate(roomId, player, sort);
     } else if (action === 'START') {
       handleStart(roomId);
     } else if (action === 'READY_TO_PLAY') {

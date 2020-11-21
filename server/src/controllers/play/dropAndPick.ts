@@ -24,15 +24,15 @@ export const handleDropAndPick = (
 
   // player picked one card from mutiple thrown cards
   if (pickedCard && notPickedCards) {
-    player.hand = sortHand([...player.hand, pickedCard], player.sortOrder);
+    player.hand = sortHand([...player.hand, pickedCard], player.sort);
     room.deck.push(...notPickedCards);
     // player picked the thrown card
   } else if (pickedCard) {
-    player.hand = sortHand([...player.hand, pickedCard], player.sortOrder);
+    player.hand = sortHand([...player.hand, pickedCard], player.sort);
     // player picked one card from the stack
   } else if (notPickedCards) {
     newCardInHand = { card: room.deck[0], isFromStack: true };
-    player.hand = sortHand([...player.hand, room.deck[0]], player.sortOrder);
+    player.hand = sortHand([...player.hand, room.deck[0]], player.sort);
     room.deck = room.deck.slice(1);
     room.deck.push(...notPickedCards);
   }
