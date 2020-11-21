@@ -24,6 +24,7 @@ export interface Player {
   uuid: string;
   numberOfCards?: number;
   hand?: Card[];
+  sort?: Sort;
 }
 
 export type PlayerScore = {
@@ -51,7 +52,7 @@ export interface ReceivedMessage {
   playersCard: Record<string, Card[]>;
   playersScore: PlayerScore[];
   previousPlayer: Player;
-  sortOrder: SortOrder;
+  sort: Sort;
   thrownCards: Card[];
   roundWinner: Player;
   type: ReceivedMessageType;
@@ -80,6 +81,11 @@ export type ReceivedMessageType =
   | 'START_GAME';
 
 export type SortOrder = 'asc' | 'desc';
+export type SortType = 'rank' | 'suit';
+export interface Sort {
+  order: SortOrder;
+  type: SortType;
+}
 
 export type MessageAction =
   | 'BACK_TO_LOBBY'

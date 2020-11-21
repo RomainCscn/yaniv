@@ -4,16 +4,19 @@ import styled, { css } from 'styled-components';
 import { ReactComponent as CrownIcon } from '../../../../assets/icons/crown.svg';
 import { PlayerScore } from '../../../../types';
 
-const Table = styled.table`
+const Container = styled.div`
   margin-top: 12px;
+  max-height: 400px;
+  overflow: auto;
+`;
+
+const Table = styled.table`
   border-collapse: separate;
   border-spacing: 0;
   background-color: #222f44;
   border-radius: 6px;
   color: white;
   border: solid 2px #3b4a61;
-  max-height: 500px;
-  overflow: auto;
   width: 100%;
   font-family: 'Roboto', sans-serif;
 
@@ -69,18 +72,20 @@ const ScoreDashboard = ({ scores }: { scores: PlayerScore[] }) => {
     });
 
   return (
-    <Table>
-      <thead>
-        <tr>
-          {scores.map((score) => (
-            <TableHeader>{score.username}</TableHeader>
-          ))}
-        </tr>
-      </thead>
-      {scores[0]?.scoreHistory.map((value, index) => (
-        <tr>{getRowScores(index)}</tr>
-      ))}
-    </Table>
+    <Container>
+      <Table>
+        <thead>
+          <tr>
+            {scores.map((score) => (
+              <TableHeader>{score.username}</TableHeader>
+            ))}
+          </tr>
+        </thead>
+        {scores[0]?.scoreHistory.map((value, index) => (
+          <tr>{getRowScores(index)}</tr>
+        ))}
+      </Table>
+    </Container>
   );
 };
 

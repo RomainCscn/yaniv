@@ -12,7 +12,7 @@ export const assignHandToPlayer = (room: Room, player: Player): void => {
 export const addPlayer = (
   playerUuid: string,
   room: Room,
-  { avatar, sessionUuid, username }: Player,
+  { avatar, sessionUuid, sort, username }: Player,
   playerWs: CustomWebSocket,
 ): void => {
   room.players[playerUuid] = {
@@ -21,7 +21,7 @@ export const addPlayer = (
     score: 0,
     scoreHistory: [],
     sessionUuid,
-    sort: { order: 'asc', type: 'suit' },
+    sort: sort || { order: 'asc', type: 'suit' },
     username,
     uuid: playerUuid,
     ws: playerWs,
@@ -116,7 +116,7 @@ export const resetRoom = (
 export default function initRoom(): Room {
   return {
     activePlayer: null,
-    configuration: { handCardsNumber: 7, scoreLimit: 200 },
+    configuration: { handCardsNumber: 7, scoreLimit: 100 },
     deck: getSuffledDeck(),
     roundWinner: null,
     thrownCards: [],

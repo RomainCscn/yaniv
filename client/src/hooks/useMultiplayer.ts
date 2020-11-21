@@ -4,14 +4,15 @@ import client from '../core/client';
 import { getSortedOtherPlayers } from '../core/utils';
 import cardReducer from '../reducers/cardReducer';
 import chatReducer from '../reducers/chatReducer';
-import { Card, NewCard, Player, PlayerScore, ReceivedMessage, SortOrder } from '../types';
+import { Card, NewCard, Player, PlayerScore, ReceivedMessage, Sort } from '../types';
 
 interface Props {
   initialPlayers: Player[];
+  initialSort?: Sort;
   playerUuid: string;
 }
 
-export default function useMultiplayer({ initialPlayers, playerUuid }: Props) {
+export default function useMultiplayer({ initialPlayers, initialSort, playerUuid }: Props) {
   const [cardState, cardDispatch] = useReducer(cardReducer, {
     otherPlayers: initialPlayers.filter((player) => player.uuid !== playerUuid),
     selectedCards: [],
@@ -31,7 +32,7 @@ export default function useMultiplayer({ initialPlayers, playerUuid }: Props) {
   const [quickPlayDone, setQuickPlayDone] = useState(false);
   const [roundWinner, setRoundWinner] = useState<Player>();
   const [scores, setScores] = useState<PlayerScore[]>([]);
-  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+  const [sort, setSort] = useState<Sort>(initialSort || { order: 'asc', type: 'suit' });
   const [shouldGoBackToLobby, setShouldGoBackToLobby] = useState<boolean>(false);
   const [yanivCaller, setYanivCaller] = useState<Player>();
 
@@ -46,8 +47,12 @@ export default function useMultiplayer({ initialPlayers, playerUuid }: Props) {
         setHand(hand);
         setNewCard(newCardInHand);
       } else if (data.type === 'PLAYER_UPDATE') {
-        const { sortOrder } = data;
-        setSortOrder(sortOrder);
+        const playerFromLocalStorage = JSON.parse(window.localStorage.getItem('player')!);
+        window.localStorage.setItem(
+          'player',
+          JSON.stringify({ ...playerFromLocalStorage, sort: data.sort }),
+        );
+        setSort(data.sort);
       } else if (data.type === 'SET_THROWN_CARDS') {
         const { thrownCards } = data;
         setQuickPlayDone(false);
@@ -120,7 +125,7 @@ export default function useMultiplayer({ initialPlayers, playerUuid }: Props) {
     roundWinner,
     scores,
     shouldGoBackToLobby,
-    sortOrder,
+    sort,
     yanivCaller,
   };
 }

@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import Score from './ScoreDashboard';
+import Sort from './Sort';
 import Modal from '../../shared/Modal';
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close.svg';
-import { PlayerScore } from '../../../types';
+import { PlayerScore, Sort as SortType } from '../../../types';
 
 const Container = styled.div`
   position: absolute;
@@ -15,6 +16,7 @@ const Container = styled.div`
   color: white;
   z-index: 10;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  overflow: auto;
 `;
 
 const Header = styled.div`
@@ -42,6 +44,10 @@ const CloseButton = styled.div`
 
 const ContentContainer = styled.div`
   padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: calc(100vh - 112px);
 `;
 
 const MenuButton = styled.button`
@@ -61,8 +67,7 @@ const MenuButton = styled.button`
 `;
 
 const QuitButton = styled.button`
-  position: absolute;
-  bottom: 24px;
+  margin: 42px 0 12px;
   padding: 12px;
   font-size: 1rem;
   font-weight: bold;
@@ -86,11 +91,14 @@ const ScoreTitle = styled.h2`
 
 interface Props {
   backToLobby: () => void;
+  playerSort: SortType;
+  playerUuid: string;
+  roomId: string;
   scores: PlayerScore[];
   setShowModal: (b: boolean) => void;
 }
 
-const Menu = ({ backToLobby, scores, setShowModal }: Props) => {
+const Menu = ({ backToLobby, playerSort, playerUuid, roomId, scores, setShowModal }: Props) => {
   const { t } = useTranslation('room');
 
   const [isVisible, setIsVisible] = useState(false);
@@ -119,9 +127,14 @@ const Menu = ({ backToLobby, scores, setShowModal }: Props) => {
             </CloseButton>
           </Header>
           <ContentContainer>
-            <ScoreTitle>Scores</ScoreTitle>
-            <Score scores={scores} />
-            <QuitButton onClick={showModal}>{t('menu.quit')}</QuitButton>
+            <div>
+              <ScoreTitle>Scores</ScoreTitle>
+              <Score scores={scores} />
+            </div>
+            <div>
+              <Sort playerSort={playerSort} playerUuid={playerUuid} roomId={roomId} />
+              <QuitButton onClick={showModal}>{t('menu.quit')}</QuitButton>
+            </div>
           </ContentContainer>
         </Container>
       )}

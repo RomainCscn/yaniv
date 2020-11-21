@@ -9,7 +9,7 @@ import YanivButton from '../../YanivButton';
 import { send } from '../../../../core/client';
 import { getCardValue } from '../../../../core/game';
 import { getCardUniqueIndex } from '../../../../core/utils';
-import { Card, NewCard, Player, SortOrder } from '../../../../types';
+import { Card, NewCard, Player } from '../../../../types';
 
 interface PlayerHandProps {
   canPlay: boolean;
@@ -22,7 +22,6 @@ interface PlayerHandProps {
   score: number;
   selectCard: any;
   selectedCards: Card[];
-  sortOrder?: SortOrder;
   thrownCards: Card[];
 }
 
@@ -37,7 +36,6 @@ const PlayerHand = ({
   score,
   selectCard,
   selectedCards,
-  sortOrder,
   thrownCards,
 }: PlayerHandProps) => {
   const handScore = hand.reduce((sum, card) => (sum += getCardValue(card)), 0);

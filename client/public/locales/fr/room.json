@@ -12,6 +12,15 @@
   },
   "menu": {
     "quit": "QUITTER LA PARTIE",
+    "sort": {
+      "title": "Triez vos cartes",
+      "order": "Ordre",
+      "type": "Type",
+      "asc": "Croissant",
+      "desc": "Décroissant",
+      "rankOnly": "Valeur uniquement",
+      "suitAndRand": "Couleur et valeur"
+    },
     "modal": {
       "title": "Arrêter la partie",
       "content": "En quittant la partie, vous et les autres joueurs retournerez au salon. Êtes-vous sûr de vouloir quitter ?",

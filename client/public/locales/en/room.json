@@ -12,6 +12,15 @@
   },
   "menu": {
     "quit": "LEAVE THE GAME",
+    "sort": {
+      "title": "Sort your cards",
+      "order": "Order",
+      "type": "Type",
+      "asc": "Ascending",
+      "desc": "Descending",
+      "rankOnly": "Rank only",
+      "suitAndRand": "Suit and rank"
+    },
     "modal": {
       "title": "Leave the game",
       "content": "By leaving the game, you and the other players will go back to the lobby. Are you sure you want to leave?",

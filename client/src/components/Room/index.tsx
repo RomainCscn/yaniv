@@ -66,6 +66,7 @@ const Room = ({ players, roomId, setPlay, playerUuid }: RoomProps) => {
   const { t } = useTranslation('room');
 
   const [showModal, setShowModal] = useState(false);
+  const player = useMemo(() => players.find((p) => p.uuid === playerUuid), [players, playerUuid]);
 
   const {
     chatState,
@@ -84,11 +85,9 @@ const Room = ({ players, roomId, setPlay, playerUuid }: RoomProps) => {
     roundWinner,
     scores,
     shouldGoBackToLobby,
-    sortOrder,
+    sort,
     yanivCaller,
-  } = useMultiplayer({ initialPlayers: players, playerUuid });
-
-  const player = useMemo(() => players.find((p) => p.uuid === playerUuid), [players, playerUuid]);
+  } = useMultiplayer({ initialPlayers: players, initialSort: player?.sort, playerUuid });
 
   useEffect(() => {
     send(roomId, { action: 'READY_TO_PLAY' }, { player });
@@ -125,7 +124,14 @@ const Room = ({ players, roomId, setPlay, playerUuid }: RoomProps) => {
   return (
     <>
       {playerQuit && <QuitModal backToLobby={backToLobby} />}
-      <Menu backToLobby={backToLobby} scores={scores} setShowModal={setShowModal} />
+      <Menu
+        backToLobby={backToLobby}
+        playerSort={sort}
+        playerUuid={playerUuid}
+        roomId={roomId}
+        scores={scores}
+        setShowModal={setShowModal}
+      />
       <Container showModal={playerQuit || showModal}>
         <RoomContainer>
           <OtherPlayers
@@ -170,7 +176,6 @@ const Room = ({ players, roomId, setPlay, playerUuid }: RoomProps) => {
             resetSelectedCards={resetSelectedCards}
             roomId={roomId}
             score={scores.find((score) => score.uuid === playerUuid)?.score || 0}
-            sortOrder={sortOrder}
             selectCard={selectCard}
             selectedCards={cardState.selectedCards}
             thrownCards={cardState.thrownCards}
