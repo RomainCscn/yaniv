@@ -1,16 +1,19 @@
 import { getPlayerByUuid, getPlayersScore, getSortedCards } from '../core/room';
 import rooms from '../core/rooms';
+import { Room } from '../types';
+
+const pickActivePlayer = (room: Room) => {
+  const playersNumber = Object.keys(room.players).length;
+  const firstPlayerUuid = Object.keys(room.players)[Math.floor(Math.random() * playersNumber)];
+
+  room.activePlayer = firstPlayerUuid;
+};
 
 const handleReadyToPlay = (roomId: string, playerUuid: string): void => {
   const player = getPlayerByUuid(rooms[roomId], playerUuid);
 
   if (!rooms[roomId].activePlayer) {
-    const playersNumber = Object.keys(rooms[roomId].players).length;
-    const firstPlayerUuid = Object.keys(rooms[roomId].players)[
-      Math.floor(Math.random() * playersNumber)
-    ];
-
-    rooms[roomId].activePlayer = firstPlayerUuid;
+    pickActivePlayer(rooms[roomId]);
   }
 
   const playersScore = getPlayersScore(rooms[roomId]);

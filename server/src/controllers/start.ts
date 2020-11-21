@@ -6,9 +6,7 @@ import { Player } from '../types';
 const handleStart = (roomId: string): void => {
   const room = rooms[roomId];
 
-  Object.entries(room.players).forEach(([, player]: [string, Player]) => {
-    assignHandToPlayer(room, player);
-  });
+  Object.values(room.players).forEach((player: Player) => assignHandToPlayer(room, player));
 
   // remove players with WebSocket closed
   room.players = Object.fromEntries(

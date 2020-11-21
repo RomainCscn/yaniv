@@ -7,12 +7,6 @@ export const removePreviousCards = (room: Room): void => {
   );
 };
 
-export const sendPlayersUpdate = (room: Room): void => {
-  Object.values(room.players).forEach((player) => {
-    player.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', players: getFormattedPlayers(room) }));
-  });
-};
-
 export const sendBackToLobby = (room: Room): void => {
   Object.values(room.players).forEach((player) => {
     player.ws.send(JSON.stringify({ type: 'BACK_TO_LOBBY' }));
@@ -31,6 +25,12 @@ export const sendMessage = (room: Room, message: Message): void => {
   Object.values(room.players).forEach((player) =>
     player.ws.send(JSON.stringify({ type: 'NEW_MESSAGE', message })),
   );
+};
+
+export const sendPlayersUpdate = (room: Room): void => {
+  Object.values(room.players).forEach((player) => {
+    player.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', players: getFormattedPlayers(room) }));
+  });
 };
 
 export const sendStartGame = (room: Room): void =>

@@ -3,11 +3,9 @@ import rooms from '../core/rooms';
 import { RoomConfiguration } from '../types';
 
 const handleConfiguration = (roomId: string, configuration: RoomConfiguration): void => {
-  const room = rooms[roomId];
+  rooms[roomId].configuration = configuration;
 
-  room.configuration = configuration;
-
-  sendConfiguration(room);
+  sendConfiguration(rooms[roomId]);
 };
 
 export default handleConfiguration;

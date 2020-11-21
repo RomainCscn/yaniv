@@ -1,12 +1,31 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import { sendBackToLobby, sendConfiguration, sendPlayersUpdate } from '../core/dispatcher';
-import initRoom, { addPlayer, getPlayerByUuid, getFormattedPlayers, resetRoom } from '../core/room';
+import initRoom, { addPlayer, getFormattedPlayers, resetRoom, updatePlayer } from '../core/room';
 import rooms from '../core/rooms';
-import { CustomWebSocket, Player } from '../types';
+import { CustomWebSocket, Player, Room } from '../types';
 
 const isExistingPlayer = (roomId: string, player: Player) =>
   player && typeof rooms[roomId].players[player.uuid] === 'object';
+
+const handleActiveExistingPlayer = (
+  room: Room,
+  playerUuid: string,
+  sessionUuid: string,
+  ws: CustomWebSocket,
+) => {
+  // re-establish ws connection
+  updatePlayer(room, playerUuid, { sessionUuid, ws });
+
+  ws.send(
+    JSON.stringify({
+      type: 'JOIN_ONGOING_GAME',
+      players: getFormattedPlayers(room),
+    }),
+  );
+
+  sendPlayersUpdate(room);
+};
 
 const handleJoin = (
   actionType: string,
@@ -26,18 +45,7 @@ const handleJoin = (
 
     if (rooms[roomId].activePlayer) {
       if (isExistingPlayer(roomId, player)) {
-        // re-establish ws connection
-        getPlayerByUuid(rooms[roomId], player.uuid).sessionUuid = sessionUuid;
-        getPlayerByUuid(rooms[roomId], player.uuid).ws = ws;
-
-        ws.send(
-          JSON.stringify({
-            type: 'JOIN_ONGOING_GAME',
-            players: getFormattedPlayers(rooms[roomId]),
-          }),
-        );
-
-        return sendPlayersUpdate(rooms[roomId]);
+        return handleActiveExistingPlayer(rooms[roomId], player.uuid, sessionUuid, ws);
       }
 
       return ws.send(JSON.stringify({ error: 'GAME_ALREADY_STARTED' }));
@@ -45,8 +53,7 @@ const handleJoin = (
 
     if (isExistingPlayer(roomId, player)) {
       // re-establish ws connection
-      getPlayerByUuid(rooms[roomId], player.uuid).sessionUuid = sessionUuid;
-      getPlayerByUuid(rooms[roomId], player.uuid).ws = ws;
+      updatePlayer(rooms[roomId], player.uuid, { sessionUuid, ws });
     } else {
       const playerUuid = uuidv4();
 

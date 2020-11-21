@@ -16,6 +16,7 @@ export const handleWebSocketClosed = (sessionUuid: string): void => {
       delete rooms[roomId];
     } else {
       const playerUuid = getPlayerUuidBySessionUuid(room, sessionUuid);
+
       if (playerUuid) {
         logger.info({ roomId, playerUuid }, 'Player quit an ongoing game');
         sendPlayersUpdate(room);

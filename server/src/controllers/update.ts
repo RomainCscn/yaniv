@@ -1,34 +1,30 @@
 import { sendPlayersUpdate } from '../core/dispatcher';
 import { sortHand } from '../core/game';
-import { getPlayerByUuid } from '../core/room';
+import { getPlayerByUuid, updatePlayer } from '../core/room';
 import rooms from '../core/rooms';
 import { SortOrder, SortType, Player } from '../types';
 
 const handleUpdate = (
   roomId: string,
-  player: Player,
+  { avatar, username, uuid }: Player,
   sort?: {
     order: SortOrder;
     type: SortType;
   },
 ): void => {
   const room = rooms[roomId];
-  const currentPlayer = getPlayerByUuid(room, player.uuid);
+  const { hand, ws } = getPlayerByUuid(room, uuid);
 
   if (sort) {
-    currentPlayer.sort = sort;
+    updatePlayer(room, uuid, { sort });
 
-    currentPlayer.ws.send(JSON.stringify({ type: 'PLAYER_UPDATE', sort }));
-    currentPlayer.ws.send(
-      JSON.stringify({ type: 'SET_PLAYER_HAND', hand: sortHand(currentPlayer.hand, sort) }),
-    );
+    ws.send(JSON.stringify({ type: 'PLAYER_UPDATE', sort }));
+    ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: sortHand(hand, sort) }));
 
     return;
   }
 
-  currentPlayer.avatar = player.avatar;
-  currentPlayer.username = player.username;
-
+  updatePlayer(room, uuid, { avatar, username });
   sendPlayersUpdate(room);
 };
 

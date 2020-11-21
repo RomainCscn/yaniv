@@ -113,6 +113,10 @@ export const resetRoom = (
   }
 };
 
+export const updatePlayer = (room: Room, playerUuid: string, player: Partial<Player>): void => {
+  room.players[playerUuid] = { ...room.players[playerUuid], ...player };
+};
+
 export default function initRoom(): Room {
   return {
     activePlayer: null,

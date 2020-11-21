@@ -4,15 +4,13 @@ import rooms from '../core/rooms';
 import { Message } from '../types';
 
 const handleChat = (messageContent: string, roomId: string, playerUuid: string): void => {
-  const room = rooms[roomId];
-
   const formattedMessage: Message = {
     content: messageContent,
-    player: getFormattedPlayer(room, playerUuid),
+    player: getFormattedPlayer(rooms[roomId], playerUuid),
     time: new Date().toISOString(),
   };
 
-  sendMessage(room, formattedMessage);
+  sendMessage(rooms[roomId], formattedMessage);
 };
 
 export default handleChat;
