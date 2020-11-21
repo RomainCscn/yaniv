@@ -26,8 +26,8 @@ const handleUpdate = (
     return;
   }
 
-  currentPlayer.avatar = currentPlayer.avatar;
-  currentPlayer.username = currentPlayer.username;
+  currentPlayer.avatar = player.avatar;
+  currentPlayer.username = player.username;
 
   sendPlayersUpdate(room);
 };
