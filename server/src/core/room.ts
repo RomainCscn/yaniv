@@ -120,7 +120,7 @@ export const updatePlayer = (room: Room, playerUuid: string, player: Partial<Pla
 export default function initRoom(): Room {
   return {
     activePlayer: null,
-    configuration: { handCardsNumber: 7, scoreLimit: 100 },
+    configuration: { handCardsNumber: 7, scoreLimit: 200 },
     deck: getSuffledDeck(),
     roundWinner: null,
     thrownCards: [],

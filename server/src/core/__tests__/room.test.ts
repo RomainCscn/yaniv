@@ -24,12 +24,17 @@ jest.mock('../rooms', () => ({
 describe('room', () => {
   let room: any;
   const player = {
-    username: 'a',
     avatar: '123',
     hand: [
       { suit: 'club', value: 1 },
       { suit: 'diamond', value: 2 },
     ],
+    username: 'a',
+    uuid: '1',
+    ws: {
+      readyState: 1,
+      CLOSED: 3,
+    },
   };
   const deck = [
     { suit: 'club', value: 1 },
@@ -40,10 +45,15 @@ describe('room', () => {
 
   beforeEach(() => {
     room = {
+      configuration: {
+        handCardsNumber: 7,
+        scoreLimit: 100,
+      },
       deck,
       players: {
         '1': player,
-        '2': { ...player, username: 'b' },
+        '2': { ...player, username: 'b', uuid: '2' },
+        '3': { ...player, username: 'c', uuid: '3', ws: { readyState: 3, CLOSED: 3 } },
       },
     };
   });
@@ -53,11 +63,15 @@ describe('room', () => {
     const initialRoom = initRoom();
 
     expect(initialRoom).toEqual({
-      thrownCards: [],
       activePlayer: null,
+      configuration: {
+        handCardsNumber: 7,
+        scoreLimit: 100,
+      },
       deck,
-      roundWinner: null,
       players: {},
+      roundWinner: null,
+      thrownCards: [],
     });
   });
 
@@ -91,19 +105,23 @@ describe('room', () => {
       scoreHistory: [],
       username: 'toto',
       sessionUuid: '456',
+      sort: {
+        order: 'asc',
+        type: 'suit',
+      },
       uuid: '123',
       ws: {},
     });
   });
 
-  it('should return a room from a player uuid', () => {
+  it('should return a room from a session uuid', () => {
     mockRooms.mockReturnValue({
-      abc: { players: { '1': {} } },
-      def: { players: { '2': {} } },
+      abc: { players: { '1': { sessionUuid: '1' } } },
+      def: { players: { '2': { sessionUuid: '2' } } },
     });
 
-    expect(findRoom('1')).toEqual(['abc', { players: { '1': {} } }]);
-    expect(findRoom('2')).toEqual(['def', { players: { '2': {} } }]);
+    expect(findRoom('1')).toEqual(['abc', { players: { '1': { sessionUuid: '1' } } }]);
+    expect(findRoom('2')).toEqual(['def', { players: { '2': { sessionUuid: '2' } } }]);
     expect(findRoom('3')).toEqual([]);
   });
 
@@ -123,16 +141,18 @@ describe('room', () => {
   it('should return formatted players', () => {
     expect(getFormattedPlayers(room)).toEqual([
       {
-        uuid: '1',
-        username: 'a',
         avatar: '123',
         numberOfCards: 2,
+        sort: undefined,
+        username: 'a',
+        uuid: '1',
       },
       {
-        uuid: '2',
-        username: 'b',
         avatar: '123',
         numberOfCards: 2,
+        sort: undefined,
+        username: 'b',
+        uuid: '2',
       },
     ]);
   });
