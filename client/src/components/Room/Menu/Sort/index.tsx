@@ -34,12 +34,18 @@ const SortItems = styled.form`
   flex-direction: column;
 `;
 
-const SortItem = styled.div`
+const SortItem = styled.label`
   margin-bottom: 3px;
+  display: flex;
+  align-items: center;
 
   &:last-child {
     margin-bottom: 0;
   }
+`;
+
+const SortLabel = styled.span`
+  margin-left: 6px;
 `;
 
 const Sort = ({ playerSort, playerUuid, roomId }: Props) => {
@@ -58,51 +64,43 @@ const Sort = ({ playerSort, playerUuid, roomId }: Props) => {
       <Subtitle>{t('menu.sort.order')}</Subtitle>
       <SortItems>
         <SortItem>
-          <label>
-            <input
-              type='radio'
-              name='order'
-              defaultChecked={order === 'asc'}
-              onChange={() => setOrder('asc')}
-            />
-            {t('menu.sort.asc')}
-          </label>
+          <input
+            type='radio'
+            name='order'
+            defaultChecked={order === 'asc'}
+            onChange={() => setOrder('asc')}
+          />
+          <SortLabel>{t('menu.sort.asc')}</SortLabel>
         </SortItem>
         <SortItem>
-          <label>
-            <input
-              type='radio'
-              name='order'
-              defaultChecked={order === 'desc'}
-              onChange={() => setOrder('desc')}
-            />
-            {t('menu.sort.desc')}
-          </label>
+          <input
+            type='radio'
+            name='order'
+            defaultChecked={order === 'desc'}
+            onChange={() => setOrder('desc')}
+          />
+          <SortLabel>{t('menu.sort.desc')}</SortLabel>
         </SortItem>
       </SortItems>
       <Subtitle>{t('menu.sort.type')}</Subtitle>
       <SortItems>
         <SortItem>
-          <label>
-            <input
-              type='radio'
-              name='type'
-              defaultChecked={type === 'rank'}
-              onChange={() => setType('rank')}
-            />
-            {t('menu.sort.rankOnly')}
-          </label>
+          <input
+            type='radio'
+            name='type'
+            defaultChecked={type === 'rank'}
+            onChange={() => setType('rank')}
+          />
+          <SortLabel>{t('menu.sort.rankOnly')}</SortLabel>
         </SortItem>
         <SortItem>
-          <label>
-            <input
-              type='radio'
-              name='type'
-              defaultChecked={type === 'suit'}
-              onChange={() => setType('suit')}
-            />
-            {t('menu.sort.suitAndRand')}
-          </label>
+          <input
+            type='radio'
+            name='type'
+            defaultChecked={type === 'suit'}
+            onChange={() => setType('suit')}
+          />
+          <SortLabel>{t('menu.sort.suitAndRand')}</SortLabel>
         </SortItem>
       </SortItems>
     </Container>
