@@ -13,18 +13,18 @@ const deck: Card[] = [
   { suit: 'heart', value: 2 },
   { suit: 'spade', value: 10 },
   { suit: 'club', value: 10 },
+  { suit: 'joker', value: 98 },
 ];
 
 const room: Room = {
   activePlayer: null,
-  configuration: { handCardsNumber: 7, scoreLimit: 200 },
+  configuration: { handCardsNumber: 5, scoreLimit: 200 },
   deck,
   roundWinner: null,
   thrownCards: [],
   players: {},
 };
 
-const mockHandCardsNumber = jest.fn();
 const mockSuits = jest.fn();
 const mockValues = jest.fn();
 
@@ -49,8 +49,13 @@ describe('game', () => {
   });
 
   it('should return a player hand', () => {
-    mockHandCardsNumber.mockReturnValue(1);
-    expect(getHand(room)).toEqual([{ suit: 'club', value: 1 }]);
+    expect(getHand(room, { order: 'asc', type: 'suit' })).toEqual([
+      { suit: 'club', value: 1 },
+      { suit: 'club', value: 10 },
+      { suit: 'diamond', value: 2 },
+      { suit: 'spade', value: 10 },
+      { suit: 'heart', value: 2 },
+    ]);
   });
 
   it('should return the smallest score', () => {
@@ -87,6 +92,6 @@ describe('game', () => {
       { suit: 'heart', value: 1 },
     ];
 
-    expect(sortHand(hand)).toEqual(sortedHand);
+    expect(sortHand(hand, { order: 'asc', type: 'suit' })).toEqual(sortedHand);
   });
 });

@@ -1,5 +1,5 @@
 import { SUITS, VALUES } from '../constants';
-import { Card, Room, SortOrder, SortType } from '../types';
+import { Card, HandScore, Player, Room, SortOrder, SortType } from '../types';
 
 const getCardValue = (card: Card): number =>
   card.suit === 'joker' ? 0 : card.value <= 10 ? card.value : 10;
@@ -50,7 +50,31 @@ const sortHand = (hand: Card[], sort: { order: SortOrder; type: SortType }): Car
 const getHand = (room: Room, sort: { order: SortOrder; type: SortType }): Card[] =>
   sortHand(room.deck.slice(0, room.configuration.handCardsNumber), sort);
 
+const getHandScores = (room: Room): HandScore[] =>
+  Object.entries(room.players).map(([uuid, player]: [string, Player]) => {
+    const handSum = player.hand.reduce((sum: number, card) => sum + getCardValue(card), 0);
+
+    return { uuid, score: handSum };
+  });
+
 const getSmallestScore = (scores: { uuid: string; score: number }[]): number =>
   scores.reduce((prev, curr) => (prev.score <= curr.score ? prev : curr)).score;
 
-export { getCardValue, getHand, getSmallestScore, getSuffledDeck, sortHand };
+const removeCardFromHand = (player: Player, card: Card): void => {
+  player.hand.splice(
+    player.hand.findIndex(
+      (handCard: Card) => handCard.value == card.value && handCard.suit === card.suit,
+    ),
+    1,
+  );
+};
+
+export {
+  getCardValue,
+  getHand,
+  getHandScores,
+  getSmallestScore,
+  getSuffledDeck,
+  removeCardFromHand,
+  sortHand,
+};
