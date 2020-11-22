@@ -42,7 +42,9 @@ const canDropCards = (selectedCards: Card[]) => {
     .join('');
 
   const isConsecutive =
-    CARDS_VALUE_SEQUENCES.indexOf(consecutiveCards) !== -1 && selectedCards.length >= 3;
+    consecutiveCards[0] !== '0' &&
+    CARDS_VALUE_SEQUENCES.indexOf(consecutiveCards) !== -1 &&
+    selectedCards.length >= 3;
 
   const cardsWithoutJoker = selectedCards
     .filter((c) => c.suit !== 'joker')

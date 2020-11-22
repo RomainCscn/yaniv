@@ -76,6 +76,9 @@ it('should return if the player can drop the given cards', () => {
   expect(canDropCards([cardJ1, cardH1, cardH2])).toBeFalsy();
   expect(canDropCards([cardH1, cardH2, cardJ1])).toBeFalsy();
   expect(canDropCards([cardH1, cardJ1])).toBeFalsy();
+  expect(
+    canDropCards([cardJ1, { suit: 'club', value: 11 }, { suit: 'club', value: 12 }]),
+  ).toBeFalsy();
 });
 
 it('should return valid cards after a player pick a card', () => {
