@@ -1,12 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import { sendBackToLobby, sendConfiguration, sendPlayersUpdate } from '../core/dispatcher';
-import initRoom, { addPlayer, getFormattedPlayers, resetRoom, updatePlayer } from '../core/room';
-import rooms from '../core/rooms';
-import { CustomWebSocket, Player, Room } from '../types';
+import { Room } from '../core/room';
+import { CustomWebSocket, Player } from '../types';
 
-const isExistingPlayer = (roomId: string, player: Player) =>
-  player && typeof rooms[roomId].players[player.uuid] === 'object';
+const isExistingPlayer = (room: Room, player: Player) =>
+  player && typeof room.players[player.uuid] === 'object';
 
 const handleActiveExistingPlayer = (
   room: Room,
@@ -15,12 +14,12 @@ const handleActiveExistingPlayer = (
   ws: CustomWebSocket,
 ) => {
   // re-establish ws connection
-  updatePlayer(room, playerUuid, { sessionUuid, ws });
+  room.updatePlayer(playerUuid, { sessionUuid, ws });
 
   ws.send(
     JSON.stringify({
       type: 'JOIN_ONGOING_GAME',
-      players: getFormattedPlayers(room),
+      players: room.getFormattedPlayers(),
     }),
   );
 
@@ -29,44 +28,41 @@ const handleActiveExistingPlayer = (
 
 const handleJoin = (
   actionType: string,
-  roomId: string,
+  room: Room,
   player: Player,
   sessionUuid: string,
   ws: CustomWebSocket,
 ): void => {
   if (actionType === 'JOINED_LOBBY') {
-    if (!rooms[roomId]) {
-      rooms[roomId] = initRoom();
-    }
-
-    if (Object.entries(rooms[roomId].players).length > 6) {
+    if (Object.keys(room.players).length > 6) {
       return ws.send(JSON.stringify({ error: 'TOO_MANY_PLAYERS' }));
     }
 
-    if (rooms[roomId].activePlayer) {
-      if (isExistingPlayer(roomId, player)) {
-        return handleActiveExistingPlayer(rooms[roomId], player.uuid, sessionUuid, ws);
+    if (room.activePlayer) {
+      if (isExistingPlayer(room, player)) {
+        return handleActiveExistingPlayer(room, player.uuid, sessionUuid, ws);
       }
 
       return ws.send(JSON.stringify({ error: 'GAME_ALREADY_STARTED' }));
     }
 
-    if (isExistingPlayer(roomId, player)) {
+    if (isExistingPlayer(room, player)) {
       // re-establish ws connection
-      updatePlayer(rooms[roomId], player.uuid, { sessionUuid, ws });
+      room.updatePlayer(player.uuid, { sessionUuid, ws });
     } else {
       const playerUuid = uuidv4();
 
-      addPlayer(playerUuid, rooms[roomId], { ...player, sessionUuid }, ws);
+      room.addPlayer({ ...player, sessionUuid, uuid: playerUuid }, ws);
       ws.send(JSON.stringify({ type: 'ASSIGN_UUID', playerUuid }));
     }
 
-    sendConfiguration(rooms[roomId]);
-    sendPlayersUpdate(rooms[roomId]);
+    sendConfiguration(room);
+    sendPlayersUpdate(room);
   } else if (actionType === 'BACK') {
-    resetRoom(rooms[roomId], { resetActivePlayer: true, resetScore: true });
-    sendBackToLobby(rooms[roomId]);
-    sendPlayersUpdate(rooms[roomId]);
+    room.reset({ resetActivePlayer: true, resetScore: true });
+
+    sendBackToLobby(room);
+    sendPlayersUpdate(room);
   }
 };
 

@@ -1,22 +1,19 @@
-import { Room, Player } from '../../types';
-import { assignHandToPlayer, getFormattedPlayers, resetRoom } from '../../core/room';
+import { Room } from '../../core/room';
 
 export const handleNextRound = (room: Room): void => {
   if (room.roundWinner) {
-    resetRoom(room);
+    room.reset();
 
     // first assign a hand to each player
-    Object.entries(room.players).forEach(([, player]: [string, Player]) => {
-      assignHandToPlayer(room, player);
-    });
+    Object.values(room.players).forEach((player) => room.assignHandToPlayer(player));
 
     // then dispatch the messages
-    Object.entries(room.players).forEach(([, player]: [string, Player]) => {
+    Object.values(room.players).forEach((player) => {
       player.ws.send(JSON.stringify({ type: 'NEW_ROUND' }));
       player.ws.send(JSON.stringify({ type: 'SET_ACTIVE_PLAYER', uuid: room.activePlayer }));
       player.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: player.hand }));
       player.ws.send(
-        JSON.stringify({ type: 'PLAYERS_UPDATE', players: getFormattedPlayers(room) }),
+        JSON.stringify({ type: 'PLAYERS_UPDATE', players: room.getFormattedPlayers() }),
       );
     });
   }

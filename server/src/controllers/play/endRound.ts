@@ -1,14 +1,6 @@
-import { getFormattedPlayer } from '../../core/room';
+import { Room } from '../../core/room';
 import { getHandScores, getSmallestScore } from '../../core/game';
-import { HandScore, Room, Player } from '../../types';
-
-const getPlayersScore = (players: Record<string, Player>) =>
-  Object.entries(players).map(([uuid, player]: [string, Player]) => ({
-    score: player.score,
-    scoreHistory: player.scoreHistory,
-    uuid,
-    username: player.username,
-  }));
+import { HandScore, Player } from '../../types';
 
 const getPlayersHandScore = (playersHandScore: HandScore[], playerUuid: string) => ({
   currentPlayerHandScore: playersHandScore.find((s) => s.uuid === playerUuid)?.score,
@@ -58,7 +50,7 @@ export const handleEndRound = (room: Room, playerUuid: string): void => {
     });
   }
 
-  const playersScore = getPlayersScore(room.players);
+  const playersScore = room.getPlayersScore();
 
   const playerAboveScoreLimit = playersScore.find(
     (playerScore) => playerScore.score >= room.configuration.scoreLimit,
@@ -71,7 +63,7 @@ export const handleEndRound = (room: Room, playerUuid: string): void => {
 
     Object.values(room.players).forEach((player) =>
       player.ws.send(
-        JSON.stringify({ type: 'GAME_OVER', winner: getFormattedPlayer(room, winner.uuid) }),
+        JSON.stringify({ type: 'GAME_OVER', winner: room.getFormattedPlayer(winner.uuid) }),
       ),
     );
   }
@@ -86,8 +78,8 @@ export const handleEndRound = (room: Room, playerUuid: string): void => {
         type: 'END_OF_ROUND_UPDATE',
         playersCard,
         playersScore,
-        roundWinner: getFormattedPlayer(room, room.roundWinner ?? ''),
-        yanivCaller: getFormattedPlayer(room, playerUuid),
+        roundWinner: room.getFormattedPlayer(room.roundWinner ?? ''),
+        yanivCaller: room.getFormattedPlayer(playerUuid),
       }),
     ),
   );

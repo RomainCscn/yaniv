@@ -1,24 +1,26 @@
 import * as WebSocket from 'ws';
 
 import { sendPlayersUpdate } from './dispatcher';
-import { findRoom, getPlayerUuidBySessionUuid } from './room';
 import rooms from './rooms';
 import logger from '../logger';
+import { findRoom } from '../utils';
 
 export const handleWebSocketClosed = (sessionUuid: string): void => {
-  const [roomId, room] = findRoom(sessionUuid);
+  const room = findRoom(sessionUuid);
 
-  if (roomId && room) {
+  if (room) {
     const wsState = new Set(Object.entries(room.players).map(([, player]) => player.ws.readyState));
 
     if (wsState.size === 1 && wsState.has(WebSocket.CLOSED)) {
-      logger.info({ roomId }, 'Room deleted');
-      delete rooms[roomId];
+      delete rooms[room.roomId];
+
+      logger.info({ roomId: room.roomId }, 'Room deleted');
     } else {
-      const playerUuid = getPlayerUuidBySessionUuid(room, sessionUuid);
+      const playerUuid = room.getPlayerUuidBySessionUuid(sessionUuid);
 
       if (playerUuid) {
-        logger.info({ roomId, playerUuid }, 'Player quit an ongoing game');
+        logger.info({ roomId: room.roomId, playerUuid }, 'Player quit an ongoing game');
+
         sendPlayersUpdate(room);
       }
     }

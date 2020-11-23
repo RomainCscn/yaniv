@@ -4,19 +4,16 @@ import { handleNextRound } from './nextRound';
 import { handlePlayAgain } from './playAgain';
 import { handleQuickPlay } from './quickPlay';
 
-import rooms from '../../core/rooms';
+import { Room } from '../../core/room';
 import { PlayedCards } from '../../types';
-
-const getPlayerByUuid = (roomId: string, playerUuid: string) => rooms[roomId].players[playerUuid];
 
 const handlePlay = (
   actionType: string,
+  room: Room,
   cards: PlayedCards,
-  roomId: string,
   playerUuid: string,
 ): void => {
-  const room = rooms[roomId];
-  const player = getPlayerByUuid(roomId, playerUuid);
+  const player = room.getPlayerByUuid(playerUuid);
 
   if (actionType === 'DROP_AND_PICK') {
     handleDropAndPick(room, player, cards);

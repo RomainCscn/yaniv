@@ -1,15 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getHand, getSuffledDeck } from '../game';
-import initRoom, {
-  addPlayer,
-  assignHandToPlayer,
-  findRoom,
-  getPlayerByUuid,
-  getFormattedPlayer,
-  getFormattedPlayers,
-  resetRoom,
-} from '../room';
-import { CustomWebSocket, Room, Player } from '../../types';
+import { Room } from '../room';
+import { Card, CustomWebSocket, Player } from '../../types';
 
 const mockRooms = jest.fn();
 
@@ -22,21 +14,24 @@ jest.mock('../rooms', () => ({
 }));
 
 describe('room', () => {
-  let room: any;
-  const player = {
+  let room: Room;
+
+  const player: Player = {
     avatar: '123',
-    hand: [
-      { suit: 'club', value: 1 },
-      { suit: 'diamond', value: 2 },
-    ],
+    hand: [],
     username: 'a',
     uuid: '1',
+    score: 0,
+    scoreHistory: [],
+    sessionUuid: '123',
+    sort: { order: 'asc', type: 'suit' },
     ws: {
       readyState: 1,
       CLOSED: 3,
-    },
+    } as CustomWebSocket,
   };
-  const deck = [
+
+  const deck: Card[] = [
     { suit: 'club', value: 1 },
     { suit: 'diamond', value: 2 },
     { suit: 'club', value: 2 },
@@ -44,32 +39,34 @@ describe('room', () => {
   ];
 
   beforeEach(() => {
-    room = {
-      configuration: {
-        handCardsNumber: 7,
-        scoreLimit: 100,
+    room = new Room('a');
+    room.addPlayer(player, <CustomWebSocket>{ readyState: 1, CLOSED: 3 });
+    room.addPlayer({ ...player, username: 'b', uuid: '2' }, <CustomWebSocket>{
+      readyState: 1,
+      CLOSED: 3,
+    });
+    room.addPlayer(
+      {
+        ...player,
+        username: 'c',
+        uuid: '3',
       },
-      deck,
-      players: {
-        '1': player,
-        '2': { ...player, username: 'b', uuid: '2' },
-        '3': { ...player, username: 'c', uuid: '3', ws: { readyState: 3, CLOSED: 3 } },
-      },
-    };
+      <CustomWebSocket>{ readyState: 3, CLOSED: 3 },
+    );
   });
 
   it('should initialize a room', () => {
     (getSuffledDeck as jest.Mock).mockReturnValue(deck);
-    const initialRoom = initRoom();
-
+    const initialRoom = new Room('a');
     expect(initialRoom).toEqual({
       activePlayer: null,
       configuration: {
         handCardsNumber: 7,
-        scoreLimit: 100,
+        scoreLimit: 200,
       },
       deck,
       players: {},
+      roomId: 'a',
       roundWinner: null,
       thrownCards: [],
     });
@@ -82,7 +79,7 @@ describe('room', () => {
       { suit: 'diamond', value: 2 },
     ]);
 
-    assignHandToPlayer(room as Room, player as Player);
+    room.assignHandToPlayer(player as Player);
 
     expect(player.hand).toEqual([
       { suit: 'club', value: 1 },
@@ -91,9 +88,7 @@ describe('room', () => {
   });
 
   it('should add a player to the room', () => {
-    addPlayer(
-      '123',
-      room,
+    room.addPlayer(
       { avatar: 'abc', username: 'toto', sessionUuid: '456', uuid: '123' } as Player,
       {} as CustomWebSocket,
     );
@@ -114,43 +109,42 @@ describe('room', () => {
     });
   });
 
-  it('should return a room from a session uuid', () => {
-    mockRooms.mockReturnValue({
-      abc: { players: { '1': { sessionUuid: '1' } } },
-      def: { players: { '2': { sessionUuid: '2' } } },
-    });
-
-    expect(findRoom('1')).toEqual(['abc', { players: { '1': { sessionUuid: '1' } } }]);
-    expect(findRoom('2')).toEqual(['def', { players: { '2': { sessionUuid: '2' } } }]);
-    expect(findRoom('3')).toEqual([]);
-  });
-
   it('should return a player by uuid', () => {
-    expect(getPlayerByUuid(room, '1')).toEqual(player);
+    expect(room.getPlayerByUuid('1')).toEqual(player);
   });
 
   it('should return formatted player', () => {
-    expect(getFormattedPlayer(room, '1')).toEqual({
+    expect(room.getFormattedPlayer('1')).toEqual({
       uuid: '1',
       username: 'a',
       avatar: '123',
-      numberOfCards: 2,
+      numberOfCards: 0,
+      sort: {
+        order: 'asc',
+        type: 'suit',
+      },
     });
   });
 
   it('should return formatted players', () => {
-    expect(getFormattedPlayers(room)).toEqual([
+    expect(room.getFormattedPlayers()).toEqual([
       {
         avatar: '123',
-        numberOfCards: 2,
-        sort: undefined,
+        numberOfCards: 0,
+        sort: {
+          order: 'asc',
+          type: 'suit',
+        },
         username: 'a',
         uuid: '1',
       },
       {
         avatar: '123',
-        numberOfCards: 2,
-        sort: undefined,
+        numberOfCards: 0,
+        sort: {
+          order: 'asc',
+          type: 'suit',
+        },
         username: 'b',
         uuid: '2',
       },
@@ -160,8 +154,12 @@ describe('room', () => {
   it('should return reset deck without reset scores', () => {
     (getSuffledDeck as jest.Mock).mockReturnValue(deck);
 
-    const updatedRoom = { ...room, thrownCards: [1, 2], activePlayer: 'toto', roundWinner: 'tata' };
-    resetRoom(updatedRoom);
+    const updatedRoom: Room = Object.assign(Object.create(Object.getPrototypeOf(room)), room);
+    updatedRoom.thrownCards = [{ suit: 'club', value: 1 }];
+    updatedRoom.roundWinner = 'tata';
+    updatedRoom.activePlayer = 'toto';
+
+    updatedRoom.reset();
 
     expect(updatedRoom).toEqual({
       ...room,
@@ -174,8 +172,12 @@ describe('room', () => {
   it('should return reset deck with reset scores', () => {
     (getSuffledDeck as jest.Mock).mockReturnValue(deck);
 
-    const updatedRoom = { ...room, thrownCards: [1, 2], activePlayer: 'toto', roundWinner: 'tata' };
-    resetRoom(updatedRoom, { resetScore: true });
+    const updatedRoom: Room = Object.assign(Object.create(Object.getPrototypeOf(room)), room);
+    updatedRoom.thrownCards = [{ suit: 'club', value: 1 }];
+    updatedRoom.roundWinner = 'tata';
+    updatedRoom.activePlayer = 'toto';
+
+    updatedRoom.reset();
 
     expect(updatedRoom).toEqual({
       ...room,

@@ -1,12 +1,9 @@
 import { sendStartGame } from '../core/dispatcher';
-import { assignHandToPlayer } from '../core/room';
-import rooms from '../core/rooms';
+import { Room } from '../core/room';
 import { Player } from '../types';
 
-const handleStart = (roomId: string): void => {
-  const room = rooms[roomId];
-
-  Object.values(room.players).forEach((player: Player) => assignHandToPlayer(room, player));
+const handleStart = (room: Room): void => {
+  Object.values(room.players).forEach((player: Player) => room.assignHandToPlayer(player));
 
   // remove players with WebSocket closed
   room.players = Object.fromEntries(

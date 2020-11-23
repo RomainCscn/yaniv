@@ -1,5 +1,5 @@
-import { getFormattedPlayers, getSortedCards } from '../core/room';
-import { Message, Room } from '../types';
+import { Room } from './room';
+import { Message } from '../types';
 
 export const removePreviousCards = (room: Room): void => {
   Object.values(room.players).forEach((player) =>
@@ -29,19 +29,19 @@ export const sendMessage = (room: Room, message: Message): void => {
 
 export const sendPlayersUpdate = (room: Room): void => {
   Object.values(room.players).forEach((player) => {
-    player.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', players: getFormattedPlayers(room) }));
+    player.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', players: room.getFormattedPlayers() }));
   });
 };
 
 export const sendStartGame = (room: Room): void =>
   Object.values(room.players).forEach((player) => {
-    player.ws.send(JSON.stringify({ type: 'START_GAME', players: getFormattedPlayers(room) }));
+    player.ws.send(JSON.stringify({ type: 'START_GAME', players: room.getFormattedPlayers() }));
   });
 
 export const sendThrownCards = (room: Room): void => {
   Object.values(room.players).forEach((player) =>
     player.ws.send(
-      JSON.stringify({ type: 'SET_THROWN_CARDS', thrownCards: getSortedCards(room.thrownCards) }),
+      JSON.stringify({ type: 'SET_THROWN_CARDS', thrownCards: room.getSortedThrownCards() }),
     ),
   );
 };

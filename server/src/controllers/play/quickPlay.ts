@@ -1,7 +1,7 @@
 import { sendThrownCards } from '../../core/dispatcher';
 import { removeCardFromHand } from '../../core/game';
-import { getFormattedPlayers } from '../../core/room';
-import { PlayedCards, Room, Player } from '../../types';
+import { Room } from '../../core/room';
+import { PlayedCards, Player } from '../../types';
 
 export const handleQuickPlay = (room: Room, player: Player, { thrownCards }: PlayedCards): void => {
   // disallow quick play when the round is finished
@@ -19,7 +19,7 @@ export const handleQuickPlay = (room: Room, player: Player, { thrownCards }: Pla
     Object.values(room.players).forEach((player) => {
       player.ws.send(JSON.stringify({ type: 'QUICK_PLAY_DONE' }));
       player.ws.send(
-        JSON.stringify({ type: 'PLAYERS_UPDATE', players: getFormattedPlayers(room) }),
+        JSON.stringify({ type: 'PLAYERS_UPDATE', players: room.getFormattedPlayers() }),
       );
     });
   }

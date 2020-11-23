@@ -1,7 +1,7 @@
 import { sendThrownCards } from '../../core/dispatcher';
 import { removeCardFromHand, sortHand } from '../../core/game';
-import { getFormattedPlayer, getFormattedPlayers } from '../../core/room';
-import { Card, PlayedCards, Room, Player } from '../../types';
+import { Room } from '../../core/room';
+import { Card, PlayedCards, Player } from '../../types';
 
 const getNextPlayerUuid = (playersUuid: string[], activePlayerIndex: number) =>
   activePlayerIndex === playersUuid.length - 1
@@ -47,7 +47,7 @@ export const handleDropAndPick = (
   player.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: player.hand, newCardInHand }));
 
   const playersUuid = Object.entries(room.players).map(([uuid]) => uuid);
-  const previousPlayer = getFormattedPlayer(room, room.activePlayer || '');
+  const previousPlayer = room.getFormattedPlayer(room.activePlayer || '');
   const activePlayerIndex = playersUuid.indexOf(room.activePlayer || '');
 
   const nextPlayerUuid = getNextPlayerUuid(playersUuid, activePlayerIndex);
@@ -57,6 +57,6 @@ export const handleDropAndPick = (
   Object.entries(room.players).forEach(([, player]: [string, Player]) => {
     player.ws.send(JSON.stringify({ type: 'SET_ACTIVE_PLAYER', uuid: nextPlayerUuid }));
     player.ws.send(JSON.stringify({ type: 'SET_PICKED_CARD', pickedCard, previousPlayer }));
-    player.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', players: getFormattedPlayers(room) }));
+    player.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', players: room.getFormattedPlayers() }));
   });
 };

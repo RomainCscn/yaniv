@@ -1,11 +1,11 @@
 import { sendConfiguration } from '../core/dispatcher';
-import rooms from '../core/rooms';
+import { Room } from '../core/room';
 import { RoomConfiguration } from '../types';
 
-const handleConfiguration = (roomId: string, configuration: RoomConfiguration): void => {
-  rooms[roomId].configuration = configuration;
+const handleConfiguration = (room: Room, configuration: RoomConfiguration): void => {
+  room.configuration = configuration;
 
-  sendConfiguration(rooms[roomId]);
+  sendConfiguration(room);
 };
 
 export default handleConfiguration;

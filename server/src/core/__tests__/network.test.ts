@@ -1,13 +1,15 @@
 import * as WebSocket from 'ws';
 
 import { handleWebSocketClosed } from '../network';
-import { findRoom } from '../room';
+import { Room } from '../room';
 import rooms from '../rooms';
+import { findRoom } from '../../utils';
+import { CustomWebSocket, Player } from '../../types';
 
 const mockRooms = jest.fn();
 
 jest.mock('../dispatcher.ts');
-jest.mock('../room');
+jest.mock('../../utils');
 jest.mock('../rooms', () => ({
   __esModule: true,
   get default() {
@@ -16,7 +18,7 @@ jest.mock('../rooms', () => ({
 }));
 
 describe('network', () => {
-  it('should delete the room if there is no player connected', () => {
+  it.only('should delete the room if there is no player connected', () => {
     const players = {
       '1': { ws: { readyState: WebSocket.CLOSED } },
       '2': { ws: { readyState: WebSocket.CLOSED } },
@@ -24,29 +26,36 @@ describe('network', () => {
     };
 
     mockRooms.mockReturnValue({
-      abc: { players },
-      def: { players: { '4': { ws: { readyState: WebSocket.OPEN } } } },
+      abc: { roomId: 'abc', players },
+      def: { roomId: 'def', players: { '4': { ws: { readyState: WebSocket.OPEN } } } },
     });
 
-    (findRoom as jest.Mock).mockReturnValue(['abc', { players }]);
+    (findRoom as jest.Mock).mockReturnValue({ roomId: 'abc', players });
 
     handleWebSocketClosed('1');
 
-    expect(rooms).toEqual({ def: { players: { '4': { ws: { readyState: WebSocket.OPEN } } } } });
+    expect(rooms).toEqual({
+      def: {
+        players: {
+          '4': { ws: { readyState: WebSocket.OPEN } },
+        },
+        roomId: 'def',
+      },
+    });
   });
 
   it('should not delete the room if there is at least one player connected', () => {
-    const players = {
-      '4': { ws: { readyState: WebSocket.OPEN } },
-      '5': { ws: { readyState: WebSocket.CLOSED } },
-    };
-    mockRooms.mockReturnValue({ def: { players } });
+    const room = new Room('a');
+    room.addPlayer(<Player>{ uuid: '4' }, <CustomWebSocket>{ readyState: WebSocket.OPEN });
+    room.addPlayer(<Player>{ uuid: '5' }, <CustomWebSocket>{ readyState: WebSocket.CLOSED });
 
-    (findRoom as jest.Mock).mockReturnValue(['abc', { players }]);
+    mockRooms.mockReturnValue({ def: room });
+
+    (findRoom as jest.Mock).mockReturnValue(room);
 
     handleWebSocketClosed('4');
 
-    expect(rooms).toEqual({ def: { players } });
+    expect(rooms).toEqual({ def: room });
   });
 
   it('should do nothing if the room is not find', () => {
@@ -54,7 +63,7 @@ describe('network', () => {
       def: { players: { '4': { ws: { readyState: WebSocket.OPEN } } } },
     });
 
-    (findRoom as jest.Mock).mockReturnValue([]);
+    (findRoom as jest.Mock).mockReturnValue(null);
 
     handleWebSocketClosed('1');
 

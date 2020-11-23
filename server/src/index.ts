@@ -13,6 +13,8 @@ import {
   handleUpdate,
 } from './controllers';
 import { handleWebSocketClosed } from './core/network';
+import { Room } from './core/room';
+import rooms from './core/rooms';
 import logger from './logger';
 import { CustomWebSocket } from './types';
 
@@ -46,20 +48,26 @@ wss.on('connection', (ws: CustomWebSocket) => {
       thrownCards,
     } = JSON.parse(data);
 
+    if (!rooms[roomId]) {
+      rooms[roomId] = new Room(roomId);
+    }
+
+    const room = rooms[roomId];
+
     if (action === 'JOIN') {
-      handleJoin(actionType, roomId, player, sessionUuid, ws);
+      handleJoin(actionType, room, player, sessionUuid, ws);
     } else if (action === 'CONFIGURATION') {
-      handleConfiguration(roomId, { handCardsNumber, scoreLimit });
+      handleConfiguration(room, { handCardsNumber, scoreLimit });
     } else if (action === 'UPDATE') {
-      handleUpdate(roomId, player, sort);
+      handleUpdate(room, player, sort);
     } else if (action === 'START') {
-      handleStart(roomId);
+      handleStart(room);
     } else if (action === 'READY_TO_PLAY') {
-      handleReadyToPlay(roomId, player.uuid);
+      handleReadyToPlay(room, player.uuid);
     } else if (action === 'PLAY') {
-      handlePlay(actionType, { notPickedCards, pickedCard, thrownCards }, roomId, player.uuid);
+      handlePlay(actionType, room, { notPickedCards, pickedCard, thrownCards }, player.uuid);
     } else if (action === 'MESSAGE') {
-      handleChat(message, roomId, player.uuid);
+      handleChat(room, player.uuid, message);
     }
   });
 

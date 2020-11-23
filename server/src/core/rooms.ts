@@ -1,4 +1,4 @@
-import { Room } from '../types';
+import { Room } from './room';
 
 const rooms: Record<string, Room> = {};
 
