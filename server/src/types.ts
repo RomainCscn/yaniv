@@ -23,7 +23,7 @@ export interface FormattedPlayer {
   uuid: string;
 }
 
-export interface HandScore {
+export interface Score {
   uuid: string;
   score: number;
 }

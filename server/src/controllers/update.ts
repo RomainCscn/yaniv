@@ -1,5 +1,5 @@
 import { sendPlayersUpdate } from '../core/dispatcher';
-import { sortHand } from '../core/game';
+import { sortHand } from '../core/game/cards';
 import { Room } from '../core/room';
 import { SortOrder, SortType, Player } from '../types';
 

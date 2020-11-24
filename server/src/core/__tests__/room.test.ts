@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getHand, getSuffledDeck } from '../game';
+import { getHand } from '../game/cards';
+import { getSuffledDeck } from '../game/cards';
 import { Room } from '../room';
 import { Card, CustomWebSocket, Player } from '../../types';
 
 const mockRooms = jest.fn();
 
-jest.mock('../game');
+jest.mock('../game/cards.ts');
+jest.mock('../game/scores.ts');
 jest.mock('../rooms', () => ({
   __esModule: true,
   get default() {

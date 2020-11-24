@@ -1,4 +1,4 @@
-import { getHand, getSuffledDeck } from './game';
+import { getHand, getSuffledDeck } from './game/cards';
 import {
   Card,
   CustomWebSocket,

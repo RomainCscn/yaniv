@@ -1,13 +1,13 @@
 import { Room } from '../../core/room';
-import { getHandScores, getSmallestScore } from '../../core/game';
-import { HandScore, Player } from '../../types';
+import { getHandScores, getSmallestScore } from '../../core/game/scores';
+import { Score, Player } from '../../types';
 
-const getPlayersHandScore = (playersHandScore: HandScore[], playerUuid: string) => ({
+const getPlayersHandScore = (playersHandScore: Score[], playerUuid: string) => ({
   currentPlayerHandScore: playersHandScore.find((s) => s.uuid === playerUuid)?.score,
   otherPlayersHandScore: playersHandScore.filter((s) => s.uuid !== playerUuid),
 });
 
-const getSmallestScores = (otherPlayersHandScore: HandScore[]) => ({
+const getSmallestScores = (otherPlayersHandScore: Score[]) => ({
   smallestScore: getSmallestScore(otherPlayersHandScore),
   smallestOtherPlayersHandScore: otherPlayersHandScore.filter(
     (s) => s.score === getSmallestScore(otherPlayersHandScore),

@@ -1,5 +1,5 @@
 import { sendThrownCards } from '../../core/dispatcher';
-import { removeCardFromHand, sortHand } from '../../core/game';
+import { removeCardFromHand, sortHand } from '../../core/game/cards';
 import { Room } from '../../core/room';
 import { Card, PlayedCards, Player } from '../../types';
 
