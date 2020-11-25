@@ -1,4 +1,4 @@
-import { Card, CustomWebSocket, Sort } from '../types';
+import { Card, CustomWebSocket, InitialPlayer, Sort } from '../types';
 
 export class Player {
   avatar = '';
@@ -11,8 +11,21 @@ export class Player {
   uuid = '';
   ws: CustomWebSocket;
 
-  constructor(player: Player, ws: CustomWebSocket) {
+  constructor(player: InitialPlayer, ws: CustomWebSocket) {
     Object.assign(this, player);
     this.ws = ws;
+  }
+
+  removeCardFromHand(card: Card): void {
+    this.hand.splice(
+      this.hand.findIndex(
+        (handCard: Card) => handCard.value == card.value && handCard.suit === card.suit,
+      ),
+      1,
+    );
+  }
+
+  update(data: Partial<Player>): void {
+    Object.assign(this, data);
   }
 }

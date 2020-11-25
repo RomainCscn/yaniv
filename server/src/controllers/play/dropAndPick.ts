@@ -1,4 +1,4 @@
-import { removeCardFromHand, sortHand } from '../../core/game/cards';
+import { sortHand } from '../../core/game/cards';
 import { Player } from '../../core/player';
 import { Room } from '../../core/room';
 import { Card, PlayedCards } from '../../types';
@@ -41,7 +41,7 @@ export const handleDropAndPick = (
   room.thrownCards = thrownCards;
   room.dispatch({ type: 'SET_THROWN_CARDS', data: { thrownCards: room.getSortedThrownCards() } });
 
-  thrownCards.forEach((card: Card) => removeCardFromHand(player, card));
+  thrownCards.forEach((card: Card) => player.removeCardFromHand(card));
 
   const newCardInHand = getNewCardInHand(room, player, { notPickedCards, pickedCard });
   player.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: player.hand, newCardInHand }));

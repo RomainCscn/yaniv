@@ -1,4 +1,3 @@
-import { removeCardFromHand } from '../../core/game/cards';
 import { Player } from '../../core/player';
 import { Room } from '../../core/room';
 import { PlayedCards } from '../../types';
@@ -10,7 +9,7 @@ export const handleQuickPlay = (room: Room, player: Player, { thrownCards }: Pla
     room.dispatch({ type: 'SET_THROWN_CARDS', data: { thrownCards: room.getSortedThrownCards() } });
 
     const quickThrownCard = thrownCards[thrownCards.length - 1];
-    removeCardFromHand(player, quickThrownCard);
+    player.removeCardFromHand(quickThrownCard);
 
     // send the hand to the player who dropped the card
     player.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: player.hand }));

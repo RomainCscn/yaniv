@@ -1,13 +1,12 @@
-import { Player } from '../../core/player';
 import { Room } from '../../core/room';
-import { CustomWebSocket } from '../../types';
+import { CustomWebSocket, InitialPlayer } from '../../types';
 import { handleBackToLobby } from './backToLobby';
 import { handleJoinLobby } from './joinLobby';
 
 const handleJoin = (
   actionType: string,
   room: Room,
-  player: Player,
+  player: InitialPlayer,
   sessionUuid: string,
   ws: CustomWebSocket,
 ): void => {

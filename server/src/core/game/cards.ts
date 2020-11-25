@@ -39,15 +39,6 @@ const shuffle = (deck: Card[]) => {
 export const getHand = (room: Room, sort: { order: SortOrder; type: SortType }): Card[] =>
   sortHand(room.deck.slice(0, room.configuration.handCardsNumber), sort);
 
-export const removeCardFromHand = (player: Player, card: Card): void => {
-  player.hand.splice(
-    player.hand.findIndex(
-      (handCard: Card) => handCard.value == card.value && handCard.suit === card.suit,
-    ),
-    1,
-  );
-};
-
 export const sortHand = (hand: Card[], sort: { order: SortOrder; type: SortType }): Card[] => {
   if (sort.type === 'rank') {
     return hand.sort((a, b) => (sort.order === 'desc' ? b.value - a.value : a.value - b.value));

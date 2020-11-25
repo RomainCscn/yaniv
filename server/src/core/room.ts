@@ -1,6 +1,13 @@
 import { getHand, getSuffledDeck } from './game/cards';
 import { Player } from './player';
-import { Card, CustomWebSocket, FormattedPlayer, Players, RoomConfiguration } from '../types';
+import {
+  Card,
+  CustomWebSocket,
+  FormattedPlayer,
+  InitialPlayer,
+  Players,
+  RoomConfiguration,
+} from '../types';
 
 type DispatchMessageType =
   | 'BACK_TO_LOBBY'
@@ -23,7 +30,7 @@ export class Room {
     this.roomId = roomId;
   }
 
-  addPlayer(player: Player, ws: CustomWebSocket): void {
+  addPlayer(player: InitialPlayer & { sessionUuid: string }, ws: CustomWebSocket): void {
     this.players[player.uuid] = new Player(player, ws);
   }
 
@@ -119,6 +126,6 @@ export class Room {
   }
 
   updatePlayer(playerUuid: string, player: Partial<Player>): void {
-    this.players[playerUuid] = { ...this.players[playerUuid], ...player };
+    this.players[playerUuid].update(player);
   }
 }

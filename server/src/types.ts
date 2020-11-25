@@ -24,10 +24,7 @@ export interface FormattedPlayer {
   uuid: string;
 }
 
-export interface Score {
-  uuid: string;
-  score: number;
-}
+export type InitialPlayer = Pick<Player, 'avatar' | 'sort' | 'username' | 'uuid'>;
 
 export interface Message {
   content: string;
@@ -40,6 +37,8 @@ export interface PlayedCards {
   pickedCard: undefined | Card;
   thrownCards: Card[];
 }
+
+export type Players = Record<string, Player>;
 
 export type RoomConfiguration = {
   handCardsNumber: 5 | 7;
@@ -55,11 +54,14 @@ export interface Room {
   players: Players;
 }
 
+export interface Score {
+  uuid: string;
+  score: number;
+}
+
 export type Sort = {
   order: SortOrder;
   type: SortType;
 };
 export type SortOrder = 'asc' | 'desc';
 export type SortType = 'rank' | 'suit';
-
-export type Players = Record<string, Player>;

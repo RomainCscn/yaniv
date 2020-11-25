@@ -1,5 +1,6 @@
-import { getCardValue, getHand, getSuffledDeck, removeCardFromHand, sortHand } from '../cards';
-import { Card, Player, Room } from '../../../types';
+import { getCardValue, getHand, getSuffledDeck, sortHand } from '../cards';
+import { Player } from '../../../core/player';
+import { Card, Room } from '../../../types';
 
 const mockSuits = jest.fn();
 const mockValues = jest.fn();
@@ -65,24 +66,24 @@ describe('Cards related tests', () => {
     ]);
   });
 
-  it('should remove a given card from the player hand', () => {
-    const player = {
-      hand: [
-        { suit: 'club', value: 1 },
-        { suit: 'heart', value: 2 },
-        { suit: 'diamond', value: 3 },
-        { suit: 'spade', value: 4 },
-      ],
-    };
+  // it('should remove a given card from the player hand', () => {
+  //   const player = {
+  //     hand: [
+  //       { suit: 'club', value: 1 },
+  //       { suit: 'heart', value: 2 },
+  //       { suit: 'diamond', value: 3 },
+  //       { suit: 'spade', value: 4 },
+  //     ],
+  //   };
 
-    removeCardFromHand(<Player>player, { suit: 'spade', value: 4 });
+  //   removeCardFromHand(<Player>player, { suit: 'spade', value: 4 });
 
-    expect(player.hand).toEqual([
-      { suit: 'club', value: 1 },
-      { suit: 'heart', value: 2 },
-      { suit: 'diamond', value: 3 },
-    ]);
-  });
+  //   expect(player.hand).toEqual([
+  //     { suit: 'club', value: 1 },
+  //     { suit: 'heart', value: 2 },
+  //     { suit: 'diamond', value: 3 },
+  //   ]);
+  // });
 
   it('should return a sorted hand', () => {
     const hand: Card[] = [
