@@ -1,4 +1,3 @@
-import { sendThrownCards } from '../../core/dispatcher';
 import { removeCardFromHand } from '../../core/game/cards';
 import { Room } from '../../core/room';
 import { PlayedCards, Player } from '../../types';
@@ -7,7 +6,7 @@ export const handleQuickPlay = (room: Room, player: Player, { thrownCards }: Pla
   // disallow quick play when the round is finished
   if (!room.roundWinner) {
     room.thrownCards = thrownCards;
-    sendThrownCards(room);
+    room.dispatch({ type: 'SET_THROWN_CARDS', data: { thrownCards: room.getSortedThrownCards() } });
 
     const quickThrownCard = thrownCards[thrownCards.length - 1];
     removeCardFromHand(player, quickThrownCard);

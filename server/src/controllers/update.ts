@@ -1,4 +1,3 @@
-import { sendPlayersUpdate } from '../core/dispatcher';
 import { sortHand } from '../core/game/cards';
 import { Room } from '../core/room';
 import { SortOrder, SortType, Player } from '../types';
@@ -23,7 +22,7 @@ const handleUpdate = (
   }
 
   room.updatePlayer(uuid, { avatar, username });
-  sendPlayersUpdate(room);
+  room.dispatch({ type: 'PLAYERS_UPDATE', data: { players: room.getFormattedPlayers() } });
 };
 
 export default handleUpdate;

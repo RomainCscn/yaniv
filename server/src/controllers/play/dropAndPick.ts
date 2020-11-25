@@ -1,4 +1,3 @@
-import { sendThrownCards } from '../../core/dispatcher';
 import { removeCardFromHand, sortHand } from '../../core/game/cards';
 import { Room } from '../../core/room';
 import { Card, PlayedCards, Player } from '../../types';
@@ -39,7 +38,7 @@ export const handleDropAndPick = (
   { notPickedCards, pickedCard, thrownCards }: PlayedCards,
 ): void => {
   room.thrownCards = thrownCards;
-  sendThrownCards(room);
+  room.dispatch({ type: 'SET_THROWN_CARDS', data: { thrownCards: room.getSortedThrownCards() } });
 
   thrownCards.forEach((card: Card) => removeCardFromHand(player, card));
 

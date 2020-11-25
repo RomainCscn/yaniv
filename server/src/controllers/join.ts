@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { sendBackToLobby, sendConfiguration, sendPlayersUpdate } from '../core/dispatcher';
 import { Room } from '../core/room';
 import { CustomWebSocket, Player } from '../types';
 
@@ -23,7 +22,7 @@ const handleActiveExistingPlayer = (
     }),
   );
 
-  sendPlayersUpdate(room);
+  room.dispatch({ type: 'PLAYERS_UPDATE', data: { players: room.getFormattedPlayers() } });
 };
 
 const handleJoin = (
@@ -56,13 +55,13 @@ const handleJoin = (
       ws.send(JSON.stringify({ type: 'ASSIGN_UUID', playerUuid }));
     }
 
-    sendConfiguration(room);
-    sendPlayersUpdate(room);
+    room.dispatch({ type: 'CONFIGURATION_UPDATE', data: { configuration: room.configuration } });
+    room.dispatch({ type: 'PLAYERS_UPDATE', data: { players: room.getFormattedPlayers() } });
   } else if (actionType === 'BACK') {
     room.reset({ resetActivePlayer: true, resetScore: true });
 
-    sendBackToLobby(room);
-    sendPlayersUpdate(room);
+    room.dispatch({ type: 'BACK_TO_LOBBY' });
+    room.dispatch({ type: 'PLAYERS_UPDATE', data: { players: room.getFormattedPlayers() } });
   }
 };
 

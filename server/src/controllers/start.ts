@@ -1,4 +1,3 @@
-import { sendStartGame } from '../core/dispatcher';
 import { Room } from '../core/room';
 import { Player } from '../types';
 
@@ -10,7 +9,7 @@ const handleStart = (room: Room): void => {
     Object.entries(room.players).filter(([, player]) => player.ws.readyState !== player.ws.CLOSED),
   );
 
-  sendStartGame(room);
+  room.dispatch({ type: 'START_GAME', data: { players: room.getFormattedPlayers() } });
 };
 
 export default handleStart;

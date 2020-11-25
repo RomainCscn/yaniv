@@ -1,6 +1,5 @@
 import * as WebSocket from 'ws';
 
-import { sendPlayersUpdate } from './dispatcher';
 import rooms from './rooms';
 import logger from '../logger';
 import { findRoom } from '../utils';
@@ -21,7 +20,7 @@ export const handleWebSocketClosed = (sessionUuid: string): void => {
       if (playerUuid) {
         logger.info({ roomId: room.roomId, playerUuid }, 'Player quit an ongoing game');
 
-        sendPlayersUpdate(room);
+        room.dispatch({ type: 'PLAYERS_UPDATE', data: { players: room.getFormattedPlayers() } });
       }
     }
   }

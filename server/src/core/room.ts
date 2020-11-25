@@ -8,6 +8,14 @@ import {
   RoomConfiguration,
 } from '../types';
 
+type DispatchMessageType =
+  | 'BACK_TO_LOBBY'
+  | 'CONFIGURATION_UPDATE'
+  | 'NEW_MESSAGE'
+  | 'PLAYERS_UPDATE'
+  | 'SET_THROWN_CARDS'
+  | 'START_GAME';
+
 export class Room {
   activePlayer: string | null = null;
   configuration: RoomConfiguration = { handCardsNumber: 7, scoreLimit: 200 };
@@ -43,6 +51,12 @@ export class Room {
 
     player.hand = playerHand;
     this.deck = this.deck.slice(this.configuration.handCardsNumber);
+  }
+
+  dispatch({ data, type }: { data?: Record<string, unknown>; type: DispatchMessageType }): void {
+    Object.values(this.players).forEach((player) => {
+      player.ws.send(JSON.stringify({ type, ...data }));
+    });
   }
 
   getFormattedPlayer(uuid: string): FormattedPlayer {
