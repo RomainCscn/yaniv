@@ -1,5 +1,6 @@
+import { Player } from '../../core/player';
 import { Room } from '../../core/room';
-import { CustomWebSocket, Player } from '../../types';
+import { CustomWebSocket } from '../../types';
 import { handleBackToLobby } from './backToLobby';
 import { handleJoinLobby } from './joinLobby';
 

@@ -1,5 +1,5 @@
+import { Player } from '../core/player';
 import { Room } from '../core/room';
-import { Player } from '../types';
 
 const handleStart = (room: Room): void => {
   Object.values(room.players).forEach((player: Player) => room.assignHandToPlayer(player));

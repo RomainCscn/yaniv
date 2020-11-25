@@ -1,6 +1,7 @@
 import { removeCardFromHand, sortHand } from '../../core/game/cards';
+import { Player } from '../../core/player';
 import { Room } from '../../core/room';
-import { Card, PlayedCards, Player } from '../../types';
+import { Card, PlayedCards } from '../../types';
 
 const getNextPlayerUuid = (playersUuid: string[], activePlayerIndex: number) =>
   activePlayerIndex === playersUuid.length - 1

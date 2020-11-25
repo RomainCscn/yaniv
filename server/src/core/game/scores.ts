@@ -1,5 +1,6 @@
 import { getCardValue } from './cards';
-import { Score, Player, Room } from '../../types';
+import { Player } from '../../core/player';
+import { Score, Room } from '../../types';
 
 export const getHandScores = ({ players }: Room): Score[] =>
   Object.entries(players).map(([uuid, player]: [string, Player]) => {

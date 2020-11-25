@@ -1,12 +1,6 @@
 import { getHand, getSuffledDeck } from './game/cards';
-import {
-  Card,
-  CustomWebSocket,
-  FormattedPlayer,
-  Player,
-  Players,
-  RoomConfiguration,
-} from '../types';
+import { Player } from './player';
+import { Card, CustomWebSocket, FormattedPlayer, Players, RoomConfiguration } from '../types';
 
 type DispatchMessageType =
   | 'BACK_TO_LOBBY'
@@ -29,21 +23,8 @@ export class Room {
     this.roomId = roomId;
   }
 
-  addPlayer(
-    { avatar, sessionUuid, sort, username, uuid }: Player,
-    playerWs: CustomWebSocket,
-  ): void {
-    this.players[uuid] = {
-      avatar,
-      hand: [],
-      score: 0,
-      scoreHistory: [],
-      sessionUuid,
-      sort: sort || { order: 'asc', type: 'suit' },
-      username,
-      uuid,
-      ws: playerWs,
-    };
+  addPlayer(player: Player, ws: CustomWebSocket): void {
+    this.players[player.uuid] = new Player(player, ws);
   }
 
   assignHandToPlayer(player: Player): void {

@@ -1,6 +1,7 @@
+import { Player } from '../../core/player';
 import { Room } from '../../core/room';
 import { getHandScores, getSmallestScore } from '../../core/game/scores';
-import { Score, Player } from '../../types';
+import { Score } from '../../types';
 
 const getPlayersHandScore = (playersHandScore: Score[], playerUuid: string) => ({
   currentPlayerHandScore: playersHandScore.find((s) => s.uuid === playerUuid)?.score,

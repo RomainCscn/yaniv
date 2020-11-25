@@ -1,7 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 
+import { Player } from '../../core/player';
 import { Room } from '../../core/room';
-import { CustomWebSocket, Player } from '../../types';
+import { CustomWebSocket } from '../../types';
 
 const isExistingPlayer = (room: Room, player: Player) =>
   player && typeof room.players[player.uuid] === 'object';

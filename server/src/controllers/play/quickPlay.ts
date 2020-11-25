@@ -1,6 +1,7 @@
 import { removeCardFromHand } from '../../core/game/cards';
+import { Player } from '../../core/player';
 import { Room } from '../../core/room';
-import { PlayedCards, Player } from '../../types';
+import { PlayedCards } from '../../types';
 
 export const handleQuickPlay = (room: Room, player: Player, { thrownCards }: PlayedCards): void => {
   // disallow quick play when the round is finished

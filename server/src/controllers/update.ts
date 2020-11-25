@@ -1,6 +1,7 @@
 import { sortHand } from '../core/game/cards';
+import { Player } from '../core/player';
 import { Room } from '../core/room';
-import { SortOrder, SortType, Player } from '../types';
+import { SortOrder, SortType } from '../types';
 
 const handleUpdate = (
   room: Room,

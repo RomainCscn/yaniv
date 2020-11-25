@@ -1,5 +1,6 @@
 import * as WebSocket from 'ws';
 
+import { Player } from './core/player';
 import { JOKER, SUITS, VALUES } from './constants';
 export interface CustomWebSocket extends WebSocket {
   isAlive: boolean;
@@ -54,22 +55,11 @@ export interface Room {
   players: Players;
 }
 
+export type Sort = {
+  order: SortOrder;
+  type: SortType;
+};
 export type SortOrder = 'asc' | 'desc';
 export type SortType = 'rank' | 'suit';
-
-export interface Player {
-  avatar: string;
-  hand: Card[];
-  score: number;
-  scoreHistory: number[];
-  sessionUuid: string;
-  sort: {
-    order: SortOrder;
-    type: SortType;
-  };
-  username: string;
-  uuid: string;
-  ws: CustomWebSocket;
-}
 
 export type Players = Record<string, Player>;
