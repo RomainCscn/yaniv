@@ -2,7 +2,7 @@ import { Player } from '../core/player';
 import { Room } from '../core/room';
 
 const handleStart = (room: Room): void => {
-  Object.values(room.players).forEach((player: Player) => room.assignHandToPlayer(player));
+  room.getPlayers().forEach((player: Player) => room.assignHandToPlayer(player));
 
   // remove players with WebSocket closed
   room.players = Object.fromEntries(

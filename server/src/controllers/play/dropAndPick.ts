@@ -46,7 +46,7 @@ export const handleDropAndPick = (
   const newCardInHand = getNewCardInHand(room, player, { notPickedCards, pickedCard });
   player.send({ type: 'SET_PLAYER_HAND', data: { hand: player.hand, newCardInHand } });
 
-  const playersUuid = Object.entries(room.players).map(([uuid]) => uuid);
+  const playersUuid = room.getPlayersUuid();
   const previousPlayer = room.getFormattedPlayer(room.activePlayer || '');
   const activePlayerIndex = playersUuid.indexOf(room.activePlayer || '');
 
@@ -54,9 +54,9 @@ export const handleDropAndPick = (
   room.activePlayer = nextPlayerUuid;
 
   // sync players to display other players cards
-  Object.entries(room.players).forEach(([, player]: [string, Player]) => {
-    player.send({ type: 'SET_ACTIVE_PLAYER', data: { uuid: nextPlayerUuid } });
-    player.send({ type: 'SET_PICKED_CARD', data: { pickedCard, previousPlayer } });
-    player.send({ type: 'PLAYERS_UPDATE', data: { players: room.getFormattedPlayers() } });
-  });
+  room.dispatchMultiple([
+    { type: 'SET_ACTIVE_PLAYER', data: { uuid: nextPlayerUuid } },
+    { type: 'SET_PICKED_CARD', data: { pickedCard, previousPlayer } },
+    { type: 'PLAYERS_UPDATE', data: { players: room.getFormattedPlayers() } },
+  ]);
 };

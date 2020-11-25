@@ -68,6 +68,14 @@ export class Room {
       }));
   }
 
+  getPlayers(): Player[] {
+    return Object.values(this.players);
+  }
+
+  getPlayersUuid(): string[] {
+    return Object.keys(this.players);
+  }
+
   getPlayerByUuid(playerUuid: string): Player {
     return this.players[playerUuid];
   }

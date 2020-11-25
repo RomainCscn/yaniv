@@ -4,7 +4,7 @@ export const handleNextRound = (room: Room): void => {
   if (room.roundWinner) {
     room.reset();
 
-    Object.values(room.players).forEach((player) => {
+    room.getPlayers().forEach((player) => {
       room.assignHandToPlayer(player);
       player.send({ type: 'SET_PLAYER_HAND', data: { hand: player.hand } });
     });

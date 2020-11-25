@@ -26,7 +26,7 @@ export const handleJoinLobby = (
   sessionUuid: string,
   ws: CustomWebSocket,
 ): void => {
-  if (Object.keys(room.players).length > 6) {
+  if (room.getPlayers().length > 6) {
     return ws.send(JSON.stringify({ error: 'TOO_MANY_PLAYERS' }));
   }
 

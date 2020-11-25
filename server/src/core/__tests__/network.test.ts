@@ -1,14 +1,14 @@
 import * as WebSocket from 'ws';
 
 import { handleWebSocketClosed } from '../network';
+import { Player } from '../player';
 import { Room } from '../room';
 import rooms from '../rooms';
 import { findRoom } from '../../utils';
-import { CustomWebSocket, Player } from '../../types';
+import { CustomWebSocket } from '../../types';
 
 const mockRooms = jest.fn();
 
-jest.mock('../dispatcher.ts');
 jest.mock('../../utils');
 jest.mock('../rooms', () => ({
   __esModule: true,
@@ -18,55 +18,88 @@ jest.mock('../rooms', () => ({
 }));
 
 describe('network', () => {
-  it.only('should delete the room if there is no player connected', () => {
-    const players = {
-      '1': { ws: { readyState: WebSocket.CLOSED } },
-      '2': { ws: { readyState: WebSocket.CLOSED } },
-      '3': { ws: { readyState: WebSocket.CLOSED } },
-    };
+  let room1: Room;
+  let room2: Room;
 
-    mockRooms.mockReturnValue({
-      abc: { roomId: 'abc', players },
-      def: { roomId: 'def', players: { '4': { ws: { readyState: WebSocket.OPEN } } } },
-    });
-
-    (findRoom as jest.Mock).mockReturnValue({ roomId: 'abc', players });
-
-    handleWebSocketClosed('1');
-
-    expect(rooms).toEqual({
-      def: {
-        players: {
-          '4': { ws: { readyState: WebSocket.OPEN } },
-        },
-        roomId: 'def',
+  beforeEach(() => {
+    room1 = new Room('room1');
+    room2 = new Room('room2');
+    room1.addPlayer(
+      {
+        avatar: 'hippo',
+        sessionUuid: 'session123',
+        sort: { order: 'asc', type: 'suit' },
+        username: 'Romain',
+        uuid: '123',
       },
-    });
+      <CustomWebSocket>({ readyState: WebSocket.CLOSED, send: () => null } as unknown),
+    );
+    room1.addPlayer(
+      {
+        avatar: 'hippo',
+        sessionUuid: 'session456',
+        sort: { order: 'asc', type: 'suit' },
+        username: 'Romain',
+        uuid: '456',
+      },
+      <CustomWebSocket>({ readyState: WebSocket.CLOSED, send: () => null } as unknown),
+    );
+
+    room2.addPlayer(
+      {
+        avatar: 'cat',
+        sessionUuid: 'session789',
+        sort: { order: 'asc', type: 'suit' },
+        username: 'Juliette',
+        uuid: '456',
+      },
+      { readyState: WebSocket.OPEN } as CustomWebSocket,
+    );
+
+    mockRooms.mockReturnValue({ room1, room2 });
+  });
+  it('should delete the room if there is no player connected', () => {
+    (findRoom as jest.Mock).mockReturnValue(room1);
+
+    handleWebSocketClosed('session123');
+
+    expect(Object.keys(rooms)).toEqual(['room2']);
   });
 
   it('should not delete the room if there is at least one player connected', () => {
-    const room = new Room('a');
-    room.addPlayer(<Player>{ uuid: '4' }, <CustomWebSocket>{ readyState: WebSocket.OPEN });
-    room.addPlayer(<Player>{ uuid: '5' }, <CustomWebSocket>{ readyState: WebSocket.CLOSED });
+    room1.addPlayer(
+      <Player>{ sessionUuid: '4', uuid: '4' },
+      <CustomWebSocket>({ readyState: WebSocket.OPEN, send: () => null } as unknown),
+    );
 
-    mockRooms.mockReturnValue({ def: room });
-
-    (findRoom as jest.Mock).mockReturnValue(room);
+    const dispatchSpy = jest.spyOn(room1, 'dispatch');
+    (findRoom as jest.Mock).mockReturnValue(room1);
 
     handleWebSocketClosed('4');
 
-    expect(rooms).toEqual({ def: room });
+    expect(Object.keys(rooms)).toEqual(['room1', 'room2']);
+    expect(dispatchSpy).toBeCalledTimes(1);
+  });
+
+  it('should not delete the room if there is at least one player connected but player is not found', () => {
+    room1.players['123'].ws = <CustomWebSocket>(
+      ({ readyState: WebSocket.OPEN, send: () => null } as unknown)
+    );
+
+    const dispatchSpy = jest.spyOn(room1, 'dispatch');
+    (findRoom as jest.Mock).mockReturnValue(room1);
+
+    handleWebSocketClosed('4');
+
+    expect(Object.keys(rooms)).toEqual(['room1', 'room2']);
+    expect(dispatchSpy).toBeCalledTimes(0);
   });
 
   it('should do nothing if the room is not find', () => {
-    mockRooms.mockReturnValue({
-      def: { players: { '4': { ws: { readyState: WebSocket.OPEN } } } },
-    });
-
     (findRoom as jest.Mock).mockReturnValue(null);
 
     handleWebSocketClosed('1');
 
-    expect(rooms).toEqual({ def: { players: { '4': { ws: { readyState: WebSocket.OPEN } } } } });
+    expect(Object.keys(rooms)).toEqual(['room1', 'room2']);
   });
 });

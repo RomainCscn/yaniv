@@ -1,5 +1,4 @@
 import { getCardValue, getHand, getSuffledDeck, sortHand } from '../cards';
-import { Player } from '../../../core/player';
 import { Card, Room } from '../../../types';
 
 const mockSuits = jest.fn();

@@ -3,7 +3,7 @@ import { Room } from '../../core/room';
 export const handlePlayAgain = (room: Room): void => {
   room.reset({ resetScore: true });
 
-  Object.values(room.players).forEach((player) => {
+  room.getPlayers().forEach((player) => {
     room.assignHandToPlayer(player);
     player.send({ type: 'SET_PLAYER_HAND', data: { hand: player.hand } });
   });

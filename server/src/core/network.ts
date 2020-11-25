@@ -1,14 +1,17 @@
 import * as WebSocket from 'ws';
 
+import { Player } from './player';
 import rooms from './rooms';
 import logger from '../logger';
 import { findRoom } from '../utils';
+
+const getUniqueWsState = (players: Player[]) => new Set(players.map(({ ws }) => ws.readyState));
 
 export const handleWebSocketClosed = (sessionUuid: string): void => {
   const room = findRoom(sessionUuid);
 
   if (room) {
-    const wsState = new Set(Object.entries(room.players).map(([, player]) => player.ws.readyState));
+    const wsState = getUniqueWsState(room.getPlayers());
 
     if (wsState.size === 1 && wsState.has(WebSocket.CLOSED)) {
       delete rooms[room.roomId];

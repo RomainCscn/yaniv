@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getHand } from '../game/cards';
 import { getSuffledDeck } from '../game/cards';
+import { Player } from '../player';
 import { Room } from '../room';
-import { Card, CustomWebSocket, Player } from '../../types';
+import { Card, CustomWebSocket } from '../../types';
 
 const mockRooms = jest.fn();
 
@@ -18,7 +19,7 @@ jest.mock('../rooms', () => ({
 describe('room', () => {
   let room: Room;
 
-  const player: Player = {
+  const player = {
     avatar: '123',
     hand: [],
     username: 'a',
@@ -31,7 +32,7 @@ describe('room', () => {
       readyState: 1,
       CLOSED: 3,
     } as CustomWebSocket,
-  };
+  } as unknown;
 
   const deck: Card[] = [
     { suit: 'club', value: 1 },
@@ -42,14 +43,14 @@ describe('room', () => {
 
   beforeEach(() => {
     room = new Room('a');
-    room.addPlayer(player, <CustomWebSocket>{ readyState: 1, CLOSED: 3 });
-    room.addPlayer({ ...player, username: 'b', uuid: '2' }, <CustomWebSocket>{
+    room.addPlayer(player as Player, <CustomWebSocket>{ readyState: 1, CLOSED: 3 });
+    room.addPlayer({ ...(player as Player), username: 'b', uuid: '2' }, <CustomWebSocket>{
       readyState: 1,
       CLOSED: 3,
     });
     room.addPlayer(
       {
-        ...player,
+        ...(player as Player),
         username: 'c',
         uuid: '3',
       },
