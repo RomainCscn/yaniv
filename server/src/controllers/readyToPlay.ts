@@ -16,18 +16,13 @@ const handleReadyToPlay = (room: Room, playerUuid: string): void => {
 
   const playersScore = room.getPlayersScore();
 
-  player.ws.send(JSON.stringify({ type: 'SET_ACTIVE_PLAYER', uuid: room.activePlayer }));
-  player.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: player.hand }));
-  player.ws.send(JSON.stringify({ type: 'SET_INTIAL_SCORES', playersScore }));
+  player.send({ type: 'SET_ACTIVE_PLAYER', data: { uuid: room.activePlayer } });
+  player.send({ type: 'SET_PLAYER_HAND', data: { hand: player.hand } });
+  player.send({ type: 'SET_INITIAL_SCORES', data: { playersScore } });
 
   // if the player reconnects, we need to sync thrown cards
   if (room.thrownCards.length > 0) {
-    player.ws.send(
-      JSON.stringify({
-        type: 'SET_THROWN_CARDS',
-        thrownCards: room.getSortedThrownCards(),
-      }),
-    );
+    player.send({ type: 'SET_THROWN_CARDS', data: { thrownCards: room.getSortedThrownCards() } });
   }
 };
 

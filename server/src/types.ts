@@ -59,6 +59,25 @@ export interface Score {
   score: number;
 }
 
+export type MessageType =
+  | 'ASSIGN_UUID'
+  | 'BACK_TO_LOBBY'
+  | 'CONFIGURATION_UPDATE'
+  | 'END_OF_ROUND_UPDATE'
+  | 'GAME_OVER'
+  | 'JOIN_ONGOING_GAME'
+  | 'NEW_MESSAGE'
+  | 'NEW_ROUND'
+  | 'PLAYER_UPDATE'
+  | 'PLAYERS_UPDATE'
+  | 'QUICK_PLAY_DONE'
+  | 'SET_ACTIVE_PLAYER'
+  | 'SET_INITIAL_SCORES'
+  | 'SET_PICKED_CARD'
+  | 'SET_PLAYER_HAND'
+  | 'SET_THROWN_CARDS'
+  | 'START_GAME';
+
 export type Sort = {
   order: SortOrder;
   type: SortType;

@@ -7,10 +7,15 @@ import { CustomWebSocket, InitialPlayer } from '../../types';
 const isExistingPlayer = (room: Room, player: InitialPlayer) =>
   player && typeof room.players[player.uuid] === 'object';
 
-const handleGameStarted = (room: Room, { sessionUuid, uuid, ws }: Player) => {
+const handleGameStarted = (
+  room: Room,
+  { sessionUuid, uuid, ws }: Pick<Player, 'sessionUuid' | 'uuid' | 'ws'>,
+) => {
   // re-establish ws connection
   room.updatePlayer(uuid, { sessionUuid, ws });
-  ws.send(JSON.stringify({ type: 'JOIN_ONGOING_GAME', players: room.getFormattedPlayers() }));
+  room
+    .getPlayerByUuid(uuid)
+    .send({ type: 'JOIN_ONGOING_GAME', data: { players: room.getFormattedPlayers() } });
 
   room.dispatch({ type: 'PLAYERS_UPDATE', data: { players: room.getFormattedPlayers() } });
 };
@@ -27,7 +32,7 @@ export const handleJoinLobby = (
 
   if (room.activePlayer) {
     if (isExistingPlayer(room, player)) {
-      return handleGameStarted(room, room.getPlayerByUuid(player.uuid));
+      return handleGameStarted(room, { sessionUuid, uuid: player.uuid, ws });
     }
 
     return ws.send(JSON.stringify({ error: 'GAME_ALREADY_STARTED' }));
@@ -40,7 +45,7 @@ export const handleJoinLobby = (
     const playerUuid = uuidv4();
 
     room.addPlayer({ ...player, sessionUuid, uuid: playerUuid }, ws);
-    ws.send(JSON.stringify({ type: 'ASSIGN_UUID', playerUuid }));
+    room.getPlayerByUuid(playerUuid).send({ type: 'ASSIGN_UUID', data: { playerUuid } });
   }
 
   room.dispatch({ type: 'CONFIGURATION_UPDATE', data: { configuration: room.configuration } });

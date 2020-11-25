@@ -5,17 +5,10 @@ import {
   CustomWebSocket,
   FormattedPlayer,
   InitialPlayer,
+  MessageType,
   Players,
   RoomConfiguration,
 } from '../types';
-
-type DispatchMessageType =
-  | 'BACK_TO_LOBBY'
-  | 'CONFIGURATION_UPDATE'
-  | 'NEW_MESSAGE'
-  | 'PLAYERS_UPDATE'
-  | 'SET_THROWN_CARDS'
-  | 'START_GAME';
 
 export class Room {
   activePlayer: string | null = null;
@@ -41,9 +34,13 @@ export class Room {
     this.deck = this.deck.slice(this.configuration.handCardsNumber);
   }
 
-  dispatch({ data, type }: { data?: Record<string, unknown>; type: DispatchMessageType }): void {
+  dispatch({ data, type }: { data?: Record<string, unknown>; type: MessageType }): void {
+    Object.values(this.players).forEach((player) => player.send({ type, data }));
+  }
+
+  dispatchMultiple(messages: { data?: Record<string, unknown>; type: MessageType }[]): void {
     Object.values(this.players).forEach((player) => {
-      player.ws.send(JSON.stringify({ type, ...data }));
+      messages.forEach(({ type, data }) => player.send({ type, data }));
     });
   }
 

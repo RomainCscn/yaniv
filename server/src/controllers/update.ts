@@ -11,13 +11,13 @@ const handleUpdate = (
     type: SortType;
   },
 ): void => {
-  const { hand, ws } = room.getPlayerByUuid(uuid);
+  const player = room.getPlayerByUuid(uuid);
 
   if (sort) {
     room.updatePlayer(uuid, { sort });
 
-    ws.send(JSON.stringify({ type: 'PLAYER_UPDATE', sort }));
-    ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: sortHand(hand, sort) }));
+    player.send({ type: 'PLAYER_UPDATE', data: { sort } });
+    player.send({ type: 'SET_PLAYER_HAND', data: { hand: sortHand(player.hand, sort) } });
 
     return;
   }

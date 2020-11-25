@@ -5,13 +5,13 @@ export const handlePlayAgain = (room: Room): void => {
 
   Object.values(room.players).forEach((player) => {
     room.assignHandToPlayer(player);
-
-    player.ws.send(JSON.stringify({ type: 'NEW_ROUND' }));
-    player.ws.send(
-      JSON.stringify({ type: 'SET_INTIAL_SCORES', playersScore: room.getPlayersScore() }),
-    );
-    player.ws.send(JSON.stringify({ type: 'PLAYERS_UPDATE', players: room.getFormattedPlayers() }));
-    player.ws.send(JSON.stringify({ type: 'SET_PLAYER_HAND', hand: player.hand }));
-    player.ws.send(JSON.stringify({ type: 'SET_ACTIVE_PLAYER', uuid: room.activePlayer }));
+    player.send({ type: 'SET_PLAYER_HAND', data: { hand: player.hand } });
   });
+
+  room.dispatchMultiple([
+    { type: 'NEW_ROUND' },
+    { type: 'PLAYERS_UPDATE', data: { players: room.getFormattedPlayers() } },
+    { type: 'SET_ACTIVE_PLAYER', data: { uuid: room.activePlayer } },
+    { type: 'SET_INITIAL_SCORES', data: { playersScore: room.getPlayersScore() } },
+  ]);
 };

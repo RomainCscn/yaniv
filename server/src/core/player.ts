@@ -1,4 +1,5 @@
-import { Card, CustomWebSocket, InitialPlayer, Sort } from '../types';
+/*eslint @typescript-eslint/no-explicit-any: ["error", { "ignoreRestArgs": true }]*/
+import { Card, CustomWebSocket, InitialPlayer, MessageType, Sort } from '../types';
 
 export class Player {
   avatar = '';
@@ -23,6 +24,10 @@ export class Player {
       ),
       1,
     );
+  }
+
+  send({ data, type }: { data?: Record<string, unknown>; type: MessageType }): void {
+    this.ws.send(JSON.stringify({ type, ...data }));
   }
 
   update(data: Partial<Player>): void {

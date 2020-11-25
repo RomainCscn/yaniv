@@ -62,26 +62,20 @@ export const handleEndRound = (room: Room, playerUuid: string): void => {
       previous.score < current.score ? previous : current,
     );
 
-    Object.values(room.players).forEach((player) =>
-      player.ws.send(
-        JSON.stringify({ type: 'GAME_OVER', winner: room.getFormattedPlayer(winner.uuid) }),
-      ),
-    );
+    room.dispatch({ type: 'GAME_OVER', data: { winner: room.getFormattedPlayer(winner.uuid) } });
   }
 
   const playersCard = Object.fromEntries(
     Object.entries(room.players).map(([uuid, player]: [string, Player]) => [uuid, player.hand]),
   );
 
-  Object.values(room.players).forEach((player) =>
-    player.ws.send(
-      JSON.stringify({
-        type: 'END_OF_ROUND_UPDATE',
-        playersCard,
-        playersScore,
-        roundWinner: room.getFormattedPlayer(room.roundWinner ?? ''),
-        yanivCaller: room.getFormattedPlayer(playerUuid),
-      }),
-    ),
-  );
+  room.dispatch({
+    type: 'END_OF_ROUND_UPDATE',
+    data: {
+      playersCard,
+      playersScore,
+      roundWinner: room.getFormattedPlayer(room.roundWinner),
+      yanivCaller: room.getFormattedPlayer(playerUuid),
+    },
+  });
 };
