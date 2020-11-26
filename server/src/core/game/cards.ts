@@ -1,5 +1,5 @@
-import { SUITS, VALUES } from '../../constants';
-import { Card, Room, SortOrder, SortType } from '../../types';
+import { SUIT_ORDER, SUITS, VALUES } from '../../constants';
+import { Card, Room, Sort, SortOrder } from '../../types';
 
 export const getCardValue = (card: Card): number =>
   card.suit === 'joker' ? 0 : card.value <= 10 ? card.value : 10;
@@ -20,8 +20,6 @@ const getDeck = (): Card[] => {
   return deck;
 };
 
-export const getSuffledDeck = (): Card[] => shuffle(getDeck());
-
 const shuffle = (deck: Card[]) => {
   const shuffledDeck = [...deck];
 
@@ -35,17 +33,23 @@ const shuffle = (deck: Card[]) => {
   return shuffledDeck;
 };
 
-export const getHand = (room: Room, sort: { order: SortOrder; type: SortType }): Card[] =>
-  sortHand(room.deck.slice(0, room.configuration.handCardsNumber), sort);
+export const getSuffledDeck = (): Card[] => shuffle(getDeck());
 
-export const sortHand = (hand: Card[], sort: { order: SortOrder; type: SortType }): Card[] => {
-  if (sort.type === 'rank') {
-    return hand.sort((a, b) => (sort.order === 'desc' ? b.value - a.value : a.value - b.value));
+export const getHand = ({ configuration, deck }: Room, sort: Sort): Card[] =>
+  sortHand(deck.slice(0, configuration.handCardsNumber), sort);
+
+const sortByRank = (hand: Card[], order: SortOrder): Card[] =>
+  hand.sort((a, b) => (order === 'desc' ? b.value - a.value : a.value - b.value));
+
+const sortBySuit = (hand: Card[]): Card[] =>
+  hand.sort((a, b) => SUIT_ORDER[a.suit] - SUIT_ORDER[b.suit]);
+
+export const sortHand = (hand: Card[], { order, type }: Sort): Card[] => {
+  const sortedByRank = sortByRank(hand, order);
+
+  if (type === 'rank') {
+    return sortedByRank;
   }
 
-  const order = { club: 1, diamond: 2, spade: 3, heart: 4, joker: 5 };
-
-  return hand
-    .sort((a, b) => (sort.order === 'desc' ? b.value - a.value : a.value - b.value))
-    .sort((a, b) => order[a.suit] - order[b.suit]);
+  return sortBySuit(sortedByRank);
 };

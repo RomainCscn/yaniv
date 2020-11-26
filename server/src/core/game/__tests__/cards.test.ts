@@ -1,17 +1,6 @@
 import { getCardValue, getHand, getSuffledDeck, sortHand } from '../cards';
-import { Card, Room } from '../../../types';
-
-const mockSuits = jest.fn();
-const mockValues = jest.fn();
-
-jest.mock('../../../constants.ts', () => ({
-  get SUITS() {
-    return mockSuits();
-  },
-  get VALUES() {
-    return mockValues();
-  },
-}));
+import { Room } from '../../room';
+import { Card } from '../../../types';
 
 const deck: Card[] = [
   { suit: 'club', value: 1 },
@@ -21,15 +10,6 @@ const deck: Card[] = [
   { suit: 'club', value: 10 },
   { suit: 'joker', value: 98 },
 ];
-
-const room: Room = {
-  activePlayer: null,
-  configuration: { handCardsNumber: 5, scoreLimit: 200 },
-  deck,
-  roundWinner: null,
-  thrownCards: [],
-  players: {},
-};
 
 describe('Cards related tests', () => {
   it('should return valid card value', () => {
@@ -43,20 +23,18 @@ describe('Cards related tests', () => {
   });
 
   it('should return a valid shuffled deck', () => {
-    mockSuits.mockReturnValue(['spade', 'diamond']);
-    mockValues.mockReturnValue([1, 2]);
-
     const shuffledDeck = getSuffledDeck();
 
-    expect(shuffledDeck.findIndex((c) => c.suit === 'spade' && c.value === 1)).not.toEqual(-1);
-    expect(shuffledDeck.findIndex((c) => c.suit === 'diamond' && c.value === 1)).not.toEqual(-1);
-    expect(shuffledDeck.findIndex((c) => c.suit === 'spade' && c.value === 2)).not.toEqual(-1);
-    expect(shuffledDeck.findIndex((c) => c.suit === 'diamond' && c.value === 1)).not.toEqual(-1);
-    expect(shuffledDeck.findIndex((c) => c.suit === 'heart' && c.value === 1)).toEqual(-1);
+    expect(shuffledDeck.length).toEqual(54);
   });
 
   it('should return a player hand', () => {
-    expect(getHand(room, { order: 'asc', type: 'suit' })).toEqual([
+    expect(
+      getHand({ deck, configuration: { handCardsNumber: 5, scoreLimit: 200 } } as Room, {
+        order: 'asc',
+        type: 'suit',
+      }),
+    ).toEqual([
       { suit: 'club', value: 1 },
       { suit: 'club', value: 10 },
       { suit: 'diamond', value: 2 },
@@ -64,25 +42,6 @@ describe('Cards related tests', () => {
       { suit: 'heart', value: 2 },
     ]);
   });
-
-  // it('should remove a given card from the player hand', () => {
-  //   const player = {
-  //     hand: [
-  //       { suit: 'club', value: 1 },
-  //       { suit: 'heart', value: 2 },
-  //       { suit: 'diamond', value: 3 },
-  //       { suit: 'spade', value: 4 },
-  //     ],
-  //   };
-
-  //   removeCardFromHand(<Player>player, { suit: 'spade', value: 4 });
-
-  //   expect(player.hand).toEqual([
-  //     { suit: 'club', value: 1 },
-  //     { suit: 'heart', value: 2 },
-  //     { suit: 'diamond', value: 3 },
-  //   ]);
-  // });
 
   it('should return a sorted hand', () => {
     const hand: Card[] = [
