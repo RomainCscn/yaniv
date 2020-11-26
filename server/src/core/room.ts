@@ -44,6 +44,14 @@ export class Room {
     });
   }
 
+  getActivePlayers(): Record<string, Player> {
+    return Object.fromEntries(
+      Object.entries(this.players).filter(
+        ([, player]) => player.ws.readyState !== player.ws.CLOSED,
+      ),
+    );
+  }
+
   getFormattedPlayer(uuid: string): FormattedPlayer {
     const { avatar, hand, sort, username } = this.players[uuid];
 

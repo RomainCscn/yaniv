@@ -16,7 +16,7 @@ import { handleWebSocketClosed } from './core/network';
 import { Room } from './core/room';
 import rooms from './core/rooms';
 import logger from './logger';
-import { CustomWebSocket } from './types';
+import { Action, ActionType, CustomWebSocket } from './types';
 
 const app = express();
 
@@ -33,20 +33,13 @@ wss.on('connection', (ws: CustomWebSocket) => {
     ws.isAlive = true;
   });
 
-  ws.on('message', (data: string) => {
+  ws.on('message', (message: string) => {
+    const data = JSON.parse(message);
     const {
       action,
       actionType,
-      handCardsNumber,
-      message,
-      notPickedCards,
-      pickedCard,
-      player,
-      room: roomId,
-      scoreLimit,
-      sort,
-      thrownCards,
-    } = JSON.parse(data);
+      roomId,
+    }: { action: Action; actionType: ActionType; roomId: string } = data;
 
     if (!rooms[roomId]) {
       rooms[roomId] = new Room(roomId);
@@ -55,19 +48,21 @@ wss.on('connection', (ws: CustomWebSocket) => {
     const room = rooms[roomId];
 
     if (action === 'JOIN') {
-      handleJoin(actionType, room, player, sessionUuid, ws);
+      handleJoin(actionType, room, data.player, sessionUuid, ws);
     } else if (action === 'CONFIGURATION') {
+      const { handCardsNumber, scoreLimit } = data;
       handleConfiguration(room, { handCardsNumber, scoreLimit });
     } else if (action === 'UPDATE') {
-      handleUpdate(room, player, sort);
+      handleUpdate(room, data.player, data.sort);
     } else if (action === 'START') {
       handleStart(room);
     } else if (action === 'READY_TO_PLAY') {
-      handleReadyToPlay(room, player.uuid);
+      handleReadyToPlay(room, data.player.uuid);
     } else if (action === 'PLAY') {
-      handlePlay(actionType, room, { notPickedCards, pickedCard, thrownCards }, player.uuid);
+      const { notPickedCards, pickedCard, thrownCards } = data;
+      handlePlay(actionType, room, { notPickedCards, pickedCard, thrownCards }, data.player.uuid);
     } else if (action === 'MESSAGE') {
-      handleChat(room, player.uuid, message);
+      handleChat(room, data.player.uuid, message);
     }
   });
 

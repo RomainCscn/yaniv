@@ -6,7 +6,23 @@ export interface CustomWebSocket extends WebSocket {
   isAlive: boolean;
 }
 
-export type ActionType = 'DROP' | 'PICK' | 'YANIV';
+export type Action =
+  | 'CONFIGURATION'
+  | 'JOIN'
+  | 'MESSAGE'
+  | 'PLAY'
+  | 'READY_TO_PLAY'
+  | 'START'
+  | 'UPDATE';
+
+export type ActionType =
+  | 'BACK'
+  | 'DROP_AND_PICK'
+  | 'JOINED_LOBBY'
+  | 'NEXT_ROUND'
+  | 'PLAY_AGAIN'
+  | 'QUICK_PLAY'
+  | 'YANIV';
 
 export interface Card {
   suit: typeof SUITS[number] | typeof JOKER;

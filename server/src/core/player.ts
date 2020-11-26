@@ -1,4 +1,4 @@
-/*eslint @typescript-eslint/no-explicit-any: ["error", { "ignoreRestArgs": true }]*/
+import { findCardIndex } from './helpers';
 import { Card, CustomWebSocket, InitialPlayer, MessageType, Sort } from '../types';
 
 export class Player {
@@ -18,12 +18,7 @@ export class Player {
   }
 
   removeCardFromHand(card: Card): void {
-    this.hand.splice(
-      this.hand.findIndex(
-        (handCard: Card) => handCard.value == card.value && handCard.suit === card.suit,
-      ),
-      1,
-    );
+    this.hand.splice(findCardIndex(this.hand, card), 1);
   }
 
   send({ data, type }: { data?: Record<string, unknown>; type: MessageType }): void {

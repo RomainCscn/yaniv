@@ -5,10 +5,10 @@ import { handlePlayAgain } from './playAgain';
 import { handleQuickPlay } from './quickPlay';
 
 import { Room } from '../../core/room';
-import { PlayedCards } from '../../types';
+import { ActionType, PlayedCards } from '../../types';
 
 const handlePlay = (
-  actionType: string,
+  actionType: ActionType,
   room: Room,
   cards: PlayedCards,
   playerUuid: string,

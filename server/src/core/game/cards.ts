@@ -1,5 +1,4 @@
 import { SUITS, VALUES } from '../../constants';
-import { Player } from '../../core/player';
 import { Card, Room, SortOrder, SortType } from '../../types';
 
 export const getCardValue = (card: Card): number =>

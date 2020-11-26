@@ -4,12 +4,12 @@ import { handleWebSocketClosed } from '../network';
 import { Player } from '../player';
 import { Room } from '../room';
 import rooms from '../rooms';
-import { findRoom } from '../../utils';
+import { findRoom } from '../helpers';
 import { CustomWebSocket } from '../../types';
 
 const mockRooms = jest.fn();
 
-jest.mock('../../utils');
+jest.mock('../helpers');
 jest.mock('../rooms', () => ({
   __esModule: true,
   get default() {

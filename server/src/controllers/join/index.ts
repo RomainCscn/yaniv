@@ -1,10 +1,10 @@
 import { Room } from '../../core/room';
-import { CustomWebSocket, InitialPlayer } from '../../types';
+import { ActionType, CustomWebSocket, InitialPlayer } from '../../types';
 import { handleBackToLobby } from './backToLobby';
 import { handleJoinLobby } from './joinLobby';
 
 const handleJoin = (
-  actionType: string,
+  actionType: ActionType,
   room: Room,
   player: InitialPlayer,
   sessionUuid: string,
