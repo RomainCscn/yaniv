@@ -83,7 +83,7 @@ export default function useMultiplayer({ initialPlayers, initialSort, playerUuid
         setRoundWinner(roundWinner);
         setYanivCaller(yanivCaller);
         cardDispatch({ type: 'setOtherPlayersWithCards', payload: playersCard });
-      } else if (data.type === 'SET_INTIAL_SCORES') {
+      } else if (data.type === 'SET_INITIAL_SCORES') {
         const { playersScore } = data;
         setScores(playersScore);
       } else if (data.type === 'SET_ACTIVE_PLAYER') {

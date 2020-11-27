@@ -55,8 +55,6 @@ export interface PlayedCards {
 
 export type Players = Record<string, Player>;
 
-export type PlayerScore = Pick<Player, 'score' | 'scoreHistory' | 'username' | 'uuid'>;
-
 export type RoomConfiguration = {
   handCardsNumber: 5 | 7;
   scoreLimit: 100 | 200;

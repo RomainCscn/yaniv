@@ -20,11 +20,13 @@ export interface NewCard {
 
 export interface Player {
   avatar: string;
+  hand?: Card[];
+  numberOfCards?: number;
+  score?: number;
+  scoreHistory?: number[];
+  sort?: Sort;
   username: string;
   uuid: string;
-  numberOfCards?: number;
-  hand?: Card[];
-  sort?: Sort;
 }
 
 export type PlayerScore = {
@@ -74,7 +76,7 @@ export type ReceivedMessageType =
   | 'PLAYERS_UPDATE'
   | 'QUICK_PLAY_DONE'
   | 'SET_ACTIVE_PLAYER'
-  | 'SET_INTIAL_SCORES'
+  | 'SET_INITIAL_SCORES'
   | 'SET_PLAYER_HAND'
   | 'SET_PICKED_CARD'
   | 'SET_THROWN_CARDS'

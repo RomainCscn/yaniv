@@ -12,6 +12,6 @@ export const handlePlayAgain = (room: Room): void => {
     { type: 'NEW_ROUND' },
     { type: 'PLAYERS_UPDATE', data: { players: room.getFormattedPlayers() } },
     { type: 'SET_ACTIVE_PLAYER', data: { uuid: room.activePlayer } },
-    { type: 'SET_INITIAL_SCORES', data: { playersScore: room.getPlayersScore() } },
+    { type: 'SET_INITIAL_SCORES', data: { playersScore: room.getFormattedPlayers() } },
   ]);
 };

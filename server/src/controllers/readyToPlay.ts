@@ -14,11 +14,9 @@ const handleReadyToPlay = (room: Room, playerUuid: string): void => {
     pickActivePlayer(room);
   }
 
-  const playersScore = room.getPlayersScore();
-
   player.send({ type: 'SET_ACTIVE_PLAYER', data: { uuid: room.activePlayer } });
   player.send({ type: 'SET_PLAYER_HAND', data: { hand: player.hand } });
-  player.send({ type: 'SET_INITIAL_SCORES', data: { playersScore } });
+  player.send({ type: 'SET_INITIAL_SCORES', data: { playersScore: room.getFormattedPlayers() } });
 
   // if the player reconnects, we need to sync thrown cards
   if (room.thrownCards.length > 0) {

@@ -7,7 +7,6 @@ import {
   InitialPlayer,
   MessageType,
   Players,
-  PlayerScore,
   RoomConfiguration,
 } from '../types';
 
@@ -73,15 +72,6 @@ export class Room {
 
   getPlayerByUuid(playerUuid: string): Player {
     return this.players[playerUuid];
-  }
-
-  getPlayersScore(): PlayerScore[] {
-    return Object.entries(this.players).map(([uuid, player]: [string, Player]) => ({
-      score: player.score,
-      scoreHistory: player.scoreHistory,
-      uuid,
-      username: player.username,
-    }));
   }
 
   getPlayerUuidBySessionUuid(sessionUuid: string): string | undefined {

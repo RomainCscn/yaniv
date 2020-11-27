@@ -42,24 +42,25 @@ describe('room', () => {
 
   beforeEach(() => {
     room = new Room('a');
-    room.addPlayer(player as Player, <CustomWebSocket>{ readyState: 1, CLOSED: 3 });
-    room.addPlayer({ ...(player as Player), username: 'b', uuid: '2' }, <CustomWebSocket>{
+    room.addPlayer(player as Player, { readyState: 1, CLOSED: 3 } as CustomWebSocket);
+    room.addPlayer({ ...(player as Player), username: 'b', uuid: '2' }, {
       readyState: 1,
       CLOSED: 3,
-    });
+    } as CustomWebSocket);
     room.addPlayer(
       {
         ...(player as Player),
         username: 'c',
         uuid: '3',
       },
-      <CustomWebSocket>{ readyState: 3, CLOSED: 3 },
+      { readyState: 3, CLOSED: 3 } as CustomWebSocket,
     );
   });
 
   it('should initialize a room', () => {
     (getSuffledDeck as jest.Mock).mockReturnValue(deck);
     const initialRoom = new Room('a');
+
     expect(initialRoom).toEqual({
       activePlayer: null,
       configuration: {
@@ -185,7 +186,7 @@ describe('room', () => {
     updatedRoom.roundWinner = 'tata';
     updatedRoom.activePlayer = 'toto';
 
-    updatedRoom.reset();
+    updatedRoom.reset({ resetScore: true });
 
     expect(updatedRoom).toEqual({
       ...room,
@@ -193,5 +194,8 @@ describe('room', () => {
       activePlayer: 'tata',
       roundWinner: null,
     });
+
+    expect(updatedRoom.getPlayers()[0].score).toEqual(0);
+    expect(updatedRoom.getPlayers()[0].scoreHistory).toEqual([]);
   });
 });
