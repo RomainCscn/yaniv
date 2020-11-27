@@ -1,4 +1,4 @@
-import { sortHand } from '../../core/game/cards';
+import { sortHand } from '../../core/cards';
 import { Player } from '../../core/player';
 import { Room } from '../../core/room';
 import { Card, PlayedCards } from '../../types';

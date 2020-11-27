@@ -1,5 +1,6 @@
+import { getCardValue } from './cards';
 import { findCardIndex } from './helpers';
-import { Card, CustomWebSocket, InitialPlayer, MessageType, Sort } from '../types';
+import { Card, CustomWebSocket, FormattedPlayer, InitialPlayer, MessageType, Sort } from '../types';
 
 export class Player {
   avatar = '';
@@ -15,6 +16,31 @@ export class Player {
   constructor(player: InitialPlayer, ws: CustomWebSocket) {
     Object.assign(this, player);
     this.ws = ws;
+  }
+
+  addScore(scoreToAdd: number): void {
+    this.score += scoreToAdd;
+    this.scoreHistory.push(this.score);
+  }
+
+  format(): FormattedPlayer {
+    return {
+      avatar: this.avatar,
+      numberOfCards: this.hand.length,
+      score: this.score,
+      scoreHistory: this.scoreHistory,
+      sort: this.sort,
+      username: this.username,
+      uuid: this.uuid,
+    };
+  }
+
+  handScore(): number {
+    return this.hand.reduce((sum: number, card) => sum + getCardValue(card), 0);
+  }
+
+  hasLost(smallestScore: number): boolean {
+    return smallestScore <= this.handScore();
   }
 
   removeCardFromHand(card: Card): void {

@@ -1,4 +1,4 @@
-import { getHand, getSuffledDeck } from './game/cards';
+import { getHand, getSuffledDeck } from './cards';
 import { Player } from './player';
 import {
   Card,
@@ -7,6 +7,7 @@ import {
   InitialPlayer,
   MessageType,
   Players,
+  PlayerScore,
   RoomConfiguration,
 } from '../types';
 
@@ -53,27 +54,13 @@ export class Room {
   }
 
   getFormattedPlayer(uuid: string): FormattedPlayer {
-    const { avatar, hand, sort, username } = this.players[uuid];
-
-    return {
-      avatar,
-      numberOfCards: hand.length,
-      sort,
-      username,
-      uuid,
-    };
+    return this.players[uuid].format();
   }
 
   getFormattedPlayers(): FormattedPlayer[] {
     return Object.values(this.players)
       .filter((player) => player.ws.readyState !== player.ws.CLOSED)
-      .map((player) => ({
-        avatar: player.avatar,
-        numberOfCards: player.hand.length,
-        sort: player.sort,
-        uuid: player.uuid,
-        username: player.username,
-      }));
+      .map((player) => player.format());
   }
 
   getPlayers(): Player[] {
@@ -88,7 +75,7 @@ export class Room {
     return this.players[playerUuid];
   }
 
-  getPlayersScore(): Pick<Player, 'score' | 'scoreHistory' | 'username' | 'uuid'>[] {
+  getPlayersScore(): PlayerScore[] {
     return Object.entries(this.players).map(([uuid, player]: [string, Player]) => ({
       score: player.score,
       scoreHistory: player.scoreHistory,
@@ -99,20 +86,6 @@ export class Room {
 
   getPlayerUuidBySessionUuid(sessionUuid: string): string | undefined {
     return Object.values(this.players).find((player) => player.sessionUuid === sessionUuid)?.uuid;
-  }
-
-  reset({ resetScore = false, resetActivePlayer = false } = {}): void {
-    this.deck = getSuffledDeck();
-    this.thrownCards = [];
-    this.activePlayer = resetActivePlayer ? null : this.roundWinner || Object.keys(this.players)[0];
-    this.roundWinner = null;
-
-    if (resetScore) {
-      Object.entries(this.players).forEach(([, player]) => {
-        player.score = 0;
-        player.scoreHistory = [];
-      });
-    }
   }
 
   getSortedThrownCards(): Card[] {
@@ -136,6 +109,24 @@ export class Room {
     }
 
     return sortedCards;
+  }
+
+  reset({ resetScore = false, resetActivePlayer = false } = {}): void {
+    this.deck = getSuffledDeck();
+    this.thrownCards = [];
+    this.activePlayer = resetActivePlayer ? null : this.roundWinner || Object.keys(this.players)[0];
+    this.roundWinner = null;
+
+    if (resetScore) {
+      Object.entries(this.players).forEach(([, player]) => {
+        player.score = 0;
+        player.scoreHistory = [];
+      });
+    }
+  }
+
+  scoreLimit(): number {
+    return this.configuration.scoreLimit;
   }
 
   updatePlayer(playerUuid: string, player: Partial<Player>): void {

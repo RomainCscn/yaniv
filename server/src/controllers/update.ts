@@ -1,15 +1,8 @@
-import { sortHand } from '../core/game/cards';
+import { sortHand } from '../core/cards';
 import { Room } from '../core/room';
-import { InitialPlayer, SortOrder, SortType } from '../types';
+import { InitialPlayer, Sort } from '../types';
 
-const handleUpdate = (
-  room: Room,
-  { avatar, username, uuid }: InitialPlayer,
-  sort?: {
-    order: SortOrder;
-    type: SortType;
-  },
-): void => {
+const handleUpdate = (room: Room, { avatar, username, uuid }: InitialPlayer, sort?: Sort): void => {
   const player = room.getPlayerByUuid(uuid);
 
   if (sort) {

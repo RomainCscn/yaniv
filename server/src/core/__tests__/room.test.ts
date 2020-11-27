@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getHand } from '../game/cards';
-import { getSuffledDeck } from '../game/cards';
+import { getHand, getSuffledDeck } from '../cards';
 import { Player } from '../player';
 import { Room } from '../room';
 import { Card, CustomWebSocket } from '../../types';
 
 const mockRooms = jest.fn();
 
-jest.mock('../game/cards.ts');
-jest.mock('../game/scores.ts');
+jest.mock('../cards');
+jest.mock('../scores');
 jest.mock('../rooms', () => ({
   __esModule: true,
   get default() {
@@ -118,14 +117,16 @@ describe('room', () => {
 
   it('should return formatted player', () => {
     expect(room.getFormattedPlayer('1')).toEqual({
-      uuid: '1',
-      username: 'a',
       avatar: '123',
       numberOfCards: 0,
+      score: 0,
+      scoreHistory: [],
       sort: {
         order: 'asc',
         type: 'suit',
       },
+      username: 'a',
+      uuid: '1',
     });
   });
 
@@ -134,6 +135,8 @@ describe('room', () => {
       {
         avatar: '123',
         numberOfCards: 0,
+        score: 0,
+        scoreHistory: [],
         sort: {
           order: 'asc',
           type: 'suit',
@@ -144,6 +147,8 @@ describe('room', () => {
       {
         avatar: '123',
         numberOfCards: 0,
+        score: 0,
+        scoreHistory: [],
         sort: {
           order: 'asc',
           type: 'suit',

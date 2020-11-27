@@ -1,6 +1,6 @@
 import { getCardValue, getHand, getSuffledDeck, sortHand } from '../cards';
-import { Room } from '../../room';
-import { Card } from '../../../types';
+import { Room } from '../room';
+import { Card } from '../../types';
 
 const deck: Card[] = [
   { suit: 'club', value: 1 },

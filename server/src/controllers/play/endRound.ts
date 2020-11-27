@@ -1,79 +1,45 @@
-import { Player } from '../../core/player';
 import { Room } from '../../core/room';
-import { getHandScores, getSmallestScore } from '../../core/game/scores';
-import { Score } from '../../types';
-
-const getPlayersHandScore = (playersHandScore: Score[], playerUuid: string) => ({
-  currentPlayerHandScore: playersHandScore.find((s) => s.uuid === playerUuid)?.score,
-  otherPlayersHandScore: playersHandScore.filter((s) => s.uuid !== playerUuid),
-});
-
-const getSmallestScores = (otherPlayersHandScore: Score[]) => ({
-  smallestScore: getSmallestScore(otherPlayersHandScore),
-  smallestOtherPlayersHandScore: otherPlayersHandScore.filter(
-    (s) => s.score === getSmallestScore(otherPlayersHandScore),
-  ),
-});
+import {
+  getHandScores,
+  getPlayerAboveScoreLimit,
+  getSmallestScore,
+  getSmallestScores,
+  addScoreToPlayers,
+  getWinner,
+} from '../../core/scores';
 
 export const handleEndRound = (room: Room, playerUuid: string): void => {
-  const playersHandScore = getHandScores(room);
-  const { currentPlayerHandScore, otherPlayersHandScore } = getPlayersHandScore(
-    playersHandScore,
-    playerUuid,
-  );
-  const { smallestScore, smallestOtherPlayersHandScore } = getSmallestScores(otherPlayersHandScore);
+  const player = room.getPlayerByUuid(playerUuid);
+  const playersHandScore = getHandScores(room.players);
+  const otherPlayersHandScore = playersHandScore.filter((s) => s.uuid !== playerUuid);
+  const smallestScore = getSmallestScore(otherPlayersHandScore);
+  const smallestOtherPlayersHandScore = getSmallestScores(otherPlayersHandScore);
 
-  const currentPlayerLost =
-    Object.keys(smallestOtherPlayersHandScore).length > 0 &&
-    smallestScore <= (currentPlayerHandScore ?? 0);
-
-  if (currentPlayerLost) {
-    room.roundWinner = smallestOtherPlayersHandScore[0].uuid;
-
-    playersHandScore.forEach(({ uuid, score }) => {
-      let scoreToAdd = score;
-
-      if (smallestOtherPlayersHandScore.map((s) => s.uuid).includes(uuid)) {
-        scoreToAdd = 0;
-      } else if (playerUuid === uuid) {
-        scoreToAdd = score + 30;
-      }
-
-      room.players[uuid].score += scoreToAdd;
-      room.players[uuid].scoreHistory.push(room.players[uuid].score);
-    });
+  if (player.hasLost(smallestScore)) {
+    const winnersUuid = smallestOtherPlayersHandScore.map(({ uuid }) => uuid);
+    room.roundWinner = winnersUuid[0];
+    addScoreToPlayers(playerUuid, playersHandScore, room.players, winnersUuid);
   } else {
     room.roundWinner = playerUuid;
-
-    playersHandScore.forEach(({ uuid, score }) => {
-      room.players[uuid].score += uuid === playerUuid ? 0 : score;
-      room.players[uuid].scoreHistory.push(room.players[uuid].score);
-    });
+    addScoreToPlayers(playerUuid, playersHandScore, room.players);
   }
 
-  const playersScore = room.getPlayersScore();
-
-  const playerAboveScoreLimit = playersScore.find(
-    (playerScore) => playerScore.score >= room.configuration.scoreLimit,
-  );
+  const players = room.getFormattedPlayers();
+  const playerAboveScoreLimit = getPlayerAboveScoreLimit(players, room.scoreLimit());
 
   if (playerAboveScoreLimit) {
-    const winner = playersScore.reduce((previous, current) =>
-      previous.score < current.score ? previous : current,
-    );
-
-    room.dispatch({ type: 'GAME_OVER', data: { winner: room.getFormattedPlayer(winner.uuid) } });
+    room.dispatch({ type: 'GAME_OVER', data: { winner: getWinner(players) } });
   }
 
   const playersCard = Object.fromEntries(
-    Object.entries(room.players).map(([uuid, player]: [string, Player]) => [uuid, player.hand]),
+    Object.values(room.players).map((player) => [player.uuid, player.hand]),
   );
 
   room.dispatch({
     type: 'END_OF_ROUND_UPDATE',
     data: {
       playersCard,
-      playersScore,
+      playersScore: players,
       roundWinner: room.getFormattedPlayer(room.roundWinner),
       yanivCaller: room.getFormattedPlayer(playerUuid),
     },
