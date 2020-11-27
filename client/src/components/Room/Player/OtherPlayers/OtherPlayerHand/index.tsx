@@ -1,18 +1,21 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
+import Circle from '../Circle';
 import Dots from '../Dots';
+import YanivText from '../YanivText';
 import ActualScore from '../../Score/ActualScore';
 import AvatarImage from '../../../../shared/Avatar/AvatarImage';
 import GenericCard from '../../../GenericCard';
 import { Card } from '../../../../../types';
 
-const Container = styled.div<{ isActivePlayer: boolean }>`
+const Container = styled.div<{ reduceOpacity: boolean }>`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  ${({ isActivePlayer }) =>
-    !isActivePlayer &&
+  ${({ reduceOpacity }) =>
+    reduceOpacity &&
     css`
       opacity: 0.5;
     `}
@@ -31,39 +34,12 @@ const AvatarContainer = styled.div`
   align-items: center;
 `;
 
-const Circle = styled.div<{ isActivePlayer: boolean }>`
-  background: #f0fdf4;
-  width: 280px;
-  height: 140px;
-  border-bottom-left-radius: 280px;
-  border-bottom-right-radius: 280px;
-  position: absolute;
-  z-index: -1;
-  border: 2px solid #bbf7d0;
-  border-top: none;
-  transition: all 0.5s ease-out;
-
-  @media screen and (max-height: 850px) {
-    width: 230px;
-    height: 120px;
-    border-bottom-left-radius: 230px;
-    border-bottom-right-radius: 230px;
-  }
-
-  ${({ isActivePlayer }) =>
-    isActivePlayer
-      ? css`
-          top: 0;
-        `
-      : css`
-          top: -140px;
-        `}
-`;
-
 interface OtherPlayerHandProps {
   avatar: string;
   hand?: Card[];
   isActivePlayer: boolean;
+  isEndRound: boolean;
+  isYanivCaller: boolean;
   numberOfCards?: number;
   score: number;
   username: string;
@@ -73,12 +49,14 @@ const OtherPlayerHand = ({
   avatar,
   hand,
   isActivePlayer,
+  isEndRound,
+  isYanivCaller,
   numberOfCards,
   score,
   username,
 }: OtherPlayerHandProps) => {
   return (
-    <Container isActivePlayer={isActivePlayer}>
+    <Container reduceOpacity={!isActivePlayer && !isEndRound}>
       <BottomContainer>
         <AvatarContainer>
           <AvatarImage id={avatar} isSmall={true} />
@@ -105,9 +83,10 @@ const OtherPlayerHand = ({
                 isLast={index === numberOfCards! - 1}
               />
             ))}
-        {isActivePlayer && <Dots />}
+        {isActivePlayer && !isEndRound && <Dots />}
       </div>
-      <Circle isActivePlayer={isActivePlayer} />
+      {isEndRound && isYanivCaller && <YanivText />}
+      {!isEndRound && <Circle isActivePlayer={isActivePlayer} />}
     </Container>
   );
 };

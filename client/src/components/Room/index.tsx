@@ -136,8 +136,10 @@ const Room = ({ players, roomId, setPlay, playerUuid }: RoomProps) => {
         <RoomContainer>
           <OtherPlayers
             activePlayer={activePlayer}
+            isEndRound={!!gameWinner || !!roundWinner}
             otherPlayers={cardState.otherPlayers}
             scores={scores}
+            yanivCaller={yanivCaller}
           />
           {!roundWinner && (
             <div>

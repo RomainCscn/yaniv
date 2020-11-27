@@ -23,23 +23,13 @@ const WinnerText = styled(DefaultWinnerText)`
   margin-bottom: 24px;
 `;
 
-const YanivCallerContainer = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
 const RoundOver = ({ roundWinner, roomId, playerUuid, yanivCaller }: Props) => {
   const { t } = useTranslation('room');
 
   return (
     <Container>
       <WinnerText>{roundWinner.uuid === playerUuid ? t('end.win') : t('end.lose')}</WinnerText>
-      {yanivCaller && yanivCaller?.uuid !== playerUuid && (
-        <YanivCallerContainer>
-          <Avatar id={yanivCaller.avatar} />
-          {yanivCaller?.username} {t('end.called')}
-        </YanivCallerContainer>
-      )}
+
       {roundWinner.uuid !== playerUuid && (
         <AvatarContainer>
           <div>{t('end.roundWinner')}</div>
