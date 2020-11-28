@@ -12,7 +12,7 @@ interface CardImageProps {
 const appear = keyframes`
   0% {
     opacity: 0;
-    top: -64px;
+    top: -36px;
   }
 
   50% {
@@ -89,7 +89,7 @@ const CardImage = styled.img<CardImageProps>`
   ${({ isNew }) =>
     isNew &&
     css`
-      animation: ${appear} 2s forwards;
+      animation: ${appear} 1.5s cubic-bezier(0.215, 0.61, 0.355, 1);
     `}
 `;
 
