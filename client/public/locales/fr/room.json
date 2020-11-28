@@ -4,11 +4,12 @@
   },
   "end": {
     "gameOver": "Fin de la partie",
-    "congrats": "Bravo",
+    "gameWinner": "a gagné la partie",
+    "playerWon": "Bravo, vous avez gagné !",
     "win": "Gagné 🥳",
     "lose": "Perdu",
     "called": "YANIV !",
-    "roundWinner": "Gagnant de la manche"
+    "roundWinner": "a gagné la manche"
   },
   "menu": {
     "quit": "QUITTER LA PARTIE",

@@ -4,11 +4,12 @@
   },
   "end": {
     "gameOver": "Game over",
-    "congrats": "Well done",
+    "gameWinner": "won the game",
+    "playerWon": "Congrats, you won!",
     "win": "You won 🥳",
     "lose": "You lost",
     "called": "YANIV!",
-    "roundWinner": "Round winner"
+    "roundWinner": "won the round"
   },
   "menu": {
     "quit": "LEAVE THE GAME",

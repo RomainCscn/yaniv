@@ -48,6 +48,10 @@ const RoomContainer = styled.div`
   }
 `;
 
+const CenterContainer = styled.div`
+  margin-bottom: 3em;
+`;
+
 const CardsContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -142,7 +146,7 @@ const Room = ({ players, roomId, setPlay, playerUuid }: RoomProps) => {
             yanivCaller={yanivCaller}
           />
           {!roundWinner && (
-            <div>
+            <CenterContainer>
               <PlayersTurn>{canPlay ? t('yourTurn') : ''}</PlayersTurn>
               <CardsContainer>
                 <ThrownCards
@@ -158,7 +162,7 @@ const Room = ({ players, roomId, setPlay, playerUuid }: RoomProps) => {
               {previousPlayer && previousPlayer.uuid !== playerUuid && (
                 <PickedCardAnnouncement previousPlayer={previousPlayer} pickedCard={pickedCard} />
               )}
-            </div>
+            </CenterContainer>
           )}
           {(gameWinner || roundWinner) && (
             <EndRound

@@ -30,7 +30,7 @@ export const HandContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 246px;
+  min-height: 213px;
 
   @media screen and (max-height: 850px) {
     min-height: 170px;

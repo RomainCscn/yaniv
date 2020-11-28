@@ -25,7 +25,7 @@ const YanivText = () => {
             range: [0, 0.2, 0.5, 1],
             output: [1, 0.7, 1.5, 1],
           })
-          .interpolate((x) => `scale(${x})`),
+          .interpolate((x: number) => `scale(${x}) rotate(4deg)`),
       }}
     >
       {t('end.called')}
