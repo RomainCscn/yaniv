@@ -18,38 +18,35 @@ const Container = styled.div<{ isSelf: boolean }>`
 `;
 
 const MessageContainer = styled.div`
-  margin: 6px;
+  margin: 0.4em;
   display: flex;
   flex-direction: column;
 `;
 
 const MessageContent = styled.div<{ isSelf: boolean }>`
-  padding: 12px;
+  padding: 0.8em;
   max-width: 150px;
-  border-radius: 12px;
+  border-radius: 0.8em;
   word-break: break-word;
   background-color: ${({ isSelf }) => (isSelf ? '#BEE3F8' : '#EDF2F7')};
   color: ${({ isSelf }) => (isSelf ? '#2A4365' : '#2D3748')};
-
-  @media screen and (max-height: 850px) {
-    font-size: 14px;
-  }
+  font-size: 0.9rem;
 `;
 
 const MessageSender = styled.div`
-  margin-bottom: 2px;
-  font-size: 12px;
+  margin-bottom: 0.1em;
+  font-size: 0.6rem;
   color: #718096;
 `;
 
 const MessageDate = styled.div`
-  margin: 3px 0 0 3px;
-  font-size: 10px;
+  margin: 0.1em 0 0 0.1em;
+  font-size: 0.6rem;
   color: #718096;
 `;
 
 const AvatarImage = styled(Avatar)`
-  width: 24px;
+  width: 1.2em;
   padding: 0;
 `;
 

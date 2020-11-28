@@ -7,7 +7,7 @@ import { ReactComponent as SendIcon } from '../../../../assets/icons/send.svg';
 
 const Container = styled.div`
   background-color: #edf2f7;
-  padding: 24px 12px;
+  padding: 1.2em 0.8em;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -22,7 +22,7 @@ const TextInput = styled(Input)`
 `;
 
 const SendButton = styled.div`
-  margin-left: 12px;
+  margin-left: 0.8em;
   cursor: pointer;
 `;
 

@@ -62,6 +62,7 @@ wss.on('connection', (ws: CustomWebSocket) => {
       const { notPickedCards, pickedCard, thrownCards } = data;
       handlePlay(actionType, room, { notPickedCards, pickedCard, thrownCards }, data.player.uuid);
     } else if (action === 'MESSAGE') {
+      const { message } = data;
       handleChat(room, data.player.uuid, message);
     }
   });

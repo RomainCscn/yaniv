@@ -24,17 +24,16 @@ const ChatContainer = styled.div`
 `;
 
 const MessagesContainer = styled.div`
-  padding: 12px 12px;
+  padding: 1em 0.5em;
   overflow: auto;
-  height: calc(100vh - 184px);
+  height: calc(100vh - 134px);
 `;
 
 const HideButton = styled.button`
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 1em;
+  right: 1em;
   border: none;
-  padding: 12px;
   font-size: 1rem;
   font-weight: bold;
   color: #2c5282;
@@ -42,25 +41,23 @@ const HideButton = styled.button`
   cursor: pointer;
 `;
 
-const ChatButton = styled(HideButton)`
-  top: 24px;
-  right: 24px;
+const ChatButton = styled.div`
+  position: absolute;
+  padding: 0.8em;
+  top: 1em;
+  right: 1em;
   display: flex;
   align-items: center;
   border: 1px solid #2c5282;
-  border-radius: 12px;
+  border-radius: 0.8em;
   background-color: white;
-
-  @media screen and (max-height: 850px) {
-    top: 12px;
-    right: 12px;
-  }
+  cursor: pointer;
 `;
 
 const ChatNotification = styled.div`
   position: absolute;
-  width: 14px;
-  height: 14px;
+  width: 0.9em;
+  height: 0.9em;
   background: #e53e3e;
   top: -4px;
   right: -4px;
@@ -69,12 +66,11 @@ const ChatNotification = styled.div`
 `;
 
 const MessagesHeader = styled.div`
-  padding: 12px;
+  padding: 1rem;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 1rem;
   display: flex;
   align-items: center;
-  height: 40px;
   background-color: #edf2f7;
 `;
 
