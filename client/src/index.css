@@ -25,13 +25,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 :root {
-  font-size: 0.75em;
+  font-size: 0.8em;
+  box-sizing: border-box;
 }
 
 @media screen and (min-height: 850px) {
   :root {
     font-size: 1em;
   }
+}
+
+*,
+::before,
+::after {
+  box-sizing: inherit;
 }
 
 body {

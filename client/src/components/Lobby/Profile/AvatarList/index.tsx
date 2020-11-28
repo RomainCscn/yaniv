@@ -1,7 +1,13 @@
 import React from 'react';
+import styled from 'styled-components';
 
 import Avatar from '../../../shared/Avatar/AvatarImage';
 import AVATARS from '../../../shared/Avatar/index';
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
 interface Props {
   selectedAvatar: string;
@@ -10,7 +16,7 @@ interface Props {
 
 const AvatarList = ({ selectedAvatar, setAvatar }: Props) => {
   return (
-    <div>
+    <Container>
       {AVATARS.map((avatar) => (
         <Avatar
           key={avatar[0]}
@@ -19,7 +25,7 @@ const AvatarList = ({ selectedAvatar, setAvatar }: Props) => {
           setAvatar={setAvatar}
         />
       ))}
-    </div>
+    </Container>
   );
 };
 

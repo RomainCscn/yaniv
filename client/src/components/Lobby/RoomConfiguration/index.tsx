@@ -1,8 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Container, ParameterContainer, ValueButton } from './styles';
-import { ButtonContainer, SectionTitle, Label } from '../styles';
+import { ParameterContainer, ValueButton } from './styles';
+import { ButtonContainer, Container, SectionTitle, Label } from '../styles';
 import Button from '../../shared/Button';
 import { send } from '../../../core/client';
 
@@ -42,7 +42,7 @@ const RoomConfiguration = ({
   };
 
   return (
-    <Container>
+    <Container color='gray'>
       <SectionTitle color='gray'>{t('room.title')}</SectionTitle>
       <Label>{t('room.cardsNumber')}</Label>
       <ParameterContainer>

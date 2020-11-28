@@ -3,31 +3,30 @@ import styled from 'styled-components';
 export const Link = styled.a`
   text-align: center;
   font-weight: bold;
-  font-size: 26px;
+  font-size: 1.5rem;
   color: #2b6cb0;
-  margin-right: 24px;
+  margin-right: 1em;
 `;
 
 export const LinkContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 1em;
 `;
 
 export const LinkText = styled.p`
   font-style: italic;
-  font-size: 22px;
+  font-size: 1.5rem;
   text-align: center;
 `;
 
 export const CopyButton = styled.button`
-  padding: 0 12px;
-  font-size: 18px;
-  height: 42px;
+  padding: 0.8em;
+  font-size: 1.2rem;
   font-weight: bold;
   border: none;
-  border-radius: 12px;
+  border-radius: 0.8em;
   background-color: #4299e1;
   color: #f0fff4;
   cursor: pointer;

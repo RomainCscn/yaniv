@@ -4,13 +4,13 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   font-family: 'Roboto', sans-serif;
-  padding: 24px;
+  padding: 1em;
   display: flex;
   justify-content: center;
 `;
 
 const Text = styled.span`
-  margin-left: 24px;
+  margin-left: 1.5em;
 
   &:first-child {
     margin-left: 0;
@@ -22,7 +22,7 @@ const Text = styled.span`
 `;
 
 const Language = styled.span`
-  margin-left: 24px;
+  margin-left: 1.5em;
   cursor: pointer;
   color: #075985;
   text-decoration: underline;

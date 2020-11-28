@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
 
 import AvatarList from './AvatarList';
 import { ButtonContainer, Container, Label, SectionTitle } from '../styles';
@@ -7,6 +8,10 @@ import Button from '../../shared/Button';
 import Input from '../../shared/Input';
 import { send } from '../../../core/client';
 import { Player } from '../../../types';
+
+const Field = styled.div`
+  margin-bottom: 1.5em;
+`;
 
 interface Props {
   player: Player;
@@ -27,13 +32,11 @@ const Profile = ({ roomId, player, setPlayer }: Props) => {
   return (
     <Container color='indigo'>
       <SectionTitle color='indigo'>{t('profile.title')}</SectionTitle>
-      <div style={{ marginBottom: '24px' }}>
+      <Field>
         <Label>{t('profile.name')}</Label>
         <Input value={player.username} onChange={setUsername} />
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <AvatarList selectedAvatar={player.avatar} setAvatar={setAvatar} />
-      </div>
+      </Field>
+      <AvatarList selectedAvatar={player.avatar} setAvatar={setAvatar} />
       <ButtonContainer>
         <Button color={'purple'} onClick={updatePlayerInformation}>
           {t('update')}

@@ -4,19 +4,19 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   width: 600px;
-  padding: 6px 16px;
-  margin: 18px;
+  padding: 0.5em 1em;
+  margin: 0.8em;
   font-family: 'Roboto';
 
   li {
-    margin-bottom: 12px;
+    margin-bottom: 0.8em;
   }
 `;
 
 const Title = styled.h2`
   font-family: 'Simplicity';
-  font-size: 48px;
-  margin: 12px 0;
+  font-size: 3rem;
+  margin: 0.5em 0;
   color: #4a5568;
 `;
 

@@ -19,13 +19,13 @@ const YanivText = () => {
   return (
     <Text
       style={{
-        opacity: x.interpolate({ range: [0, 1], output: [0, 1] }),
+        opacity: x.to({ range: [0, 1], output: [0, 1] }) as any,
         transform: x
-          .interpolate({
+          .to({
             range: [0, 0.2, 0.5, 1],
             output: [1, 0.7, 1.5, 1],
           })
-          .interpolate((x: number) => `scale(${x}) rotate(4deg)`),
+          .to((x: number) => `scale(${x}) rotate(4deg)`),
       }}
     >
       {t('end.called')}

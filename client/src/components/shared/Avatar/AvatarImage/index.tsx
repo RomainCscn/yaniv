@@ -24,10 +24,6 @@ const Image = styled.img<{ canClick: boolean; selected?: boolean; small?: boolea
     css`
       border-bottom: 3px solid #667eea;
     `}
-
-  @media screen and (max-height: 850px) {
-    width: 30px;
-  }
 `;
 
 interface Props {
