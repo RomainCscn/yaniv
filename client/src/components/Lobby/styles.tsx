@@ -76,7 +76,7 @@ export const SectionTitle = styled.h2<SectionTitleProps>`
   letter-spacing: 1px;
   font-family: 'Simplicity';
   font-size: 3rem;
-  margin: 0 0 0.2em;
+  margin: 0 0 0.4em;
   ${({ color }) => colors.text[color]};
 `;
 

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Error, PlayersAvatarContainer, PlayerContainer, PlayerName } from './styles';
 import { ButtonContainer, Container, SectionTitle } from '../styles';
-import AVATARS from '../../shared/Avatar';
+import Avatar from '../../shared/Avatar/AvatarImage';
 import Button from '../../shared/Button';
 import { send } from '../../../core/client';
 import { CustomError, Player } from '../../../types';
@@ -33,11 +33,7 @@ const Players = ({ error, players, roomId, currentPlayer }: Props) => {
       <PlayersAvatarContainer>
         {players.map((player) => (
           <PlayerContainer key={player.uuid}>
-            <img
-              width={50}
-              src={AVATARS.find((avatar) => avatar[0] === player.avatar)![1]}
-              alt={player.avatar}
-            />
+            <Avatar id={player.avatar} />
             <PlayerName>
               {player.username} {player.uuid === currentPlayer.uuid && t('players.you')}
             </PlayerName>
