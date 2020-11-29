@@ -53,12 +53,12 @@ const handleActiveBorderColor = (color: Color) => {
 };
 
 const Button = styled.button<{ color?: Color }>`
-  padding: 0 12px;
+  padding: 0 0.5em;
   font-size: 2rem;
   height: 60px;
   font-weight: bold;
   border: none;
-  border-radius: 12px;
+  border-radius: 0.5em;
   cursor: pointer;
   ${({ color }) => color && handleColor(color)};
 

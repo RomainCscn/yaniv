@@ -7,22 +7,7 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding-bottom: 24px;
-
-  @media screen and (max-height: 850px) {
-    padding-bottom: 12px;
-  }
-`;
-
-export const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 92px;
-  right: -192px;
-  @media screen and (max-height: 850px) {
-    top: 56px;
-  }
+  padding-bottom: 1.2em;
 `;
 
 export const HandContainer = styled.div`
@@ -30,7 +15,7 @@ export const HandContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 213px;
+  min-height: calc(175px + 2em); // to handle selected cards margin
 
   @media screen and (max-height: 850px) {
     min-height: 170px;
@@ -44,7 +29,7 @@ export const AvatarContainer = styled.div`
 
 export const ScoreContainer = styled.div`
   width: 400px;
-  margin-top: 12px;
+  margin-top: 0.8em;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -62,7 +47,6 @@ export const ActivePlayer = styled.div<{ isActivePlayer: boolean }>`
   border-top-right-radius: 650px;
   position: absolute;
   z-index: -1;
-  bottom: -24px;
   border: 2px solid #bbf7d0;
   border-bottom: none;
   transition: all 0.5s ease-out;
@@ -79,9 +63,9 @@ export const ActivePlayer = styled.div<{ isActivePlayer: boolean }>`
   ${({ isActivePlayer }) =>
     isActivePlayer
       ? css`
-          bottom: -24px;
+          bottom: -2.5em;
         `
       : css`
-          bottom: -324px;
+          bottom: -350px;
         `}
 `;

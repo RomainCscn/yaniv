@@ -6,7 +6,7 @@ import { ReactComponent as TrophyIcons } from '../../../../assets/icons/trophy.s
 const Score = ({ isOtherPlayer, score }: { isOtherPlayer?: boolean; score: number }) => {
   return (
     <ScoreContainer isOtherPlayer={isOtherPlayer}>
-      <TrophyIcons style={{ marginLeft: '-2px' }} fill={'#2c7a7b'} height={31} />
+      <TrophyIcons fill={'#2c7a7b'} height={'2rem'} />
       {score}
     </ScoreContainer>
   );

@@ -8,12 +8,12 @@ type Color = 'orange';
 const Container = styled.div<{ color: Color }>`
   position: absolute;
   min-width: 600px;
-  padding: 36px;
+  padding: 2em;
   z-index: 99;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  border-radius: 12px;
+  border-radius: 1em;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   ${({ color }) => {
     switch (color) {
@@ -26,8 +26,8 @@ const Container = styled.div<{ color: Color }>`
 `;
 
 const Title = styled.h2<{ color: Color }>`
-  margin-bottom: 64px;
-  font-size: 32px;
+  margin-bottom: 2em;
+  font-size: 2rem;
   ${({ color }) => {
     switch (color) {
       case 'orange':
@@ -39,16 +39,14 @@ const Title = styled.h2<{ color: Color }>`
 `;
 
 const Text = styled.p`
-  margin-bottom: 64px;
-  font-size: 20px;
+  margin-bottom: 3em;
+  font-size: 1.2rem;
   font-family: 'Roboto', sans-serif;
 `;
 
 const Button = styled(DefaultButton)`
-  font-size: 20px;
-  height: 48px;
-  margin-right: 24px;
-  font-weight: normal;
+  font-size: 1.2rem;
+  margin-right: 1.5em;
 `;
 
 interface Props {

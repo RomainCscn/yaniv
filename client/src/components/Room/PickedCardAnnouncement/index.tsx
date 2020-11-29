@@ -17,12 +17,11 @@ const Container = styled.div`
   position: absolute;
   left: 50%;
   transform: translate(-50%, 0);
-  margin-top: 36px;
+  margin-top: 2em;
 `;
 
 const Text = styled.div`
-  font-size: 18px;
-  margin-right: 12px;
+  margin-right: 0.8em;
 `;
 
 const PickedCardAnnouncement = ({ pickedCard, previousPlayer }: Props) => {

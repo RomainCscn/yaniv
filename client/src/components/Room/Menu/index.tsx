@@ -23,43 +23,41 @@ const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px;
-  height: 64px;
+  padding: 0.8em;
   background-color: #18243d;
   position: relative;
 `;
 
 const Title = styled.h1`
-  font-size: 56px;
+  font-size: 3rem;
   margin: 0;
   font-family: 'Alloy';
   font-weight: normal;
 `;
 
 const CloseButton = styled.div`
-  width: 32px;
-  padding: 6px;
+  width: 2rem;
   cursor: pointer;
 `;
 
 const ContentContainer = styled.div`
-  padding: 12px;
+  padding: 0.8em;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: calc(100vh - 112px);
+  height: calc(100vh - 5em);
 `;
 
 const MenuButton = styled.button`
   position: absolute;
-  top: 24px;
-  left: 24px;
+  top: 1em;
+  left: 1em;
   display: inline-block;
-  padding: 12px;
+  padding: 0.8em;
   font-size: 1rem;
   font-weight: bold;
   border: 1px solid #2c5282;
-  border-radius: 12px;
+  border-radius: 0.8em;
   background-color: white;
   color: #2c5282;
   cursor: pointer;
@@ -67,12 +65,12 @@ const MenuButton = styled.button`
 `;
 
 const QuitButton = styled.button`
-  margin: 42px 0 12px;
-  padding: 12px;
+  margin: 3em 0 0.8em;
+  padding: 0.8em;
   font-size: 1rem;
   font-weight: bold;
   border: none;
-  border-radius: 12px;
+  border-radius: 0.8em;
   background-color: white;
   color: #1f2937;
   cursor: pointer;
@@ -86,7 +84,7 @@ const QuitButton = styled.button`
 `;
 
 const ScoreTitle = styled.h2`
-  margin: 56px 0 12px;
+  margin: 3rem 0 0.8em;
 `;
 
 interface Props {

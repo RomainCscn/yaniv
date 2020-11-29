@@ -31,11 +31,11 @@ const cardStyle = {
     z-index: -1;
   `,
   hand: css`
-    margin-right: -64px;
+    margin-right: -4em;
     align-self: flex-end;
 
     @media screen and (max-height: 850px) {
-      margin-right: -46px;
+      margin-right: -3em;
     }
   `,
   stack: css`
@@ -61,7 +61,7 @@ const CardImage = styled.img<CardImageProps>`
   transition: all 0.1s ease-in;
   width: 126px;
   height: 175px;
-  margin-right: -64px;
+  margin-right: -4em;
   position: relative;
   cursor: ${({ canClick }) => (canClick ? 'pointer' : 'default')};
   transform: ${({ degree }) => (degree ? `rotate(${degree}deg)` : 'rotate(0)')};
@@ -84,7 +84,7 @@ const CardImage = styled.img<CardImageProps>`
   ${({ isSelected }) =>
     isSelected &&
     css`
-      margin-bottom: 36px;
+      margin-bottom: 2em;
     `}
   ${({ isNew }) =>
     isNew &&

@@ -5,7 +5,7 @@ import { ReactComponent as CrownIcon } from '../../../../assets/icons/crown.svg'
 import { PlayerScore } from '../../../../types';
 
 const Container = styled.div`
-  margin-top: 12px;
+  margin-top: 0.8em;
   max-height: 400px;
   overflow: auto;
 `;
@@ -14,7 +14,7 @@ const Table = styled.table`
   border-collapse: separate;
   border-spacing: 0;
   background-color: #222f44;
-  border-radius: 6px;
+  border-radius: 0.3em;
   color: white;
   border: solid 2px #3b4a61;
   width: 100%;
@@ -29,7 +29,7 @@ const Table = styled.table`
 const TableCell = styled.div<{ isWinningCell: boolean }>`
   display: flex;
   align-items: center;
-  padding: 6px 12px;
+  padding: 0.3em 0.8em;
   ${({ isWinningCell }) =>
     isWinningCell &&
     css`
@@ -40,7 +40,7 @@ const TableCell = styled.div<{ isWinningCell: boolean }>`
 const TableHeader = styled.th`
   background-color: #172035;
   color: #ebf8ff;
-  padding: 6px 12px;
+  padding: 0.5em 0.8em;
   text-align: left;
 
   &:first-child {

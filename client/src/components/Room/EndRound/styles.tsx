@@ -18,11 +18,11 @@ export const Container = styled.div`
 
 export const WinnerText = styled.div`
   font-weight: bold;
-  font-size: 32px;
+  font-size: 2rem;
   text-align: center;
 `;
 
 export const WinnerUsername = styled.span`
   font-weight: bold;
-  font-size: 24px;
+  font-size: 1.5rem;
 `;

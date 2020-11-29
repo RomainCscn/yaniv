@@ -15,7 +15,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 64px;
+  margin-right: 4em;
 `;
 
 const ThrownCards = ({ canPlay, pickCard, thrownCards }: ThrownCardsProps) => {

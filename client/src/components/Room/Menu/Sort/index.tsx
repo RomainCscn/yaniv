@@ -20,13 +20,13 @@ const Container = styled.div`
 
 const Title = styled.h2`
   font-family: 'Kurri';
-  margin-top: 32px;
-  margin-bottom: 12px;
+  margin-top: 2em;
+  margin-bottom: 0.8em;
 `;
 
 const Subtitle = styled.div`
-  margin: 16px 0 12px;
-  font-size: 20px;
+  margin: 1em 0 0.8em;
+  font-size: 1.2rem;
 `;
 
 const SortItems = styled.form`
@@ -35,7 +35,7 @@ const SortItems = styled.form`
 `;
 
 const SortItem = styled.label`
-  margin-bottom: 3px;
+  margin-bottom: 0.2em;
   display: flex;
   align-items: center;
 
@@ -45,7 +45,7 @@ const SortItem = styled.label`
 `;
 
 const SortLabel = styled.span`
-  margin-left: 6px;
+  margin-left: 0.5em;
 `;
 
 const Sort = ({ playerSort, playerUuid, roomId }: Props) => {

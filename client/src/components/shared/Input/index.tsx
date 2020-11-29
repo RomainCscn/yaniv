@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 const Input = styled.input`
-  font-size: 16px;
-  padding: 12px;
-  border-radius: 6px;
+  font-size: 1rem;
+  padding: 0.8em;
+  border-radius: 0.5em;
   appearance: none;
   background-color: #ebf4ff;
   border-width: 2px;

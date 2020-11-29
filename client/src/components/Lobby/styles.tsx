@@ -97,8 +97,8 @@ export const Title = styled.h1`
 
 export const Languages = styled.div`
   position: absolute;
-  top: 24px;
-  left: 24px;
+  top: 1em;
+  left: 1em;
   display: flex;
   font-family: 'Roboto', sans-serif;
   cursor: pointer;

@@ -15,7 +15,7 @@ interface YanivButtonProps {
 }
 
 const Button = styled(DefaultButton)<{ canClick: boolean }>`
-  font-size: 24px;
+  font-size: 1.5rem;
   height: 48px;
 
   @media screen and (max-height: 850px) {

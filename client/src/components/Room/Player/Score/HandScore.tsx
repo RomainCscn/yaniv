@@ -6,7 +6,7 @@ import { ReactComponent as CardsIcons } from '../../../../assets/icons/playing-c
 const Score = ({ score }: { score: number }) => {
   return (
     <ScoreContainer isHandScore>
-      <CardsIcons fill={'#4c51bf'} /> {score}
+      <CardsIcons style={{ marginRight: '2px' }} fill={'#4c51bf'} height={'2rem'} /> {score}
     </ScoreContainer>
   );
 };

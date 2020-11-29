@@ -6,11 +6,11 @@ interface Props {
 }
 
 const ScoreContainer = styled.div<Props>`
-  border-radius: 12px;
+  border-radius: 0.8em;
   color: #2c7a7b;
-  padding: 6px;
+  padding: 0.4em;
   font-weight: bold;
-  height: 36px;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,7 +19,6 @@ const ScoreContainer = styled.div<Props>`
     isHandScore &&
     css`
       color: #4c51bf;
-      width: 46px;
     `}
 
   ${({ isOtherPlayer }) =>

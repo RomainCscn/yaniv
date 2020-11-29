@@ -16,13 +16,6 @@ import { canDropCards, getCardsAfterPick } from '../../core/game';
 import { Card, Player } from '../../types';
 import useMultiplayer from '../../hooks/useMultiplayer';
 
-interface RoomProps {
-  players: Player[];
-  roomId: string;
-  setPlay: (b: boolean) => void;
-  playerUuid: string;
-}
-
 const Container = styled.div<{ showModal: boolean }>`
   display: grid;
   grid-template-columns: 1fr auto;
@@ -36,16 +29,11 @@ const Container = styled.div<{ showModal: boolean }>`
 
 const RoomContainer = styled.div`
   position: relative;
-  padding: 24px 24px 0;
+  padding: 1.2em 1.2em 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: calc(100vh - 24px);
-
-  @media screen and (max-height: 850px) {
-    padding: 12px;
-    height: calc(100vh - 12px);
-  }
+  height: 100vh;
 `;
 
 const CenterContainer = styled.div`
@@ -60,11 +48,17 @@ const CardsContainer = styled.div`
 
 const PlayersTurn = styled.p`
   text-align: center;
-  min-height: 25px;
-  margin-bottom: 24px;
-  font-size: 18px;
+  font-size: 1.2rem;
   font-weight: bold;
+  min-height: 2em;
 `;
+
+interface RoomProps {
+  players: Player[];
+  roomId: string;
+  setPlay: (b: boolean) => void;
+  playerUuid: string;
+}
 
 const Room = ({ players, roomId, setPlay, playerUuid }: RoomProps) => {
   const { t } = useTranslation('room');
