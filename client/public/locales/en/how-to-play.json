@@ -1,5 +1,6 @@
 {
   "title": "How to play",
+  "goal": "The objective of the game is to earn the fewest points in each round. The player with the fewest points at the end of the game is the winner.",
   "selectCard": {
     "part1": "Click on one or more cards in your hand to select it/them (see ",
     "here": "here",

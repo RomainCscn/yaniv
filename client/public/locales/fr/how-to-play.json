@@ -1,5 +1,6 @@
 {
   "title": "Comment jouer",
+  "goal": "Le but du jeu est de totaliser le moins de points possible. La partie se termine lorsqu’un des joueurs atteint le score limite. Le gagnant est alors celui qui a le moins de points.",
   "selectCard": {
     "part1": "Cliquez sur une ou plusieurs cartes de votre main pour la/les sélectionner (voir ",
     "here": "ici",

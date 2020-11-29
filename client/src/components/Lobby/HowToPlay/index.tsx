@@ -34,6 +34,7 @@ const HowToPlay = () => {
       <Title>{t('title')}</Title>
       <div>
         <ul>
+          <li>{t('goal')}</li>
           <li>
             {t('selectCard.part1')}
             <Link target='_blank' rel='noopener noreferrer' href={t('selectCard.link')}>
