@@ -7,7 +7,7 @@ import { handleWebSocketClosed } from './core/network';
 import { Room } from './core/room';
 import rooms from './core/rooms';
 import handleMessage from './handlers';
-import { getData } from './helpers';
+import { getData, getWSInterval } from './helpers';
 import logger from './logger';
 import { CustomWebSocket } from './types';
 
@@ -47,20 +47,7 @@ wss.on('connection', (ws: CustomWebSocket) => {
   };
 });
 
-const interval = setInterval(() => {
-  wss.clients.forEach((ws: WebSocket) => {
-    const customWs = ws as CustomWebSocket;
-
-    if (!customWs.isAlive) {
-      logger.warn('Player disconnected due to inactive WebSocket');
-
-      return customWs.terminate();
-    }
-
-    customWs.isAlive = false;
-    customWs.ping(null, undefined);
-  });
-}, 10000);
+const interval = getWSInterval(wss);
 
 wss.on('close', () => {
   clearInterval(interval);
