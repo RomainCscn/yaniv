@@ -38,7 +38,7 @@ const RoomConfiguration = ({
   const { t } = useTranslation('lobby');
 
   const updateRoomConfiguration = () => {
-    send(roomId, { action: 'CONFIGURATION' }, { handCardsNumber, scoreLimit });
+    send(roomId, { action: 'CONFIGURATION' }, { configuration: { handCardsNumber, scoreLimit } });
   };
 
   return (

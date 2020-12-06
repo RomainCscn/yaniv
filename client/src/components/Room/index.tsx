@@ -111,7 +111,7 @@ const Room = ({ players, roomId, setPlay, playerUuid }: RoomProps) => {
       const cards = getCardsAfterPick(card, cardState.selectedCards, cardState.thrownCards);
 
       resetSelectedCards();
-      send(roomId, { action: 'PLAY', actionType: 'DROP_AND_PICK' }, { ...cards, player });
+      send(roomId, { action: 'PLAY', actionType: 'DROP_AND_PICK' }, { cards, player });
     }
   };
 

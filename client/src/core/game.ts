@@ -68,8 +68,8 @@ const getCardsAfterPick = (card: undefined | Card, selectedCards: Card[], thrown
     );
 
     return {
-      pickedCard: card,
       notPickedCards: remainingThrownCards,
+      pickedCard: card,
       thrownCards: selectedCards,
     };
   } else {

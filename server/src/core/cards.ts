@@ -1,5 +1,6 @@
 import { SUIT_ORDER, SUITS, VALUES } from '../constants';
-import { Card, Room, Sort, SortOrder } from '../types';
+import { Room } from '../core/room';
+import { Card, Sort, SortOrder } from '../types';
 
 export const getCardValue = (card: Card): number =>
   card.suit === 'joker' ? 0 : card.value <= 10 ? card.value : 10;

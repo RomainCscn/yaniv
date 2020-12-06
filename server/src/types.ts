@@ -1,6 +1,7 @@
 import * as WebSocket from 'ws';
 
 import { Player } from './core/player';
+import { Room } from './core/room';
 import { JOKER, SUITS, VALUES } from './constants';
 export interface CustomWebSocket extends WebSocket {
   isAlive: boolean;
@@ -29,6 +30,24 @@ export interface Card {
   value: typeof VALUES[number] | 98 | 99;
 }
 
+export interface Data {
+  action: Action;
+  actionType: ActionType;
+  cards: PlayedCards;
+  configuration: RoomConfiguration;
+  message: string;
+  player: InitialPlayer;
+  roomId: string;
+  sessionUuid: string;
+  sort: Sort;
+  ws: CustomWebSocket;
+}
+
+export type Handler = (
+  room: Room,
+  data: Data & { sessionUuid: string; ws: CustomWebSocket },
+) => void;
+
 export interface FormattedPlayer {
   avatar: string;
   numberOfCards: number;
@@ -40,39 +59,6 @@ export interface FormattedPlayer {
 }
 
 export type InitialPlayer = Pick<Player, 'avatar' | 'sort' | 'username' | 'uuid'>;
-
-export interface Message {
-  content: string;
-  player: FormattedPlayer;
-  time: string;
-}
-
-export interface PlayedCards {
-  notPickedCards: undefined | Card[];
-  pickedCard: undefined | Card;
-  thrownCards: Card[];
-}
-
-export type Players = Record<string, Player>;
-
-export type RoomConfiguration = {
-  handCardsNumber: 5 | 7;
-  scoreLimit: 100 | 200;
-};
-
-export interface Room {
-  activePlayer: null | string;
-  configuration: RoomConfiguration;
-  deck: Card[];
-  roundWinner: null | string;
-  thrownCards: Card[];
-  players: Players;
-}
-
-export interface Score {
-  uuid: string;
-  score: number;
-}
 
 export type MessageType =
   | 'ASSIGN_UUID'
@@ -92,6 +78,24 @@ export type MessageType =
   | 'SET_PLAYER_HAND'
   | 'SET_THROWN_CARDS'
   | 'START_GAME';
+
+export interface PlayedCards {
+  notPickedCards: undefined | Card[];
+  pickedCard: undefined | Card;
+  thrownCards: Card[];
+}
+
+export type Players = Record<string, Player>;
+
+export type RoomConfiguration = {
+  handCardsNumber: 5 | 7;
+  scoreLimit: 100 | 200;
+};
+
+export interface Score {
+  uuid: string;
+  score: number;
+}
 
 export type Sort = {
   order: SortOrder;

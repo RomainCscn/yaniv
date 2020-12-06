@@ -1,4 +1,5 @@
 import { Room } from '../core/room';
+import { Data } from '../types';
 
 const pickActivePlayer = (room: Room) => {
   const playersNumber = room.getPlayersUuid().length;
@@ -7,8 +8,8 @@ const pickActivePlayer = (room: Room) => {
   room.activePlayer = firstPlayerUuid;
 };
 
-const handleReadyToPlay = (room: Room, playerUuid: string): void => {
-  const player = room.getPlayerByUuid(playerUuid);
+const handleReadyToPlay = (room: Room, { player: { uuid } }: Data): void => {
+  const player = room.getPlayerByUuid(uuid);
 
   if (!room.activePlayer) {
     pickActivePlayer(room);

@@ -5,22 +5,17 @@ import { handlePlayAgain } from './playAgain';
 import { handleQuickPlay } from './quickPlay';
 
 import { Room } from '../../core/room';
-import { ActionType, PlayedCards } from '../../types';
+import { Data } from '../../types';
 
-const handlePlay = (
-  actionType: ActionType,
-  room: Room,
-  cards: PlayedCards,
-  playerUuid: string,
-): void => {
-  const player = room.getPlayerByUuid(playerUuid);
+const handlePlay = (room: Room, { actionType, cards, player: { uuid } }: Data): void => {
+  const player = room.getPlayerByUuid(uuid);
 
   if (actionType === 'DROP_AND_PICK') {
     handleDropAndPick(room, player, cards);
   } else if (actionType === 'QUICK_PLAY') {
     handleQuickPlay(room, player, cards);
   } else if (actionType === 'YANIV') {
-    handleEndRound(room, playerUuid);
+    handleEndRound(room, uuid);
   } else if (actionType === 'NEXT_ROUND') {
     handleNextRound(room);
   } else if (actionType === 'PLAY_AGAIN') {

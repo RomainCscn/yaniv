@@ -77,7 +77,7 @@ const PlayerHand = ({
     send(
       roomId,
       { action: 'PLAY', actionType: 'QUICK_PLAY' },
-      { thrownCards: [...thrownCards, card], player },
+      { cards: { thrownCards: [...thrownCards, card] }, player },
     );
   };
 
