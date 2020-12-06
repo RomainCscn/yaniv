@@ -3,14 +3,16 @@ import { Room } from '../core/room';
 import { Data } from '../types';
 
 const handleUpdate = (room: Room, { player: { avatar, username, uuid }, sort }: Data): void => {
-  const player = room.getPlayerByUuid(uuid);
+  const updateSort = () => {
+    const player = room.getPlayerByUuid(uuid);
 
-  if (sort) {
     room.updatePlayer(uuid, { sort });
     player.send({ type: 'PLAYER_UPDATE', data: { sort } });
     player.send({ type: 'SET_PLAYER_HAND', data: { hand: sortHand(player.hand, sort) } });
+  };
 
-    return;
+  if (sort) {
+    return updateSort();
   }
 
   room.updatePlayer(uuid, { avatar, username });

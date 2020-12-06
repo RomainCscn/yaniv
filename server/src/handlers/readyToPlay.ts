@@ -2,8 +2,8 @@ import { Room } from '../core/room';
 import { Data } from '../types';
 
 const pickActivePlayer = (room: Room) => {
-  const playersNumber = room.getPlayersUuid().length;
-  const firstPlayerUuid = room.getPlayersUuid()[Math.floor(Math.random() * playersNumber)];
+  const playersUuid = room.getPlayersUuid();
+  const firstPlayerUuid = playersUuid[Math.floor(Math.random() * playersUuid.length)];
 
   room.activePlayer = firstPlayerUuid;
 };
