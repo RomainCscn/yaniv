@@ -4,6 +4,7 @@ import client from '../core/client';
 import { getSortedOtherPlayers } from '../core/utils';
 import cardReducer from '../reducers/cardReducer';
 import chatReducer from '../reducers/chatReducer';
+import playersReducer from '../reducers/playersReducer';
 import { Card, NewCard, Player, PlayerScore, ReceivedMessage } from '../types';
 
 interface Props {
@@ -12,12 +13,15 @@ interface Props {
 
 export default function useMultiplayer({ playerUuid }: Props) {
   const [cardState, cardDispatch] = useReducer(cardReducer, {
-    otherPlayers: [],
     selectedCards: [],
     thrownCards: [],
   });
   const [chatState, chatDispatch] = useReducer(chatReducer, {
     messages: [],
+  });
+  const [playersState, playersDispatch] = useReducer(playersReducer, {
+    player: null,
+    otherPlayers: [],
   });
   const [activePlayer, setActivePlayer] = useState<string>('');
   const [canPlay, setCanPlay] = useState(false);
@@ -25,7 +29,6 @@ export default function useMultiplayer({ playerUuid }: Props) {
   const [hand, setHand] = useState<Card[]>([]);
   const [newCard, setNewCard] = useState<NewCard>();
   const [pickedCard, setPickedCard] = useState<Card>();
-  const [player, setPlayer] = useState<Player>();
   const [playerQuit, setPlayerQuit] = useState(false);
   const [previousPlayer, setPreviousPlayer] = useState<Player>();
   const [quickPlayDone, setQuickPlayDone] = useState(false);
@@ -46,7 +49,7 @@ export default function useMultiplayer({ playerUuid }: Props) {
         setNewCard(newCardInHand);
       } else if (data.type === 'PLAYER_UPDATE') {
         window.localStorage.setItem('player', JSON.stringify(data.player));
-        setPlayer(player);
+        playersDispatch({ type: 'SET_PLAYER', player: data.player });
       } else if (data.type === 'SET_THROWN_CARDS') {
         const { thrownCards } = data;
         setQuickPlayDone(false);
@@ -59,21 +62,21 @@ export default function useMultiplayer({ playerUuid }: Props) {
           setNewCard(undefined); // reset new card if a card is picked by another player
         }
       } else if (data.type === 'PLAYERS_UPDATE') {
-        if (!player) {
+        if (!playersState.player) {
           const currentPlayer = data.players.find((p) => p.uuid === playerUuid);
-          setPlayer(currentPlayer);
+          playersDispatch({ type: 'SET_PLAYER', player: currentPlayer });
         }
 
         const otherPlayers = getSortedOtherPlayers(data.players, playerUuid);
 
         if (
-          cardState.otherPlayers.length !== 0 &&
-          cardState.otherPlayers.length !== otherPlayers.length
+          playersState.otherPlayers.length !== 0 &&
+          playersState.otherPlayers.length !== otherPlayers.length
         ) {
           setPlayerQuit(true);
         } else {
           setPlayerQuit(false);
-          cardDispatch({ type: 'setOtherPlayers', payload: otherPlayers });
+          playersDispatch({ type: 'UPDATE_OTHER_PLAYERS', otherPlayers });
         }
       } else if (data.type === 'QUICK_PLAY_DONE') {
         setQuickPlayDone(true);
@@ -84,7 +87,7 @@ export default function useMultiplayer({ playerUuid }: Props) {
         setScores(playersScore);
         setRoundWinner(roundWinner);
         setYanivCaller(yanivCaller);
-        cardDispatch({ type: 'setOtherPlayersWithCards', payload: playersCard });
+        playersDispatch({ type: 'UPDATE_OTHER_PLAYERS_CARDS', playersCard });
       } else if (data.type === 'SET_INITIAL_SCORES') {
         const { playersScore } = data;
         setScores(playersScore);
@@ -105,7 +108,7 @@ export default function useMultiplayer({ playerUuid }: Props) {
         chatDispatch({ type: 'NEW_MESSAGE', payload: data.message });
       }
     };
-  }, [cardState.otherPlayers.length, player, playerUuid]);
+  }, [playersState.otherPlayers.length, playersState.player, playerUuid]);
 
   const resetOnMessage = useCallback(() => (client.onmessage = null), []);
 
@@ -120,8 +123,9 @@ export default function useMultiplayer({ playerUuid }: Props) {
     hand,
     newCard,
     pickedCard,
-    player,
+    player: playersState.player,
     playerQuit,
+    playersState,
     previousPlayer,
     quickPlayDone,
     resetOnMessage,

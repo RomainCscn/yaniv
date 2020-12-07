@@ -76,6 +76,7 @@ const Room = ({ roomId, setPlay, playerUuid }: RoomProps) => {
     pickedCard,
     player,
     playerQuit,
+    playersState,
     previousPlayer,
     quickPlayDone,
     resetOnMessage,
@@ -135,7 +136,7 @@ const Room = ({ roomId, setPlay, playerUuid }: RoomProps) => {
               <OtherPlayers
                 activePlayer={activePlayer}
                 isEndRound={!!gameWinner || !!roundWinner}
-                otherPlayers={cardState.otherPlayers}
+                otherPlayers={playersState.otherPlayers}
                 scores={scores}
                 yanivCaller={yanivCaller}
               />
