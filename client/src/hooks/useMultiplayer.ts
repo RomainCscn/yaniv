@@ -5,13 +5,9 @@ import { getSortedOtherPlayers } from '../core/utils';
 import cardReducer from '../reducers/cardReducer';
 import chatReducer from '../reducers/chatReducer';
 import playersReducer from '../reducers/playersReducer';
-import { Card, NewCard, Player, PlayerScore, ReceivedMessage } from '../types';
+import { Card, NewCard, Player, PlayerScore, ReceivedMessage, ReceivedMessageType } from '../types';
 
-interface Props {
-  playerUuid: string;
-}
-
-export default function useMultiplayer({ playerUuid }: Props) {
+export default function useMultiplayer({ playerUuid }: { playerUuid: string }) {
   const [cardState, cardDispatch] = useReducer(cardReducer, {
     selectedCards: [],
     thrownCards: [],
@@ -37,31 +33,32 @@ export default function useMultiplayer({ playerUuid }: Props) {
   const [shouldGoBackToLobby, setShouldGoBackToLobby] = useState<boolean>(false);
   const [yanivCaller, setYanivCaller] = useState<Player>();
 
-  useEffect(() => {
-    client.onmessage = (message) => {
-      const data: ReceivedMessage = JSON.parse(message.data);
-
-      if (data.type === 'BACK_TO_LOBBY') {
-        setShouldGoBackToLobby(true);
-      } else if (data.type === 'SET_PLAYER_HAND') {
-        const { newCardInHand, hand } = data;
-        setHand(hand);
-        setNewCard(newCardInHand);
-      } else if (data.type === 'PLAYER_UPDATE') {
+  const getHandlers = useCallback(
+    (data: ReceivedMessage): { [Key in ReceivedMessageType]?: Function } => ({
+      BACK_TO_LOBBY: () => setShouldGoBackToLobby(true),
+      END_OF_ROUND_UPDATE: () => {
+        const { playersCard, playersScore, roundWinner, yanivCaller } = data;
+        setActivePlayer('');
+        setCanPlay(false);
+        setScores(playersScore);
+        setRoundWinner(roundWinner);
+        setYanivCaller(yanivCaller);
+        playersDispatch({ type: 'UPDATE_OTHER_PLAYERS_CARDS', playersCard });
+      },
+      GAME_OVER: () => setGameWinner(data.winner),
+      NEW_MESSAGE: () => chatDispatch({ type: 'NEW_MESSAGE', payload: data.message }),
+      NEW_ROUND: () => {
+        cardDispatch({ type: 'newRound' });
+        setGameWinner(undefined);
+        setPreviousPlayer(undefined);
+        setPickedCard(undefined);
+        setRoundWinner(undefined);
+      },
+      PLAYER_UPDATE: () => {
         window.localStorage.setItem('player', JSON.stringify(data.player));
         playersDispatch({ type: 'SET_PLAYER', player: data.player });
-      } else if (data.type === 'SET_THROWN_CARDS') {
-        const { thrownCards } = data;
-        setQuickPlayDone(false);
-        cardDispatch({ type: 'setThrownCards', payload: thrownCards });
-      } else if (data.type === 'SET_PICKED_CARD') {
-        const { pickedCard, previousPlayer } = data;
-        setPreviousPlayer(previousPlayer);
-        setPickedCard(pickedCard);
-        if (previousPlayer.uuid !== playerUuid) {
-          setNewCard(undefined); // reset new card if a card is picked by another player
-        }
-      } else if (data.type === 'PLAYERS_UPDATE') {
+      },
+      PLAYERS_UPDATE: () => {
         if (!playersState.player) {
           const currentPlayer = data.players.find((p) => p.uuid === playerUuid);
           playersDispatch({ type: 'SET_PLAYER', player: currentPlayer });
@@ -78,37 +75,44 @@ export default function useMultiplayer({ playerUuid }: Props) {
           setPlayerQuit(false);
           playersDispatch({ type: 'UPDATE_OTHER_PLAYERS', otherPlayers });
         }
-      } else if (data.type === 'QUICK_PLAY_DONE') {
-        setQuickPlayDone(true);
-      } else if (data.type === 'END_OF_ROUND_UPDATE') {
-        const { playersCard, playersScore, roundWinner, yanivCaller } = data;
-        setActivePlayer('');
-        setCanPlay(false);
-        setScores(playersScore);
-        setRoundWinner(roundWinner);
-        setYanivCaller(yanivCaller);
-        playersDispatch({ type: 'UPDATE_OTHER_PLAYERS_CARDS', playersCard });
-      } else if (data.type === 'SET_INITIAL_SCORES') {
-        const { playersScore } = data;
-        setScores(playersScore);
-      } else if (data.type === 'SET_ACTIVE_PLAYER') {
+      },
+      QUICK_PLAY_DONE: () => setQuickPlayDone(true),
+      SET_ACTIVE_PLAYER: () => {
         const { uuid } = data;
         setActivePlayer(uuid);
         setCanPlay(uuid === playerUuid);
-      } else if (data.type === 'NEW_ROUND') {
-        cardDispatch({ type: 'newRound' });
-        setGameWinner(undefined);
-        setPreviousPlayer(undefined);
-        setPickedCard(undefined);
-        setRoundWinner(undefined);
-      } else if (data.type === 'GAME_OVER') {
-        const { winner } = data;
-        setGameWinner(winner);
-      } else if (data.type === 'NEW_MESSAGE') {
-        chatDispatch({ type: 'NEW_MESSAGE', payload: data.message });
-      }
+      },
+      SET_INITIAL_SCORES: () => setScores(data.playersScore),
+      SET_PICKED_CARD: () => {
+        const { pickedCard, previousPlayer } = data;
+        setPreviousPlayer(previousPlayer);
+        setPickedCard(pickedCard);
+        if (previousPlayer.uuid !== playerUuid) {
+          setNewCard(undefined); // reset new card if a card is picked by another player
+        }
+      },
+      SET_PLAYER_HAND: () => {
+        const { newCardInHand, hand } = data;
+        setHand(hand);
+        setNewCard(newCardInHand);
+      },
+      SET_THROWN_CARDS: () => {
+        const { thrownCards } = data;
+        setQuickPlayDone(false);
+        cardDispatch({ type: 'setThrownCards', payload: thrownCards });
+      },
+    }),
+    [playersState.otherPlayers.length, playersState.player, playerUuid],
+  );
+
+  useEffect(() => {
+    client.onmessage = (message) => {
+      const data: ReceivedMessage = JSON.parse(message.data);
+
+      const handler = getHandlers(data)[data.type];
+      if (handler) handler();
     };
-  }, [playersState.otherPlayers.length, playersState.player, playerUuid]);
+  }, [getHandlers]);
 
   const resetOnMessage = useCallback(() => (client.onmessage = null), []);
 
