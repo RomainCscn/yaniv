@@ -5,6 +5,10 @@ import { BACK } from '../../../constants';
 import { getCardUniqueIndex, getCardImagePath } from '../../../core/utils';
 import { Card } from '../../../types';
 
+const getDataCy = (card?: Card, cardType?: 'false' | 'hand' | 'otherPlayer' | 'stack') => {
+  return card ? `${cardType}-card-${getCardUniqueIndex(card)}` : 'stack';
+};
+
 interface GenericCardProps {
   card?: Card;
   canClick: boolean;
@@ -29,6 +33,7 @@ const GenericCard = ({
   onCardDoubleClick,
 }: GenericCardProps) => (
   <CardImage
+    data-cy={getDataCy(card, cardType)}
     canClick={canClick}
     cardType={cardType}
     degree={degree}

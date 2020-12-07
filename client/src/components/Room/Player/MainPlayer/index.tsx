@@ -83,7 +83,7 @@ const PlayerHand = ({
 
   return (
     <Container>
-      <HandContainer>
+      <HandContainer data-cy='hand'>
         {hand.map((card, index) => (
           <CardComponent
             key={getCardUniqueIndex(card) + index}

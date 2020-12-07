@@ -16,14 +16,16 @@ interface Props {
 
 const ParameterButton = ({
   currentValue,
+  dataCy,
   setValue,
   value,
 }: {
   currentValue: number;
+  dataCy?: string;
   setValue: (v: number) => void;
   value: number;
 }) => (
-  <ValueButton selected={currentValue === value} onClick={() => setValue(value)}>
+  <ValueButton data-cy={dataCy} selected={currentValue === value} onClick={() => setValue(value)}>
     {value}
   </ValueButton>
 );
@@ -46,7 +48,12 @@ const RoomConfiguration = ({
       <SectionTitle color='gray'>{t('room.title')}</SectionTitle>
       <Label>{t('room.cardsNumber')}</Label>
       <ParameterContainer>
-        <ParameterButton currentValue={handCardsNumber} setValue={setHandCardsNumber} value={5} />
+        <ParameterButton
+          dataCy='cards-5'
+          currentValue={handCardsNumber}
+          setValue={setHandCardsNumber}
+          value={5}
+        />
         <ParameterButton currentValue={handCardsNumber} setValue={setHandCardsNumber} value={7} />
       </ParameterContainer>
       <Label>{t('room.scoreLimit')}</Label>
@@ -55,7 +62,7 @@ const RoomConfiguration = ({
         <ParameterButton currentValue={scoreLimit} setValue={setScoreLimit} value={200} />
       </ParameterContainer>
       <ButtonContainer>
-        <Button color={'gray'} onClick={updateRoomConfiguration}>
+        <Button data-cy='updateRoom' color={'gray'} onClick={updateRoomConfiguration}>
           {t('update')}
         </Button>
       </ButtonContainer>
