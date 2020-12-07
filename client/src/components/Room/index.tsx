@@ -68,15 +68,11 @@ const Room = ({ roomId, setPlay, playerUuid }: RoomProps) => {
     chatState,
     cardState,
     cardDispatch,
-    activePlayer,
     canPlay,
-    gameWinner,
-    hand,
     newCard,
     pickedCard,
-    player,
     playerQuit,
-    playersState,
+    playersState: { activePlayerUuid, gameWinner, otherPlayers, player },
     previousPlayer,
     quickPlayDone,
     resetOnMessage,
@@ -134,9 +130,9 @@ const Room = ({ roomId, setPlay, playerUuid }: RoomProps) => {
           <Container showModal={playerQuit || showModal}>
             <RoomContainer>
               <OtherPlayers
-                activePlayer={activePlayer}
+                activePlayer={activePlayerUuid}
                 isEndRound={!!gameWinner || !!roundWinner}
-                otherPlayers={playersState.otherPlayers}
+                otherPlayers={otherPlayers}
                 scores={scores}
                 yanivCaller={yanivCaller}
               />
@@ -171,13 +167,12 @@ const Room = ({ roomId, setPlay, playerUuid }: RoomProps) => {
                   yanivCaller={yanivCaller}
                 />
               )}
-
               <MainPlayer
                 canPlay={canPlay}
-                hand={hand}
+                hand={player.hand}
                 newCard={newCard}
                 quickPlayDone={quickPlayDone}
-                player={player!}
+                player={player}
                 resetSelectedCards={resetSelectedCards}
                 roomId={roomId}
                 score={scores.find((score) => score.uuid === playerUuid)?.score || 0}

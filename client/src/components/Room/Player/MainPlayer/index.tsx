@@ -27,7 +27,7 @@ interface PlayerHandProps {
 
 const PlayerHand = ({
   canPlay,
-  hand,
+  hand = [],
   newCard,
   player,
   quickPlayDone,
