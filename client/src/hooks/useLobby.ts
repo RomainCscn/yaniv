@@ -8,7 +8,12 @@ import { CustomError, Player, ReceivedMessage } from '../types';
 const randomAvatar = AVATARS[Math.floor(Math.random() * AVATARS.length)][0];
 const randomUsername = Math.random().toString(36).substring(7);
 
-const initialPlayer: Player = { avatar: randomAvatar, username: randomUsername, uuid: '' };
+const initialPlayer: Player = {
+  avatar: randomAvatar,
+  sort: { order: 'asc', type: 'suit' },
+  username: randomUsername,
+  uuid: '',
+};
 
 interface Props {
   roomId: string;
@@ -47,7 +52,6 @@ export default function useLobby({ roomId }: Props) {
       } else if (type === 'PLAYERS_UPDATE') {
         setPlayers(players);
       } else if (type === 'START_GAME') {
-        setPlayers(players);
         setPlay(true);
       }
     },

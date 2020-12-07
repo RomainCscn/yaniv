@@ -44,7 +44,7 @@ const Lobby = () => {
   return (
     <>
       {play ? (
-        <Room players={players} roomId={roomId} setPlay={setPlay} playerUuid={player.uuid} />
+        <Room roomId={roomId} setPlay={setPlay} playerUuid={player.uuid} />
       ) : (
         <>
           <Languages>

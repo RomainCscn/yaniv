@@ -7,7 +7,7 @@ const handleUpdate = (room: Room, { player: { avatar, username, uuid }, sort }: 
     const player = room.getPlayerByUuid(uuid);
 
     room.updatePlayer(uuid, { sort });
-    player.send({ type: 'PLAYER_UPDATE', data: { sort } });
+    player.send({ type: 'PLAYER_UPDATE', data: { player } });
     player.send({ type: 'SET_PLAYER_HAND', data: { hand: sortHand(player.hand, sort) } });
   };
 

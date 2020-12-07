@@ -4,17 +4,15 @@ import client from '../core/client';
 import { getSortedOtherPlayers } from '../core/utils';
 import cardReducer from '../reducers/cardReducer';
 import chatReducer from '../reducers/chatReducer';
-import { Card, NewCard, Player, PlayerScore, ReceivedMessage, Sort } from '../types';
+import { Card, NewCard, Player, PlayerScore, ReceivedMessage } from '../types';
 
 interface Props {
-  initialPlayers: Player[];
-  initialSort?: Sort;
   playerUuid: string;
 }
 
-export default function useMultiplayer({ initialPlayers, initialSort, playerUuid }: Props) {
+export default function useMultiplayer({ playerUuid }: Props) {
   const [cardState, cardDispatch] = useReducer(cardReducer, {
-    otherPlayers: initialPlayers.filter((player) => player.uuid !== playerUuid),
+    otherPlayers: [],
     selectedCards: [],
     thrownCards: [],
   });
@@ -27,12 +25,12 @@ export default function useMultiplayer({ initialPlayers, initialSort, playerUuid
   const [hand, setHand] = useState<Card[]>([]);
   const [newCard, setNewCard] = useState<NewCard>();
   const [pickedCard, setPickedCard] = useState<Card>();
+  const [player, setPlayer] = useState<Player>();
   const [playerQuit, setPlayerQuit] = useState(false);
   const [previousPlayer, setPreviousPlayer] = useState<Player>();
   const [quickPlayDone, setQuickPlayDone] = useState(false);
   const [roundWinner, setRoundWinner] = useState<Player>();
   const [scores, setScores] = useState<PlayerScore[]>([]);
-  const [sort, setSort] = useState<Sort>(initialSort || { order: 'asc', type: 'suit' });
   const [shouldGoBackToLobby, setShouldGoBackToLobby] = useState<boolean>(false);
   const [yanivCaller, setYanivCaller] = useState<Player>();
 
@@ -47,12 +45,8 @@ export default function useMultiplayer({ initialPlayers, initialSort, playerUuid
         setHand(hand);
         setNewCard(newCardInHand);
       } else if (data.type === 'PLAYER_UPDATE') {
-        const playerFromLocalStorage = JSON.parse(window.localStorage.getItem('player')!);
-        window.localStorage.setItem(
-          'player',
-          JSON.stringify({ ...playerFromLocalStorage, sort: data.sort }),
-        );
-        setSort(data.sort);
+        window.localStorage.setItem('player', JSON.stringify(data.player));
+        setPlayer(player);
       } else if (data.type === 'SET_THROWN_CARDS') {
         const { thrownCards } = data;
         setQuickPlayDone(false);
@@ -65,9 +59,17 @@ export default function useMultiplayer({ initialPlayers, initialSort, playerUuid
           setNewCard(undefined); // reset new card if a card is picked by another player
         }
       } else if (data.type === 'PLAYERS_UPDATE') {
+        if (!player) {
+          const currentPlayer = data.players.find((p) => p.uuid === playerUuid);
+          setPlayer(currentPlayer);
+        }
+
         const otherPlayers = getSortedOtherPlayers(data.players, playerUuid);
 
-        if (cardState.otherPlayers.length !== otherPlayers.length) {
+        if (
+          cardState.otherPlayers.length !== 0 &&
+          cardState.otherPlayers.length !== otherPlayers.length
+        ) {
           setPlayerQuit(true);
         } else {
           setPlayerQuit(false);
@@ -103,7 +105,7 @@ export default function useMultiplayer({ initialPlayers, initialSort, playerUuid
         chatDispatch({ type: 'NEW_MESSAGE', payload: data.message });
       }
     };
-  }, [cardState.otherPlayers.length, playerUuid]);
+  }, [cardState.otherPlayers.length, player, playerUuid]);
 
   const resetOnMessage = useCallback(() => (client.onmessage = null), []);
 
@@ -118,6 +120,7 @@ export default function useMultiplayer({ initialPlayers, initialSort, playerUuid
     hand,
     newCard,
     pickedCard,
+    player,
     playerQuit,
     previousPlayer,
     quickPlayDone,
@@ -125,7 +128,6 @@ export default function useMultiplayer({ initialPlayers, initialSort, playerUuid
     roundWinner,
     scores,
     shouldGoBackToLobby,
-    sort,
     yanivCaller,
   };
 }

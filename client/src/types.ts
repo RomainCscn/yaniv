@@ -24,7 +24,7 @@ export interface Player {
   numberOfCards?: number;
   score?: number;
   scoreHistory?: number[];
-  sort?: Sort;
+  sort: Sort;
   username: string;
   uuid: string;
 }
