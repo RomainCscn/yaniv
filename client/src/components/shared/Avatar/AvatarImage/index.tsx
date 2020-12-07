@@ -28,14 +28,16 @@ const Image = styled.img<{ canClick: boolean; selected?: boolean; small?: boolea
 
 interface Props {
   className?: any;
+  dataCy?: string;
   id: string;
   isSelected?: boolean;
   isSmall?: boolean;
   setAvatar?: (id: string) => void;
 }
 
-const Avatar = ({ className, id, isSelected, isSmall, setAvatar }: Props) => (
+const Avatar = ({ className, dataCy, id, isSelected, isSmall, setAvatar }: Props) => (
   <Image
+    data-cy={dataCy}
     canClick={typeof setAvatar === 'function'}
     className={className}
     selected={isSelected}

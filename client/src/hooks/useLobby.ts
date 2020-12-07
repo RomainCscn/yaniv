@@ -59,12 +59,12 @@ export default function useLobby({ roomId }: Props) {
   }, [player, roomId]);
 
   useEffect(() => {
-    if (client.readyState !== client.OPEN && client.onopen === null) {
+    if (client.readyState !== WebSocket.OPEN && !client.onopen) {
       client.onopen = () => {
         if (play === undefined) sendJoin(); // useful to handle back to lobby
         client.onmessage = handleMessage;
       };
-    } else if (client.readyState === client.OPEN && client.onmessage === null) {
+    } else if (client.readyState === WebSocket.OPEN && !client.onmessage) {
       if (play === undefined) sendJoin();
       client.onmessage = handleMessage;
     }

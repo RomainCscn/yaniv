@@ -19,6 +19,7 @@ const AvatarList = ({ selectedAvatar, setAvatar }: Props) => {
     <Container>
       {AVATARS.map((avatar) => (
         <Avatar
+          dataCy={avatar[0]}
           key={avatar[0]}
           id={avatar[0]}
           isSelected={selectedAvatar === avatar[0]}

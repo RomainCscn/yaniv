@@ -15,6 +15,7 @@
     "@types/styled-components": "^5.1.4",
     "@types/use-ackee": "^1.0.0",
     "classnames": "^2.2.6",
+    "cypress": "^6.0.1",
     "i18next": "^19.8.4",
     "i18next-browser-languagedetector": "^6.0.1",
     "i18next-http-backend": "^1.0.21",
@@ -34,7 +35,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --coverage",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cypress:open": "cypress open"
   },
   "eslintConfig": {
     "extends": [
@@ -55,6 +57,7 @@
     ]
   },
   "devDependencies": {
+    "eslint-plugin-cypress": "^2.11.2",
     "eslint-plugin-react-hooks": "^4.2.0",
     "typescript-plugin-css-modules": "^2.8.0"
   }

@@ -17,9 +17,11 @@ const ShareLink = () => {
 
   return (
     <div>
-      <LinkText>{t('share.text')}</LinkText>
+      <LinkText data-cy='shareText'>{t('share.text')}</LinkText>
       <LinkContainer>
-        <Link href={window.location.href}>{window.location.host + window.location.pathname}</Link>
+        <Link data-cy='shareLink' href={window.location.href}>
+          {window.location.host + window.location.pathname}
+        </Link>
         <CopyButton onClick={() => copyLink()}>{t('share.copy')}</CopyButton>
       </LinkContainer>
     </div>

@@ -34,11 +34,11 @@ const Profile = ({ roomId, player, setPlayer }: Props) => {
       <SectionTitle color='indigo'>{t('profile.title')}</SectionTitle>
       <Field>
         <Label>{t('profile.name')}</Label>
-        <Input value={player.username} onChange={setUsername} />
+        <Input data-cy='username' value={player.username} onChange={setUsername} />
       </Field>
       <AvatarList selectedAvatar={player.avatar} setAvatar={setAvatar} />
       <ButtonContainer>
-        <Button color={'purple'} onClick={updatePlayerInformation}>
+        <Button data-cy='updateProfile' color={'purple'} onClick={updatePlayerInformation}>
           {t('update')}
         </Button>
       </ButtonContainer>

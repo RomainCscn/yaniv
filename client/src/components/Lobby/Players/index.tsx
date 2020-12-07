@@ -31,18 +31,18 @@ const Players = ({ error, players, roomId, currentPlayer }: Props) => {
     <Container color='green'>
       <SectionTitle color='green'>{t('players.title')}</SectionTitle>
       <PlayersAvatarContainer>
-        {players.map((player) => (
-          <PlayerContainer key={player.uuid}>
-            <Avatar id={player.avatar} />
+        {players.map((player, index) => (
+          <PlayerContainer data-cy={`player-${index}`} key={player.uuid}>
+            <Avatar dataCy={`player-avatar-${player.avatar}`} id={player.avatar} />
             <PlayerName>
               {player.username} {player.uuid === currentPlayer.uuid && t('players.you')}
             </PlayerName>
           </PlayerContainer>
         ))}
       </PlayersAvatarContainer>
-      {error && <p>{t('players.inGame')}</p>}
+      {}
       <ButtonContainer>
-        <Button color={'green'} onClick={startGame}>
+        <Button data-cy='startButton' color={'green'} onClick={startGame}>
           {t('players.start')}
         </Button>
         {errorMessage && players.length < 2 && <Error>{errorMessage}</Error>}
