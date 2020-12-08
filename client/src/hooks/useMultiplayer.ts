@@ -5,7 +5,7 @@ import { getSortedOtherPlayers } from '../core/utils';
 import cardReducer from '../reducers/cardReducer';
 import chatReducer from '../reducers/chatReducer';
 import playersReducer from '../reducers/playersReducer';
-import { Card, NewCard, Player, PlayerScore, ReceivedMessage, ReceivedMessageType } from '../types';
+import { Card, NewCard, PlayerScore, ReceivedMessage, ReceivedMessageType } from '../types';
 
 export default function useMultiplayer({ playerUuid }: { playerUuid: string }) {
   const [cardState, cardDispatch] = useReducer(cardReducer, {
@@ -16,21 +16,21 @@ export default function useMultiplayer({ playerUuid }: { playerUuid: string }) {
     messages: [],
   });
   const [playersState, playersDispatch] = useReducer(playersReducer, {
-    activePlayerUuid: null,
+    activePlayerUuid: '',
     gameWinner: null,
     player: null,
     otherPlayers: [],
+    previousPlayer: null,
+    roundWinner: null,
+    yanivCaller: null,
   });
   const [canPlay, setCanPlay] = useState(false);
   const [newCard, setNewCard] = useState<NewCard>();
   const [pickedCard, setPickedCard] = useState<Card>();
   const [playerQuit, setPlayerQuit] = useState(false);
-  const [previousPlayer, setPreviousPlayer] = useState<Player>();
   const [quickPlayDone, setQuickPlayDone] = useState(false);
-  const [roundWinner, setRoundWinner] = useState<Player>();
   const [scores, setScores] = useState<PlayerScore[]>([]);
   const [shouldGoBackToLobby, setShouldGoBackToLobby] = useState<boolean>(false);
-  const [yanivCaller, setYanivCaller] = useState<Player>();
 
   const getHandlers = useCallback(
     (data: ReceivedMessage): { [Key in ReceivedMessageType]?: Function } => ({
@@ -39,19 +39,22 @@ export default function useMultiplayer({ playerUuid }: { playerUuid: string }) {
         const { playersCard, playersScore, roundWinner, yanivCaller } = data;
         setCanPlay(false);
         setScores(playersScore);
-        setRoundWinner(roundWinner);
-        setYanivCaller(yanivCaller);
-        playersDispatch({ type: 'SET_ACTIVE_PLAYER', activePlayerUuid: null });
+        playersDispatch({
+          type: 'END_OF_ROUND_UPDATE',
+          activePlayerUuid: '',
+          roundWinner,
+          yanivCaller,
+        });
         playersDispatch({ type: 'UPDATE_OTHER_PLAYERS_CARDS', playersCard });
       },
       GAME_OVER: () => playersDispatch({ type: 'SET_GAME_WINNER', gameWinner: data.winner }),
       NEW_MESSAGE: () => chatDispatch({ type: 'NEW_MESSAGE', payload: data.message }),
       NEW_ROUND: () => {
         cardDispatch({ type: 'newRound' });
-        playersDispatch({ type: 'SET_GAME_WINNER', gameWinner: null });
-        setPreviousPlayer(undefined);
         setPickedCard(undefined);
-        setRoundWinner(undefined);
+        playersDispatch({ type: 'SET_GAME_WINNER', gameWinner: undefined });
+        playersDispatch({ type: 'SET_PREVIOUS_PLAYER', previousPlayer: undefined });
+        playersDispatch({ type: 'SET_ROUND_WINNER', roundWinner: undefined });
       },
       PLAYER_UPDATE: () => {
         window.localStorage.setItem('player', JSON.stringify(data.player));
@@ -82,7 +85,7 @@ export default function useMultiplayer({ playerUuid }: { playerUuid: string }) {
       },
       SET_INITIAL_SCORES: () => setScores(data.playersScore),
       SET_PICKED_CARD: () => {
-        setPreviousPlayer(data.previousPlayer);
+        playersDispatch({ type: 'SET_PREVIOUS_PLAYER', previousPlayer: data.previousPlayer });
         setPickedCard(data.pickedCard);
         if (data.previousPlayer.uuid !== playerUuid) {
           setNewCard(undefined); // reset new card if a card is picked by another player
@@ -121,12 +124,9 @@ export default function useMultiplayer({ playerUuid }: { playerUuid: string }) {
     pickedCard,
     playerQuit,
     playersState,
-    previousPlayer,
     quickPlayDone,
     resetOnMessage,
-    roundWinner,
     scores,
     shouldGoBackToLobby,
-    yanivCaller,
   };
 }

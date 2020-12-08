@@ -13,7 +13,7 @@ import { Card, NewCard, Player } from '../../../../types';
 
 interface PlayerHandProps {
   canPlay: boolean;
-  hand: Card[];
+  hand?: Card[];
   newCard?: NewCard;
   player: Player;
   quickPlayDone: boolean;

@@ -65,21 +65,26 @@ const Room = ({ roomId, setPlay, playerUuid }: RoomProps) => {
   const [showModal, setShowModal] = useState(false);
 
   const {
-    chatState,
-    cardState,
+    chatState: { messages },
+    cardState: { selectedCards, thrownCards },
     cardDispatch,
     canPlay,
     newCard,
     pickedCard,
     playerQuit,
-    playersState: { activePlayerUuid, gameWinner, otherPlayers, player },
-    previousPlayer,
+    playersState: {
+      activePlayerUuid,
+      gameWinner,
+      otherPlayers,
+      player,
+      previousPlayer,
+      roundWinner,
+      yanivCaller,
+    },
     quickPlayDone,
     resetOnMessage,
-    roundWinner,
     scores,
     shouldGoBackToLobby,
-    yanivCaller,
   } = useMultiplayer({ playerUuid });
 
   useEffect(() => {
@@ -102,8 +107,8 @@ const Room = ({ roomId, setPlay, playerUuid }: RoomProps) => {
   const resetSelectedCards = () => cardDispatch({ type: 'resetSelectedCards' });
 
   const pickCard = (card?: Card) => {
-    if (canDropCards(cardState.selectedCards)) {
-      const cards = getCardsAfterPick(card, cardState.selectedCards, cardState.thrownCards);
+    if (canDropCards(selectedCards)) {
+      const cards = getCardsAfterPick(card, selectedCards, thrownCards);
 
       resetSelectedCards();
       send(roomId, { action: 'PLAY', actionType: 'DROP_AND_PICK' }, { cards, player });
@@ -141,14 +146,11 @@ const Room = ({ roomId, setPlay, playerUuid }: RoomProps) => {
                   <PlayersTurn>{canPlay ? t('yourTurn') : ''}</PlayersTurn>
                   <CardsContainer>
                     <ThrownCards
-                      canPlay={canPlay && cardState.selectedCards.length > 0}
+                      canPlay={canPlay && selectedCards.length > 0}
                       pickCard={pickCard}
-                      thrownCards={cardState.thrownCards}
+                      thrownCards={thrownCards}
                     />
-                    <Stack
-                      canPlay={canPlay && cardState.selectedCards.length > 0}
-                      pickCard={pickCard}
-                    />
+                    <Stack canPlay={canPlay && selectedCards.length > 0} pickCard={pickCard} />
                   </CardsContainer>
                   {previousPlayer && previousPlayer.uuid !== playerUuid && (
                     <PickedCardAnnouncement
@@ -177,11 +179,11 @@ const Room = ({ roomId, setPlay, playerUuid }: RoomProps) => {
                 roomId={roomId}
                 score={scores.find((score) => score.uuid === playerUuid)?.score || 0}
                 selectCard={selectCard}
-                selectedCards={cardState.selectedCards}
-                thrownCards={cardState.thrownCards}
+                selectedCards={selectedCards}
+                thrownCards={thrownCards}
               />
             </RoomContainer>
-            <Chat messages={chatState.messages} roomId={roomId} playerUuid={playerUuid} />
+            <Chat messages={messages} roomId={roomId} playerUuid={playerUuid} />
           </Container>
         </>
       )}
