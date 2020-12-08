@@ -17,6 +17,7 @@ const handleReadyToPlay = (room: Room, { player: { uuid } }: Data): void => {
 
   player.send({ type: 'PLAYERS_UPDATE', data: { players: room.getFormattedPlayers() } });
   player.send({ type: 'SET_ACTIVE_PLAYER', data: { uuid: room.activePlayer } });
+  player.send({ type: 'SET_PLAYER', data: { player: player.format() } });
   player.send({ type: 'SET_PLAYER_HAND', data: { hand: player.hand } });
   player.send({ type: 'SET_INITIAL_SCORES', data: { playersScore: room.getFormattedPlayers() } });
 

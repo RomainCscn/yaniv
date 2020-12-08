@@ -77,6 +77,7 @@ export type ReceivedMessageType =
   | 'QUICK_PLAY_DONE'
   | 'SET_ACTIVE_PLAYER'
   | 'SET_INITIAL_SCORES'
+  | 'SET_PLAYER'
   | 'SET_PLAYER_HAND'
   | 'SET_PICKED_CARD'
   | 'SET_THROWN_CARDS'
