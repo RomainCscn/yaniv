@@ -65,12 +65,10 @@ const Room = ({ roomId, setPlay, playerUuid }: RoomProps) => {
   const [showModal, setShowModal] = useState(false);
 
   const {
-    cardsState: { selectedCards, thrownCards },
+    cardsState: { newCard, pickedCard, selectedCards, thrownCards },
     cardsDispatch,
     canPlay,
-    newCard,
     messages,
-    pickedCard,
     playerQuit,
     playersState: {
       activePlayerUuid,

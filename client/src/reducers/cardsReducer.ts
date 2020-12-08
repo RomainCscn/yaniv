@@ -1,11 +1,13 @@
 import { canSelectCard } from '../core/game';
 import { findCardIndex } from '../core/utils';
-import { Card, Player } from '../types';
+import { Card, NewCard, Player } from '../types';
 
 enum ActionType {
   NEW_ROUND = 'NEW_ROUND',
   RESET_SELECTED_CARDS = 'RESET_SELECTED_CARDS',
   SELECT_CARD = 'SELECT_CARD',
+  SET_NEW_CARD = 'SET_NEW_CARD',
+  SET_PICKED_CARD = 'SET_PICKED_CARD',
   SET_THROWN_CARDS = 'SET_THROWN_CARDS',
 }
 
@@ -14,6 +16,8 @@ type ActionTypeKeys = keyof typeof ActionType;
 interface Action {
   type: ActionTypeKeys;
   payload?: Card | Card[] | Player[] | Record<string, Card[]>;
+  newCard?: NewCard;
+  pickedCard?: Card;
 }
 
 export const initialState = {
@@ -28,6 +32,20 @@ const cardsReducer = (state: any, action: Action) => {
     return {
       ...state,
       thrownCards: action.payload,
+    };
+  }
+
+  if (action.type === 'SET_NEW_CARD') {
+    return {
+      ...state,
+      newCard: action.newCard,
+    };
+  }
+
+  if (action.type === 'SET_PICKED_CARD') {
+    return {
+      ...state,
+      pickedCard: action.pickedCard,
     };
   }
 
@@ -64,7 +82,7 @@ const cardsReducer = (state: any, action: Action) => {
   }
 
   if (action.type === 'NEW_ROUND') {
-    return { ...state, thrownCards: [], selectedCards: [] };
+    return { ...state, pickedCard: undefined, thrownCards: [], selectedCards: [] };
   }
 
   return state;

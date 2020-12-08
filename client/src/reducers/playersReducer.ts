@@ -2,6 +2,7 @@ import { Card, Player } from '../types';
 
 enum ActionType {
   END_OF_ROUND_UPDATE = 'END_OF_ROUND_UPDATE',
+  NEW_ROUND = 'NEW_ROUND',
   SET_ACTIVE_PLAYER = 'SET_ACTIVE_PLAYER',
   SET_GAME_WINNER = 'SET_GAME_WINNER',
   SET_ROUND_WINNER = 'SET_ROUND_WINNER',
@@ -9,7 +10,6 @@ enum ActionType {
   SET_PLAYER_HAND = 'SET_PLAYER_HAND',
   SET_PREVIOUS_PLAYER = 'SET_PREVIOUS_PLAYER',
   UPDATE_OTHER_PLAYERS = 'UPDATE_OTHER_PLAYERS',
-  UPDATE_OTHER_PLAYERS_CARDS = 'UPDATE_OTHER_PLAYERS_CARDS',
 }
 
 type ActionTypeKeys = keyof typeof ActionType;
@@ -44,11 +44,26 @@ const getPlayerWithHand = (playersCard: Record<string, Card[]>, player: Player) 
 
 const playersReducer = (state: any, action: Action) => {
   if (action.type === 'END_OF_ROUND_UPDATE') {
+    const otherPlayersWithHand = state.otherPlayers.map((player: Player) =>
+      getPlayerWithHand(action.playersCard!, player),
+    );
+
     return {
       ...state,
       activePlayerUuid: action.activePlayerUuid,
+      otherPlayers: otherPlayersWithHand,
       roundWinner: action.roundWinner,
       yanivCaller: action.yanivCaller,
+    };
+  }
+
+  if (action.type === 'NEW_ROUND') {
+    return {
+      ...state,
+      gameWinner: undefined,
+      roundWinner: undefined,
+      previousPlayer: undefined,
+      yanivCaller: undefined,
     };
   }
 
@@ -102,14 +117,6 @@ const playersReducer = (state: any, action: Action) => {
       ...state,
       otherPlayers: action.otherPlayers,
     };
-  }
-
-  if (action.type === 'UPDATE_OTHER_PLAYERS_CARDS') {
-    const otherPlayersWithHand = state.otherPlayers.map((player: Player) =>
-      getPlayerWithHand(action.playersCard!, player),
-    );
-
-    return { ...state, otherPlayers: otherPlayersWithHand };
   }
 };
 
