@@ -27,6 +27,16 @@ interface Action {
   yanivCaller?: Player;
 }
 
+export const initialState = {
+  activePlayerUuid: '',
+  gameWinner: null,
+  player: null,
+  otherPlayers: [],
+  previousPlayer: null,
+  roundWinner: null,
+  yanivCaller: null,
+};
+
 const getPlayerWithHand = (playersCard: Record<string, Card[]>, player: Player) => ({
   ...player,
   hand: playersCard[player.uuid],

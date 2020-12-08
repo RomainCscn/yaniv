@@ -7,7 +7,7 @@ export interface Card {
 
 export type CustomError = 'GAME_ALREADY_STARTED' | 'TOO_MANY_PLAYERS';
 
-export interface Message {
+export interface ChatMessage {
   content: string;
   player: Player;
   time: string;
@@ -45,7 +45,7 @@ export interface ReceivedMessage {
   configuration: RoomConfiguration;
   error: CustomError;
   hand: Card[];
-  message: Message;
+  message: ChatMessage;
   newCardInHand?: { card: Card; isFromStack: boolean };
   pickedCard?: Card;
   player: Player;

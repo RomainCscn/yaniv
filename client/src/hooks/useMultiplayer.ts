@@ -2,28 +2,21 @@ import { useCallback, useEffect, useReducer, useState } from 'react';
 
 import client from '../core/client';
 import { getSortedOtherPlayers } from '../core/utils';
-import cardReducer from '../reducers/cardReducer';
-import chatReducer from '../reducers/chatReducer';
-import playersReducer from '../reducers/playersReducer';
-import { Card, NewCard, PlayerScore, ReceivedMessage, ReceivedMessageType } from '../types';
+import cardsReducer, { initialState as initialCardsState } from '../reducers/cardsReducer';
+import playersReducer, { initialState } from '../reducers/playersReducer';
+import {
+  Card,
+  ChatMessage,
+  NewCard,
+  PlayerScore,
+  ReceivedMessage,
+  ReceivedMessageType,
+} from '../types';
 
 export default function useMultiplayer({ playerUuid }: { playerUuid: string }) {
-  const [cardState, cardDispatch] = useReducer(cardReducer, {
-    selectedCards: [],
-    thrownCards: [],
-  });
-  const [chatState, chatDispatch] = useReducer(chatReducer, {
-    messages: [],
-  });
-  const [playersState, playersDispatch] = useReducer(playersReducer, {
-    activePlayerUuid: '',
-    gameWinner: null,
-    player: null,
-    otherPlayers: [],
-    previousPlayer: null,
-    roundWinner: null,
-    yanivCaller: null,
-  });
+  const [cardsState, cardsDispatch] = useReducer(cardsReducer, initialCardsState);
+  const [playersState, playersDispatch] = useReducer(playersReducer, initialState);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [canPlay, setCanPlay] = useState(false);
   const [newCard, setNewCard] = useState<NewCard>();
   const [pickedCard, setPickedCard] = useState<Card>();
@@ -48,9 +41,9 @@ export default function useMultiplayer({ playerUuid }: { playerUuid: string }) {
         playersDispatch({ type: 'UPDATE_OTHER_PLAYERS_CARDS', playersCard });
       },
       GAME_OVER: () => playersDispatch({ type: 'SET_GAME_WINNER', gameWinner: data.winner }),
-      NEW_MESSAGE: () => chatDispatch({ type: 'NEW_MESSAGE', payload: data.message }),
+      NEW_MESSAGE: () => setMessages((prevMessages) => [...prevMessages, data.message]),
       NEW_ROUND: () => {
-        cardDispatch({ type: 'newRound' });
+        cardsDispatch({ type: 'NEW_ROUND' });
         setPickedCard(undefined);
         playersDispatch({ type: 'SET_GAME_WINNER', gameWinner: undefined });
         playersDispatch({ type: 'SET_PREVIOUS_PLAYER', previousPlayer: undefined });
@@ -97,7 +90,7 @@ export default function useMultiplayer({ playerUuid }: { playerUuid: string }) {
       },
       SET_THROWN_CARDS: () => {
         setQuickPlayDone(false);
-        cardDispatch({ type: 'setThrownCards', payload: data.thrownCards });
+        cardsDispatch({ type: 'SET_THROWN_CARDS', payload: data.thrownCards });
       },
     }),
     [playersState.otherPlayers.length, playersState.player, playerUuid],
@@ -115,12 +108,11 @@ export default function useMultiplayer({ playerUuid }: { playerUuid: string }) {
   const resetOnMessage = useCallback(() => (client.onmessage = null), []);
 
   return {
-    cardState,
-    cardDispatch,
-    chatState,
-    chatDispatch,
+    cardsState,
+    cardsDispatch,
     canPlay,
     newCard,
+    messages,
     pickedCard,
     playerQuit,
     playersState,

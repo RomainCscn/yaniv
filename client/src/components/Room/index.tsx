@@ -65,11 +65,11 @@ const Room = ({ roomId, setPlay, playerUuid }: RoomProps) => {
   const [showModal, setShowModal] = useState(false);
 
   const {
-    chatState: { messages },
-    cardState: { selectedCards, thrownCards },
-    cardDispatch,
+    cardsState: { selectedCards, thrownCards },
+    cardsDispatch,
     canPlay,
     newCard,
+    messages,
     pickedCard,
     playerQuit,
     playersState: {
@@ -104,7 +104,7 @@ const Room = ({ roomId, setPlay, playerUuid }: RoomProps) => {
     setPlay(false);
   }, [resetOnMessage, setPlay]);
 
-  const resetSelectedCards = () => cardDispatch({ type: 'resetSelectedCards' });
+  const resetSelectedCards = () => cardsDispatch({ type: 'RESET_SELECTED_CARDS' });
 
   const pickCard = (card?: Card) => {
     if (canDropCards(selectedCards)) {
@@ -116,7 +116,7 @@ const Room = ({ roomId, setPlay, playerUuid }: RoomProps) => {
   };
 
   const selectCard = (card: Card) => {
-    cardDispatch({ type: 'selectCard', payload: card });
+    cardsDispatch({ type: 'SELECT_CARD', payload: card });
   };
 
   return (

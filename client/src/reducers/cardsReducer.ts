@@ -3,10 +3,10 @@ import { findCardIndex } from '../core/utils';
 import { Card, Player } from '../types';
 
 enum ActionType {
-  newRound = 'newRound',
-  resetSelectedCards = 'resetSelectedCards',
-  selectCard = 'selectCard',
-  setThrownCards = 'setThrownCards',
+  NEW_ROUND = 'NEW_ROUND',
+  RESET_SELECTED_CARDS = 'RESET_SELECTED_CARDS',
+  SELECT_CARD = 'SELECT_CARD',
+  SET_THROWN_CARDS = 'SET_THROWN_CARDS',
 }
 
 type ActionTypeKeys = keyof typeof ActionType;
@@ -16,15 +16,22 @@ interface Action {
   payload?: Card | Card[] | Player[] | Record<string, Card[]>;
 }
 
-const cardReducer = (state: any, action: Action) => {
-  if (action.type === 'setThrownCards') {
+export const initialState = {
+  newCard: null,
+  pickedCard: null,
+  selectedCards: [],
+  thrownCards: [],
+};
+
+const cardsReducer = (state: any, action: Action) => {
+  if (action.type === 'SET_THROWN_CARDS') {
     return {
       ...state,
       thrownCards: action.payload,
     };
   }
 
-  if (action.type === 'selectCard') {
+  if (action.type === 'SELECT_CARD') {
     const canSelect = canSelectCard(action.payload as Card, state.selectedCards);
 
     if (!canSelect) {
@@ -49,18 +56,18 @@ const cardReducer = (state: any, action: Action) => {
     }
   }
 
-  if (action.type === 'resetSelectedCards') {
+  if (action.type === 'RESET_SELECTED_CARDS') {
     return {
       ...state,
       selectedCards: [],
     };
   }
 
-  if (action.type === 'newRound') {
+  if (action.type === 'NEW_ROUND') {
     return { ...state, thrownCards: [], selectedCards: [] };
   }
 
   return state;
 };
 
-export default cardReducer;
+export default cardsReducer;

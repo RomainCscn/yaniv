@@ -5,10 +5,10 @@ import styled from 'styled-components';
 import Message from './Message';
 import NewMessage from './NewMessage';
 import { ReactComponent as ChatIcon } from '../../../assets/icons/chat.svg';
-import { Message as MessageType } from '../../../types';
+import { ChatMessage } from '../../../types';
 
 interface Props {
-  messages: MessageType[];
+  messages: ChatMessage[];
   roomId: string;
   playerUuid: string;
 }

@@ -2,11 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Avatar from '../../../shared/Avatar/AvatarImage';
-import { Message as MessageType } from '../../../../types';
+import { ChatMessage } from '../../../../types';
 
 interface Props {
   isSelf: boolean;
-  message: MessageType;
+  message: ChatMessage;
 }
 
 const Container = styled.div<{ isSelf: boolean }>`
