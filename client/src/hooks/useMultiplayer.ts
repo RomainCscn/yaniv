@@ -4,7 +4,14 @@ import client from '../core/client';
 import { getSortedOtherPlayers } from '../core/utils';
 import cardsReducer, { initialState as initialCardsState } from '../reducers/cardsReducer';
 import playersReducer, { initialState as initialPlayersState } from '../reducers/playersReducer';
-import { ChatMessage, Player, PlayerScore, ReceivedMessage, ReceivedMessageType } from '../types';
+import {
+  Card,
+  ChatMessage,
+  Player,
+  PlayerScore,
+  ReceivedMessage,
+  ReceivedMessageType,
+} from '../types';
 
 export default function useMultiplayer({ playerUuid }: { playerUuid: string }) {
   const [cardsState, cardsDispatch] = useReducer(cardsReducer, initialCardsState);
@@ -109,15 +116,21 @@ export default function useMultiplayer({ playerUuid }: { playerUuid: string }) {
 
   const resetOnMessage = useCallback(() => (client.onmessage = null), []);
 
+  const resetSelectedCards = () => cardsDispatch({ type: 'RESET_SELECTED_CARDS' });
+
+  const selectCard = (card: Card) => cardsDispatch({ type: 'SELECT_CARD', card });
+
   return {
     cardsState,
     cardsDispatch,
+    resetSelectedCards,
     canPlay,
     messages,
     playerQuit,
     playersState,
     quickPlayDone,
     resetOnMessage,
+    selectCard,
     scores,
     shouldGoBackToLobby,
   };

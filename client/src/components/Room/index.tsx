@@ -66,7 +66,6 @@ const Room = ({ roomId, setPlay, playerUuid }: RoomProps) => {
 
   const {
     cardsState: { newCard, pickedCard, selectedCards, thrownCards },
-    cardsDispatch,
     canPlay,
     messages,
     playerQuit,
@@ -81,6 +80,8 @@ const Room = ({ roomId, setPlay, playerUuid }: RoomProps) => {
     },
     quickPlayDone,
     resetOnMessage,
+    resetSelectedCards,
+    selectCard,
     scores,
     shouldGoBackToLobby,
   } = useMultiplayer({ playerUuid });
@@ -89,20 +90,17 @@ const Room = ({ roomId, setPlay, playerUuid }: RoomProps) => {
     send(roomId, { action: 'READY_TO_PLAY' }, { player: { uuid: playerUuid } });
   }, [playerUuid, roomId]);
 
-  // handle another player going back to lobby
-  useEffect(() => {
-    if (shouldGoBackToLobby) {
-      resetOnMessage();
-      setPlay(false);
-    }
-  }, [resetOnMessage, setPlay, shouldGoBackToLobby]);
-
   const backToLobby = useCallback(() => {
     resetOnMessage();
     setPlay(false);
   }, [resetOnMessage, setPlay]);
 
-  const resetSelectedCards = () => cardsDispatch({ type: 'RESET_SELECTED_CARDS' });
+  // handle another player going back to lobby
+  useEffect(() => {
+    if (shouldGoBackToLobby) {
+      backToLobby();
+    }
+  }, [backToLobby, shouldGoBackToLobby]);
 
   const pickCard = (card?: Card) => {
     if (canDropCards(selectedCards)) {
@@ -111,10 +109,6 @@ const Room = ({ roomId, setPlay, playerUuid }: RoomProps) => {
       resetSelectedCards();
       send(roomId, { action: 'PLAY', actionType: 'DROP_AND_PICK' }, { cards, player });
     }
-  };
-
-  const selectCard = (card: Card) => {
-    cardsDispatch({ type: 'SELECT_CARD', card });
   };
 
   return (
