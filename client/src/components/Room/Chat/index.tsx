@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import Message from './Message';
-import NewMessage from './NewMessage';
+import MessageInput from './MessageInput';
 import { ReactComponent as ChatIcon } from '../../../assets/icons/chat.svg';
 import { ChatMessage } from '../../../types';
 
@@ -77,13 +77,13 @@ const MessagesHeader = styled.div`
 const Chat = ({ messages, roomId, playerUuid }: Props) => {
   const { t } = useTranslation('room');
 
-  const messagesRef = useRef<HTMLDivElement>(null);
+  const bottomMessagesRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [hasNewMessage, setHasNewMessage] = useState(false);
 
   useEffect(() => {
-    if (messagesRef.current) {
-      messagesRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    if (bottomMessagesRef.current) {
+      bottomMessagesRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }
   }, [messages]);
 
@@ -119,9 +119,9 @@ const Chat = ({ messages, roomId, playerUuid }: Props) => {
           {messages.map((message) => (
             <Message isSelf={message.player.uuid === playerUuid} message={message} />
           ))}
-          <div ref={messagesRef}></div>
+          <div ref={bottomMessagesRef}></div>
         </MessagesContainer>
-        <NewMessage roomId={roomId} playerUuid={playerUuid} />
+        <MessageInput roomId={roomId} playerUuid={playerUuid} />
       </ChatContainer>
     </Container>
   );

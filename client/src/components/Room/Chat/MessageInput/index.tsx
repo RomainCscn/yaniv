@@ -26,7 +26,7 @@ const SendButton = styled.div`
   cursor: pointer;
 `;
 
-const NewMessage = ({ roomId, playerUuid }: { roomId: string; playerUuid: string }) => {
+const MessageInput = ({ roomId, playerUuid }: { roomId: string; playerUuid: string }) => {
   const [newMessage, setNewMessage] = useState('');
 
   const sendMessage = useCallback(() => {
@@ -61,4 +61,4 @@ const NewMessage = ({ roomId, playerUuid }: { roomId: string; playerUuid: string
   );
 };
 
-export default NewMessage;
+export default MessageInput;

@@ -13,8 +13,7 @@ const Container = styled.div<{ isSelf: boolean }>`
   display: flex;
   align-items: center;
   justify-content: ${({ isSelf }) => (isSelf ? 'flex-end' : 'flex-start')};
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
-    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Roboto', sans-serif;
 `;
 
 const MessageContainer = styled.div`
