@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import useLocalStorage from './useLocalStorage';
 import AVATARS from '../components/shared/Avatar';
 import client, { send } from '../core/client';
-import { CustomError, Player, ReceivedMessage } from '../types';
+import { Player, ReceivedMessage } from '../types';
 
 const randomAvatar = AVATARS[Math.floor(Math.random() * AVATARS.length)][0];
 const randomUsername = Math.random().toString(36).substring(7);
@@ -20,7 +20,7 @@ interface Props {
 }
 
 export default function useLobby({ roomId }: Props) {
-  const [error, setError] = useState<CustomError>();
+  const [error, setError] = useState<string>();
   const [isLoading, setIsLoading] = useState(true);
   const [handCardsNumber, setHandCardsNumber] = useState(7);
   const [play, setPlay] = useState<boolean | undefined>(undefined);
@@ -37,7 +37,7 @@ export default function useLobby({ roomId }: Props) {
       if (type !== 'JOIN_ONGOING_GAME') setIsLoading(false);
 
       if (error === 'GAME_ALREADY_STARTED') {
-        return setError(error);
+        return setError('GAME_ALREADY_STARTED');
       }
 
       if (type === 'CONFIGURATION_UPDATE') {

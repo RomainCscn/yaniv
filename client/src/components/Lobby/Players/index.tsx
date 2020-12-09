@@ -6,10 +6,10 @@ import { ButtonContainer, Container, SectionTitle } from '../styles';
 import Avatar from '../../shared/Avatar/AvatarImage';
 import Button from '../../shared/Button';
 import { send } from '../../../core/client';
-import { CustomError, Player } from '../../../types';
+import { Player } from '../../../types';
 
 interface Props {
-  error?: CustomError;
+  error?: string;
   players: Player[];
   roomId: string;
   currentPlayer: Player;
@@ -17,7 +17,7 @@ interface Props {
 
 const Players = ({ error, players, roomId, currentPlayer }: Props) => {
   const { t } = useTranslation('lobby');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState();
 
   const startGame = () => {
     if (players.length >= 2) {
@@ -40,7 +40,7 @@ const Players = ({ error, players, roomId, currentPlayer }: Props) => {
           </PlayerContainer>
         ))}
       </PlayersAvatarContainer>
-      {}
+      {error && t('players.inGame')}
       <ButtonContainer>
         <Button data-cy='startButton' color={'green'} onClick={startGame}>
           {t('players.start')}
