@@ -6,6 +6,11 @@ import RoundOver from './RoundOver';
 
 import { Player } from '../../../types';
 
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 interface Props {
   gameWinner?: Player;
   roomId: string;
@@ -14,24 +19,12 @@ interface Props {
   yanivCaller?: Player;
 }
 
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
 const EndRound = ({ gameWinner, roomId, roundWinner, playerUuid, yanivCaller }: Props) => (
   <Container>
     {gameWinner ? (
       <GameOver roomId={roomId} gameWinner={gameWinner} playerUuid={playerUuid} />
     ) : (
-      roundWinner && (
-        <RoundOver
-          roomId={roomId}
-          roundWinner={roundWinner}
-          playerUuid={playerUuid}
-          yanivCaller={yanivCaller}
-        />
-      )
+      roundWinner && <RoundOver roomId={roomId} roundWinner={roundWinner} playerUuid={playerUuid} />
     )}
   </Container>
 );

@@ -12,13 +12,6 @@ import Avatar from '../../../shared/Avatar/AvatarImage';
 import NextRoundButton from '../../NextRoundButton';
 import { Player } from '../../../../types';
 
-interface Props {
-  roundWinner: Player;
-  roomId: string;
-  playerUuid: string;
-  yanivCaller?: Player;
-}
-
 const WinnerText = styled(DefaultWinnerText)`
   font-size: 2.5rem;
   margin-bottom: 1em;
@@ -28,22 +21,28 @@ const RoundWinnerText = styled(WinnerUsername)`
   font-weight: initial;
 `;
 
-const RoundOver = ({ roundWinner, roomId, playerUuid, yanivCaller }: Props) => {
+interface Props {
+  roundWinner: Player;
+  roomId: string;
+  playerUuid: string;
+}
+
+const RoundOver = ({ roundWinner, roomId, playerUuid }: Props) => {
   const { t } = useTranslation('room');
+
+  const isWinner = roundWinner.uuid === playerUuid;
 
   return (
     <Container>
-      <WinnerText>{roundWinner.uuid === playerUuid ? t('end.win') : t('end.lose')}</WinnerText>
-      {roundWinner.uuid !== playerUuid && (
-        <>
-          <AvatarContainer>
-            <Avatar id={roundWinner.avatar} />
-            <div>
-              <WinnerUsername>{roundWinner.username}</WinnerUsername>
-              <RoundWinnerText> {t('end.roundWinner')}</RoundWinnerText>
-            </div>
-          </AvatarContainer>
-        </>
+      <WinnerText>{isWinner ? t('end.win') : t('end.lose')}</WinnerText>
+      {!isWinner && (
+        <AvatarContainer>
+          <Avatar id={roundWinner.avatar} />
+          <div>
+            <WinnerUsername>{roundWinner.username}</WinnerUsername>
+            <RoundWinnerText> {t('end.roundWinner')}</RoundWinnerText>
+          </div>
+        </AvatarContainer>
       )}
       <NextRoundButton roomId={roomId} playerUuid={playerUuid} />
     </Container>
