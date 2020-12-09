@@ -53,37 +53,36 @@ const TableHeader = styled.th`
 `;
 
 const ScoreDashboard = ({ scores }: { scores: PlayerScore[] }) => {
-  const getRowScores = (index: number) =>
-    scores.map((score) => {
-      const isWinningCell =
-        score.scoreHistory[index] === 0 ||
-        score.scoreHistory[index - 1] === score.scoreHistory[index];
+  const isWinningCell = ({ scoreHistory }: PlayerScore, index: number) =>
+    scoreHistory[index] === 0 || scoreHistory[index - 1] === scoreHistory[index];
 
-      return (
-        <td>
-          <TableCell isWinningCell={isWinningCell}>
-            {score.scoreHistory[index]}{' '}
-            {isWinningCell && (
-              <CrownIcon height='16px' fill='white' style={{ marginLeft: '9px' }} />
-            )}
-          </TableCell>
-        </td>
-      );
-    });
+  const getRowScores = (index: number) =>
+    scores.map((score, scoreIndex) => (
+      <td key={scoreIndex}>
+        <TableCell isWinningCell={isWinningCell(score, index)}>
+          {score.scoreHistory[index]}{' '}
+          {isWinningCell(score, index) && (
+            <CrownIcon height='16px' fill='white' style={{ marginLeft: '9px' }} />
+          )}
+        </TableCell>
+      </td>
+    ));
 
   return (
     <Container>
       <Table>
         <thead>
           <tr>
-            {scores.map((score) => (
-              <TableHeader>{score.username}</TableHeader>
+            {scores.map((score, index) => (
+              <TableHeader key={index}>{score.username}</TableHeader>
             ))}
           </tr>
         </thead>
-        {scores[0]?.scoreHistory.map((value, index) => (
-          <tr>{getRowScores(index)}</tr>
-        ))}
+        <tbody>
+          {scores[0]?.scoreHistory.map((_, index) => (
+            <tr key={index}>{getRowScores(index)}</tr>
+          ))}
+        </tbody>
       </Table>
     </Container>
   );
