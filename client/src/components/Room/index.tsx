@@ -114,7 +114,7 @@ const Room = ({ roomId, setPlay, playerUuid }: RoomProps) => {
   };
 
   const selectCard = (card: Card) => {
-    cardsDispatch({ type: 'SELECT_CARD', payload: card });
+    cardsDispatch({ type: 'SELECT_CARD', card });
   };
 
   return (

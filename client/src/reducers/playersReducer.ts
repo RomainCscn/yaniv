@@ -50,7 +50,7 @@ const playersReducer = (state: any, action: Action) => {
 
     return {
       ...state,
-      activePlayerUuid: action.activePlayerUuid,
+      activePlayerUuid: '',
       otherPlayers: otherPlayersWithHand,
       roundWinner: action.roundWinner,
       yanivCaller: action.yanivCaller,
@@ -89,6 +89,8 @@ const playersReducer = (state: any, action: Action) => {
   }
 
   if (action.type === 'SET_PLAYER') {
+    window.localStorage.setItem('player', JSON.stringify(action.player));
+
     return {
       ...state,
       player: action.player,

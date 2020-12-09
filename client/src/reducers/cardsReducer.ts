@@ -1,6 +1,6 @@
 import { canSelectCard } from '../core/game';
 import { findCardIndex } from '../core/utils';
-import { Card, NewCard, Player } from '../types';
+import { Card, NewCard } from '../types';
 
 enum ActionType {
   NEW_ROUND = 'NEW_ROUND',
@@ -11,13 +11,12 @@ enum ActionType {
   SET_THROWN_CARDS = 'SET_THROWN_CARDS',
 }
 
-type ActionTypeKeys = keyof typeof ActionType;
-
 interface Action {
-  type: ActionTypeKeys;
-  payload?: Card | Card[] | Player[] | Record<string, Card[]>;
+  type: keyof typeof ActionType;
+  card?: Card;
   newCard?: NewCard;
   pickedCard?: Card;
+  thrownCards?: Card[];
 }
 
 export const initialState = {
@@ -27,62 +26,44 @@ export const initialState = {
   thrownCards: [],
 };
 
-const cardsReducer = (state: any, action: Action) => {
-  if (action.type === 'SET_THROWN_CARDS') {
-    return {
-      ...state,
-      thrownCards: action.payload,
-    };
+const cardsReducer = (state: any, { card, newCard, pickedCard, thrownCards, type }: Action) => {
+  if (type === 'RESET_SELECTED_CARDS') {
+    return { ...state, selectedCards: [] };
   }
 
-  if (action.type === 'SET_NEW_CARD') {
-    return {
-      ...state,
-      newCard: action.newCard,
-    };
+  if (type === 'NEW_ROUND') {
+    return { ...state, pickedCard: undefined, thrownCards: [], selectedCards: [] };
   }
 
-  if (action.type === 'SET_PICKED_CARD') {
-    return {
-      ...state,
-      pickedCard: action.pickedCard,
-    };
-  }
-
-  if (action.type === 'SELECT_CARD') {
-    const canSelect = canSelectCard(action.payload as Card, state.selectedCards);
-
-    if (!canSelect) {
+  if (type === 'SELECT_CARD') {
+    if (!canSelectCard(card!, state.selectedCards)) {
       return state;
     }
 
-    const selectedCards = [...state.selectedCards];
-    const selectedCardIndex = findCardIndex(action.payload as Card, state.selectedCards);
+    const selectedCardIndex = findCardIndex(card!, state.selectedCards);
 
     if (selectedCardIndex >= 0) {
-      selectedCards.splice(selectedCardIndex, 1);
-
       return {
         ...state,
-        selectedCards: selectedCards,
-      };
-    } else {
-      return {
-        ...state,
-        selectedCards: [...state.selectedCards, action.payload],
+        selectedCards: state.selectedCards.filter(
+          (_: Card, index: number) => index !== selectedCardIndex,
+        ),
       };
     }
+
+    return { ...state, selectedCards: [...state.selectedCards, card] };
   }
 
-  if (action.type === 'RESET_SELECTED_CARDS') {
-    return {
-      ...state,
-      selectedCards: [],
-    };
+  if (type === 'SET_NEW_CARD') {
+    return { ...state, newCard };
   }
 
-  if (action.type === 'NEW_ROUND') {
-    return { ...state, pickedCard: undefined, thrownCards: [], selectedCards: [] };
+  if (type === 'SET_PICKED_CARD') {
+    return { ...state, pickedCard };
+  }
+
+  if (type === 'SET_THROWN_CARDS') {
+    return { ...state, thrownCards };
   }
 
   return state;
