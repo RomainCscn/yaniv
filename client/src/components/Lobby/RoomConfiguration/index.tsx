@@ -6,6 +6,19 @@ import { ButtonContainer, Container, SectionTitle, Label } from '../styles';
 import Button from '../../shared/Button';
 import { send } from '../../../core/client';
 
+interface ParameterProps {
+  currentValue: number;
+  dataCy?: string;
+  setValue: (v: number) => void;
+  value: number;
+}
+
+const ParameterButton = ({ currentValue, dataCy, setValue, value }: ParameterProps) => (
+  <ValueButton data-cy={dataCy} selected={currentValue === value} onClick={() => setValue(value)}>
+    {value}
+  </ValueButton>
+);
+
 interface Props {
   roomId: string;
   handCardsNumber: number;
@@ -13,22 +26,6 @@ interface Props {
   scoreLimit: number;
   setScoreLimit: (v: number) => void;
 }
-
-const ParameterButton = ({
-  currentValue,
-  dataCy,
-  setValue,
-  value,
-}: {
-  currentValue: number;
-  dataCy?: string;
-  setValue: (v: number) => void;
-  value: number;
-}) => (
-  <ValueButton data-cy={dataCy} selected={currentValue === value} onClick={() => setValue(value)}>
-    {value}
-  </ValueButton>
-);
 
 const RoomConfiguration = ({
   roomId,
