@@ -2,17 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
+import SortItem from './SortItem';
 import { send } from '../../../../core/client';
-import { SortOrder, SortType } from '../../../../types';
-
-interface Props {
-  playerSort: {
-    order: SortOrder;
-    type: SortType;
-  };
-  playerUuid: string;
-  roomId: string;
-}
+import { Sort as PlayerSort, SortOrder, SortType } from '../../../../types';
 
 const Container = styled.div`
   font-family: 'Roboto', sans-serif;
@@ -34,19 +26,14 @@ const SortItems = styled.form`
   flex-direction: column;
 `;
 
-const SortItem = styled.label`
-  margin-bottom: 0.2em;
-  display: flex;
-  align-items: center;
+const ORDER: SortOrder[] = ['asc', 'desc'];
+const TYPE: SortType[] = ['rank', 'suit'];
 
-  &:last-child {
-    margin-bottom: 0;
-  }
-`;
-
-const SortLabel = styled.span`
-  margin-left: 0.5em;
-`;
+interface Props {
+  playerSort: PlayerSort;
+  playerUuid: string;
+  roomId: string;
+}
 
 const Sort = ({ playerSort, playerUuid, roomId }: Props) => {
   const { t } = useTranslation('room');
@@ -63,45 +50,25 @@ const Sort = ({ playerSort, playerUuid, roomId }: Props) => {
       <Title>{t('menu.sort.title')}</Title>
       <Subtitle>{t('menu.sort.order')}</Subtitle>
       <SortItems>
-        <SortItem>
-          <input
-            type='radio'
-            name='order'
-            defaultChecked={order === 'asc'}
-            onChange={() => setOrder('asc')}
+        {ORDER.map((value) => (
+          <SortItem
+            key={value}
+            isChecked={order === value}
+            label={t(`menu.sort.${value}`)}
+            setValue={setOrder}
+            value={value}
           />
-          <SortLabel>{t('menu.sort.asc')}</SortLabel>
-        </SortItem>
-        <SortItem>
-          <input
-            type='radio'
-            name='order'
-            defaultChecked={order === 'desc'}
-            onChange={() => setOrder('desc')}
+        ))}
+        <Subtitle>{t('menu.sort.type')}</Subtitle>
+        {TYPE.map((value) => (
+          <SortItem
+            key={value}
+            isChecked={type === value}
+            label={t(`menu.sort.${value}`)}
+            setValue={setType}
+            value={value}
           />
-          <SortLabel>{t('menu.sort.desc')}</SortLabel>
-        </SortItem>
-      </SortItems>
-      <Subtitle>{t('menu.sort.type')}</Subtitle>
-      <SortItems>
-        <SortItem>
-          <input
-            type='radio'
-            name='type'
-            defaultChecked={type === 'rank'}
-            onChange={() => setType('rank')}
-          />
-          <SortLabel>{t('menu.sort.rankOnly')}</SortLabel>
-        </SortItem>
-        <SortItem>
-          <input
-            type='radio'
-            name='type'
-            defaultChecked={type === 'suit'}
-            onChange={() => setType('suit')}
-          />
-          <SortLabel>{t('menu.sort.suitAndRand')}</SortLabel>
-        </SortItem>
+        ))}
       </SortItems>
     </Container>
   );

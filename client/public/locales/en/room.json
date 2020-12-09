@@ -19,8 +19,8 @@
       "type": "Type",
       "asc": "Ascending",
       "desc": "Descending",
-      "rankOnly": "Rank only",
-      "suitAndRand": "Suit and rank"
+      "rank": "Rank only",
+      "suit": "Suit and rank"
     },
     "modal": {
       "title": "Leave the game",

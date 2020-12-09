@@ -19,8 +19,8 @@
       "type": "Type",
       "asc": "Croissant",
       "desc": "Décroissant",
-      "rankOnly": "Valeur uniquement",
-      "suitAndRand": "Couleur et valeur"
+      "rank": "Valeur uniquement",
+      "suit": "Couleur et valeur"
     },
     "modal": {
       "title": "Arrêter la partie",
