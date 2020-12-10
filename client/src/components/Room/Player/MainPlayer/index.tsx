@@ -11,7 +11,7 @@ import { getCardValue } from '../../../../core/game';
 import { getCardUniqueIndex } from '../../../../core/utils';
 import { Card, NewCard, Player } from '../../../../types';
 
-interface PlayerHandProps {
+interface Props {
   canPlay: boolean;
   hand?: Card[];
   newCard?: NewCard;
@@ -25,7 +25,7 @@ interface PlayerHandProps {
   thrownCards: Card[];
 }
 
-const PlayerHand = ({
+const MainPlayer = ({
   canPlay,
   hand = [],
   newCard,
@@ -37,7 +37,7 @@ const PlayerHand = ({
   selectCard,
   selectedCards,
   thrownCards,
-}: PlayerHandProps) => {
+}: Props) => {
   const handScore = hand.reduce((sum, card) => (sum += getCardValue(card)), 0);
 
   const canQuickPlay = useCallback(
@@ -114,4 +114,4 @@ const PlayerHand = ({
   );
 };
 
-export default PlayerHand;
+export default MainPlayer;
