@@ -1,4 +1,4 @@
-import { Card } from '../types';
+import { Card } from '../../types';
 
 const CARDS_VALUE_SEQUENCES = '12345678910111213';
 

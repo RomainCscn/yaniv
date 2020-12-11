@@ -5,7 +5,7 @@ import { Card } from '../../../../../types';
 
 interface CardProps {
   canPlay: boolean;
-  canQuickPlay: boolean;
+  canQuickPlay?: boolean;
   card: Card;
   isLast: boolean;
   isNew: boolean;

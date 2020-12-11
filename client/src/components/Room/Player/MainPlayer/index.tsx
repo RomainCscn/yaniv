@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
 import { ActivePlayer, AvatarContainer, Container, HandContainer, ScoreContainer } from './styles';
 import CardComponent from './HandCard';
@@ -8,6 +8,7 @@ import Avatar from '../../../shared/Avatar/AvatarImage';
 import YanivButton from '../../YanivButton';
 import { send } from '../../../../core/client';
 import { getCardValue } from '../../../../core/game';
+import { canQuickPlay } from '../../../../core/game/quickPlay';
 import { getCardUniqueIndex } from '../../../../core/utils';
 import { Card, NewCard, Player } from '../../../../types';
 
@@ -40,38 +41,6 @@ const MainPlayer = ({
 }: Props) => {
   const handScore = hand.reduce((sum, card) => (sum += getCardValue(card)), 0);
 
-  const canQuickPlay = useCallback(
-    (card: Card) => {
-      let sameValueCards: Card[] = [];
-      const uniqueValues = [...new Set(thrownCards.map((c) => c.value))].length === 1;
-
-      const isSingleCard = thrownCards.length === 1;
-      const isPair = thrownCards.length === 2;
-      const isThreeCardsOfSameValue = thrownCards.length === 3 && uniqueValues;
-
-      if (!quickPlayDone && hand.length > 1 && (isPair || isThreeCardsOfSameValue)) {
-        sameValueCards = hand.filter((card) => card.value === thrownCards[0].value);
-      }
-
-      const isNewCardFromStack =
-        !!newCard &&
-        newCard.isFromStack &&
-        card.suit === newCard.card.suit &&
-        card.value === newCard.card.value;
-
-      const canDropNewCard =
-        isNewCardFromStack &&
-        (isSingleCard || isPair || isThreeCardsOfSameValue) &&
-        card.value === thrownCards[0].value;
-
-      const cardIsSameValueAsThrownsOne =
-        sameValueCards.findIndex((c) => card.suit === c.suit && card.value === c.value) !== -1;
-
-      return canDropNewCard || cardIsSameValueAsThrownsOne;
-    },
-    [hand, newCard, quickPlayDone, thrownCards],
-  );
-
   const quickPlay = (card: Card) => {
     resetSelectedCards();
     send(
@@ -88,7 +57,7 @@ const MainPlayer = ({
           <CardComponent
             key={getCardUniqueIndex(card) + index}
             canPlay={canPlay}
-            canQuickPlay={canQuickPlay(card)}
+            canQuickPlay={canQuickPlay(thrownCards, quickPlayDone, hand, card, newCard)}
             card={card}
             isLast={index === hand.length - 1}
             isNew={

@@ -11,7 +11,7 @@ const getDataCy = (card?: Card, cardType?: 'false' | 'hand' | 'otherPlayer' | 's
 
 interface GenericCardProps {
   card?: Card;
-  canClick: boolean;
+  canClick?: boolean;
   cardType?: 'false' | 'hand' | 'otherPlayer' | 'stack';
   degree?: number;
   isNew?: boolean;

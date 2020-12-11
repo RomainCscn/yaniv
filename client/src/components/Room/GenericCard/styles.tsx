@@ -1,7 +1,7 @@
 import styled, { css, keyframes } from 'styled-components';
 
 interface CardImageProps {
-  canClick: boolean;
+  canClick?: boolean;
   cardType?: 'false' | 'hand' | 'otherPlayer' | 'stack';
   degree?: number;
   isLast?: boolean;
