@@ -80,10 +80,14 @@ export default function useMultiplayer({ playerUuid }: { playerUuid: string }) {
     playersDispatch({ type: 'SET_PLAYER_HAND', hand });
   };
 
-  const setThrownCards = ({ thrownCards }: ReceivedMessage) => {
-    setQuickPlayDone(false);
-    cardsDispatch({ type: 'SET_THROWN_CARDS', thrownCards });
-  };
+  const setThrownCards = useCallback(
+    ({ player, thrownCards }: ReceivedMessage) => {
+      // disallow quick play (only on pair / three of a kind) when the player discards cards
+      setQuickPlayDone(player?.uuid === playerUuid ? true : false);
+      cardsDispatch({ type: 'SET_THROWN_CARDS', thrownCards });
+    },
+    [playerUuid],
+  );
 
   const getHandlers = useCallback(
     (data: ReceivedMessage): { [Key in ReceivedMessageType]?: Function } => ({
@@ -102,7 +106,7 @@ export default function useMultiplayer({ playerUuid }: { playerUuid: string }) {
       SET_PLAYER_HAND: () => setPlayerHand(data),
       SET_THROWN_CARDS: () => setThrownCards(data),
     }),
-    [aPlayerQuit, setActivePlayer, setPickedCard, updatePlayers],
+    [aPlayerQuit, setActivePlayer, setPickedCard, setThrownCards, updatePlayers],
   );
 
   useEffect(() => {

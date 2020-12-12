@@ -39,7 +39,10 @@ export const handleDropAndPick = (
   { notPickedCards, pickedCard, thrownCards }: PlayedCards,
 ): void => {
   room.thrownCards = thrownCards;
-  room.dispatch({ type: 'SET_THROWN_CARDS', data: { thrownCards: room.getSortedThrownCards() } });
+  room.dispatch({
+    type: 'SET_THROWN_CARDS',
+    data: { player: player.format(), thrownCards: room.getSortedThrownCards() },
+  });
 
   thrownCards.forEach((card: Card) => player.removeCardFromHand(card));
 
